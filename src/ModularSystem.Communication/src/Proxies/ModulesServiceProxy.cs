@@ -16,9 +16,9 @@ namespace ModularSystem.Communication.Proxies
         { }
 
         /// <inheritdoc />
-        public Task<ResolveResponse> ResolveAsync(ResolveRequest req)
+        public Task<IResolveResponse> ResolveAsync(IResolveRequest req)
         {
-            return Channel.ResolveAsync(req);
+            throw new NotImplementedException();
         }
     }
 }

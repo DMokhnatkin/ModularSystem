@@ -40,7 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Contracts\IModuleFilesService.cs" />
     <Compile Include="src\Contracts\IModulesService.cs" />
+    <Compile Include="src\Data\IDownloadModulesRequest.cs" />
+    <Compile Include="src\Data\IDownloadModulesResponse.cs" />
+    <Compile Include="src\Data\IResolveRequest.cs" />
+    <Compile Include="src\Data\IResolveResponse.cs" />
     <Compile Include="src\Data\ModuleDto.cs" />
     <Compile Include="src\Data\ModuleWrapper.cs" />
     <Compile Include="src\Data\ResolveRequest.cs" />

@@ -1,9 +1,13 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
+using ModularSystem.Common;
 
 namespace ModularSystem.Communication.Data
 {
     [DataContract]
-    public struct ResolveRequest
+    public class ResolveRequest : IResolveRequest
     {
+        /// <inheritdoc />
+        public IEnumerable<ModuleIdentity> ModuleIdentities { get; set; }
     }
 }

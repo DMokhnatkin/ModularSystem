@@ -2,10 +2,8 @@
 
 namespace ModularSystem.Common
 {
-    public interface IModule : IEquatable<IModule>
+    public interface IModule
     {
         ModuleInfo ModuleInfo { get; }
-
-        string Path { get; }
     }
 }

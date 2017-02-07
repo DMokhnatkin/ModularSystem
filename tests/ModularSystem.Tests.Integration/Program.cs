@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Linq;
 using System.ServiceModel;
 using ModularSystem.Communication.Data;
 using ModularSystem.Communication.Proxies;
@@ -15,7 +16,7 @@ namespace ModularSystem.Tests.Integration
             host.Open();
             ModulesServiceProxy proxy = new ModulesServiceProxy(new BasicHttpBinding(), new EndpointAddress(@"http://localhost:80/Temporary_Listen_Addresses"));
             var res = proxy.ResolveAsync(new ResolveRequest()).Result;
-            if (res.Modules.Length != 0)
+            if (res.ModuleIdentities.Count() != 0)
                 throw new ArgumentException();
             host.Close();
         }

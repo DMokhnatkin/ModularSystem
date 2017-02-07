@@ -5,9 +5,9 @@ using ModularSystem.Communication.Data;
 namespace ModularSystem.Communication.Contracts
 {
     [ServiceContract]
-    public interface IModulesService
+    public interface IModuleFilesService
     {
         [OperationContract]
-        Task<IResolveResponse> ResolveAsync(IResolveRequest req);
+        Task<IDownloadModulesResponse> DownloadModules(IDownloadModulesRequest request);
     }
 }

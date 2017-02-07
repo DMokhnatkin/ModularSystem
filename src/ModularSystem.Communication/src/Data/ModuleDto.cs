@@ -4,13 +4,11 @@ using ModularSystem.Common;
 namespace ModularSystem.Communication.Data
 {
     [DataContract]
-    public class ModuleDto
+    public class ModuleDto : IModule
     {
+        /// <inheritdoc />
         [DataMember]
-        public ModuleIdentity ModuleIdentity { get; set; }
-
-        [DataMember]
-        public string[] Dependencies { get; set; }
+        public ModuleInfo ModuleInfo { get; set; }
 
         [DataMember]
         public byte[] Data { get; set; }

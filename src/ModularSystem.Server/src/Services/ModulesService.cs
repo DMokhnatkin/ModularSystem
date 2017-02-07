@@ -8,7 +8,7 @@ namespace ModularSystem.Server.Services
     public class ModulesService : IModulesService
     {
         /// <inheritdoc />
-        public async Task<ResolveResponse> ResolveAsync(ResolveRequest req)
+        public Task<IResolveResponse> ResolveAsync(IResolveRequest req)
         {
             throw new NotImplementedException();
         }
