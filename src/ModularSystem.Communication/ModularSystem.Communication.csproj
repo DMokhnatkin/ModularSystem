@@ -47,7 +47,7 @@
     <Compile Include="src\Data\IResolveRequest.cs" />
     <Compile Include="src\Data\IResolveResponse.cs" />
     <Compile Include="src\Data\ModuleDto.cs" />
-    <Compile Include="src\Data\ModuleWrapper.cs" />
+    <Compile Include="src\Data\ModuleMapper.cs" />
     <Compile Include="src\Data\ResolveRequest.cs" />
     <Compile Include="src\Data\ResolveResponse.cs" />
     <Compile Include="src\Proxies\ModulesServiceProxy.cs" />

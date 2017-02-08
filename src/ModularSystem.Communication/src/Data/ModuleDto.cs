@@ -1,4 +1,6 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.IO;
+using System.Runtime.Serialization;
 using ModularSystem.Common;
 
 namespace ModularSystem.Communication.Data
@@ -10,7 +12,6 @@ namespace ModularSystem.Communication.Data
         [DataMember]
         public ModuleInfo ModuleInfo { get; set; }
 
-        [DataMember]
-        public byte[] Data { get; set; }
+        public Stream Data { get; set; }
     }
 }

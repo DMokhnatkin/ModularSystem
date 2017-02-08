@@ -43,6 +43,9 @@
     <Compile Include="src\IModule.cs" />
     <Compile Include="src\ModuleIdentity.cs" />
     <Compile Include="src\ModuleInfo.cs" />
+    <Compile Include="src\ModuleType.cs" />
+    <Compile Include="src\Repositories\IModuleFilesRepository.cs" />
+    <Compile Include="src\Repositories\IModulesRepository.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

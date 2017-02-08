@@ -7,21 +7,38 @@ namespace ModularSystem.Common
     public struct ModuleIdentity
     {
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get; }
 
         [DataMember]
-        public Version Version { get; private set; }
+        public Version Version { get; }
 
-        public ModuleIdentity(string name, Version version)
+        [DataMember]
+        public ModuleType ModuleType { get; }
+
+        public ModuleIdentity(string name, Version version, ModuleType moduleType)
         {
             Name = name;
             Version = version;
+            ModuleType = moduleType;
         }
 
-        public ModuleIdentity(string name, string version)
+        public ModuleIdentity(string name, string version, ModuleType moduleType)
         {
             Name = name;
             Version = new Version(version);
+            ModuleType = moduleType;
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"{Name} {Version} {ModuleType}";
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode() ^ Version.GetHashCode() ^ ModuleType.GetHashCode();
         }
     }
 }

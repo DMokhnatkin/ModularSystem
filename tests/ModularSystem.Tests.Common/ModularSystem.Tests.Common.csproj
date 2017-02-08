@@ -85,11 +85,16 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\CommunicationTest.cs" />
+    <Compile Include="src\Repositories\ModulesRepositoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\ModularSystem.Common\ModularSystem.Common.csproj">
+      <Project>{146a831a-2aff-4f04-91f2-3230576c3ee1}</Project>
+      <Name>ModularSystem.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\ModularSystem.Communication\ModularSystem.Communication.csproj">
       <Project>{3d149144-213d-4c07-a6a1-0a383aca0784}</Project>
       <Name>ModularSystem.Communication</Name>

@@ -40,14 +40,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Repositories\ModulesRepository.cs" />
     <Compile Include="src\Services\ModulesService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ModularSystem.Common\ModularSystem.Common.csproj">
+      <Project>{146A831A-2AFF-4F04-91F2-3230576C3EE1}</Project>
+      <Name>ModularSystem.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ModularSystem.Communication\ModularSystem.Communication.csproj">
       <Project>{3d149144-213d-4c07-a6a1-0a383aca0784}</Project>
       <Name>ModularSystem.Communication</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace ModularSystem.Common
 {
@@ -7,18 +6,14 @@ namespace ModularSystem.Common
     public class ModuleInfo
     {
         [DataMember]
-        public string Name { get; private set; }
-
-        [DataMember]
-        public Version Version { get; private set; }
+        public ModuleIdentity ModuleIdentity { get; set; }
 
         [DataMember]
         public ModuleInfo[] Dependencies { get; private set; }
 
-        public ModuleInfo(string name, Version version, ModuleInfo[] dependencies)
+        public ModuleInfo(ModuleIdentity identity, ModuleInfo[] dependencies)
         {
-            Name = name;
-            Version = version;
+            ModuleIdentity = identity;
             Dependencies = dependencies;
         }
     }
