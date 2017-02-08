@@ -1,17 +1,18 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
 using ModularSystem.Common;
 using ModularSystem.Server.Repositories;
 using Moq;
+using NUnit.Framework;
 
-namespace ModularSystem.Tests.Common.Repositories
+namespace ModularSystem.Tests.Server.Repositories
 {
-    [TestClass]
+    [TestFixture]
     public class ModulesRepositoryTest
     {
         private ModulesRepository _repository;
         private IModule[] _sampleModules;
 
-        [TestInitialize]
+        [SetUp]
         public void InitializeTest()
         {
             _repository = new ModulesRepository();
@@ -43,13 +44,15 @@ namespace ModularSystem.Tests.Common.Repositories
                         new ModuleInfo(new ModuleIdentity("test2", "1.0", ModuleType.Client), new ModuleInfo[0]));
         }
 
-        [TestMethod]
+        [Test]
         public void TestRegisterModule()
         {
             _repository.RegisterModule(_sampleModules[0]);
             Assert.AreEqual(_sampleModules[0], _repository.GetModule(_sampleModules[0].ModuleInfo.ModuleIdentity));
+            Assert.Throws<ArgumentException>(() => _repository.RegisterModule(_sampleModules[0]));
             _repository.RegisterModule(_sampleModules[1]);
             Assert.AreEqual(_sampleModules[1], _repository.GetModule(_sampleModules[1].ModuleInfo.ModuleIdentity));
+            Assert.Throws<ArgumentException>(() => _repository.RegisterModule(_sampleModules[1]));
             _repository.RegisterModule(_sampleModules[2]);
             _repository.RegisterModule(_sampleModules[3]);
             _repository.RegisterModule(_sampleModules[4]);
@@ -58,7 +61,7 @@ namespace ModularSystem.Tests.Common.Repositories
             Assert.AreEqual(_sampleModules[4], _repository.GetModule(_sampleModules[4].ModuleInfo.ModuleIdentity));
         }
 
-        [TestMethod]
+        [Test]
         public void TestUnregisterModule()
         {
             _repository.RegisterModule(_sampleModules[0]);
@@ -69,6 +72,7 @@ namespace ModularSystem.Tests.Common.Repositories
 
             _repository.UnregisterModule(_sampleModules[0].ModuleInfo.ModuleIdentity);
             Assert.IsNull(_repository.GetModule(_sampleModules[0].ModuleInfo.ModuleIdentity));
+            Assert.Throws<ArgumentException>(() => _repository.UnregisterModule(_sampleModules[0].ModuleInfo.ModuleIdentity));
             _repository.UnregisterModule(_sampleModules[1].ModuleInfo.ModuleIdentity);
             _repository.UnregisterModule(_sampleModules[2].ModuleInfo.ModuleIdentity);
             _repository.UnregisterModule(_sampleModules[3].ModuleInfo.ModuleIdentity);

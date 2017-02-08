@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ModularSystem.Tests.Common")]
+[assembly: AssemblyTitle("ModularSystem.Tests.Server")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ModularSystem.Tests.Common")]
+[assembly: AssemblyProduct("ModularSystem.Tests.Server")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("14702c65-f8a3-4e51-ae40-da03a4393749")]
+[assembly: Guid("b4f6f272-2911-49c6-b69f-c9b6a4d6c981")]
 
 // Version information for an assembly consists of the following four values:
 //

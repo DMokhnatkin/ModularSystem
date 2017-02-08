@@ -1,15 +1,14 @@
 ﻿using System;
 using System.ServiceModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModularSystem.Server.Services;
-using Moq;
+using NUnit.Framework;
 
-namespace ModularSystem.Tests.Common
+namespace ModularSystem.Tests.Server
 {
-    [TestClass]
+    [TestFixture]
     public class CommunicationTest
     {
-        [TestMethod]
+        [Test]
         public void StartResolveService()
         {
             try
