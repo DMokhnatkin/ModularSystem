@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ModularSystem.Common;
+using ModularSystem.Common.Exceptions;
 
 namespace ModularSystem.Server.Repositories
 {
@@ -16,6 +18,12 @@ namespace ModularSystem.Server.Repositories
 
         /// <inheritdoc />
         public bool IsCheckSuccess => _failedModules?.Count == 0;
+
+        /// <inheritdoc />
+        public ModuleMissedException ToOneException()
+        {
+            return new ModuleMissedException(FailedModules.Select(x => x.Key));
+        }
 
         public CheckDependenciesResult(ModuleIdentity sourceModule, Dictionary<ModuleIdentity, Exception> failedModules)
         {

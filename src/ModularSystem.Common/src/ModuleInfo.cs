@@ -9,9 +9,9 @@ namespace ModularSystem.Common
         public ModuleIdentity ModuleIdentity { get; set; }
 
         [DataMember]
-        public ModuleInfo[] Dependencies { get; private set; }
+        public ModuleIdentity[] Dependencies { get; private set; }
 
-        public ModuleInfo(ModuleIdentity identity, ModuleInfo[] dependencies)
+        public ModuleInfo(ModuleIdentity identity, ModuleIdentity[] dependencies)
         {
             ModuleIdentity = identity;
             Dependencies = dependencies;

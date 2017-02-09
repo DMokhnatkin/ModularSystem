@@ -9,5 +9,9 @@ namespace ModularSystem.Common.Repositories
         IModule GetModule(ModuleIdentity moduleIdentity);
 
         ICheckDependenciesResult CheckDependencies(ModuleInfo moduleInfo);
+        IEnumerable<ModuleIdentity> GetDependent(ModuleIdentity moduleInfo);
+
+        /// <inheritdoc />
+        void RegisterModules(IEnumerable<IModule> modules);
     }
 }
