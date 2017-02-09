@@ -40,11 +40,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Exceptions\ModuleMissedException.cs" />
+    <Compile Include="src\Exceptions\WrongModuleTypeException.cs" />
     <Compile Include="src\IModule.cs" />
+    <Compile Include="src\ICheckDependenciesResult.cs" />
     <Compile Include="src\ModuleIdentity.cs" />
     <Compile Include="src\ModuleInfo.cs" />
     <Compile Include="src\ModuleType.cs" />
-    <Compile Include="src\Repositories\IModuleFilesRepository.cs" />
     <Compile Include="src\Repositories\IModulesRepository.cs" />
   </ItemGroup>
   <ItemGroup />

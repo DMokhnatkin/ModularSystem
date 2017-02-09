@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ModularSystem.Common;
+using ModularSystem.Common.Exceptions;
 using ModularSystem.Common.Repositories;
 
 namespace ModularSystem.Server.Repositories
@@ -36,15 +38,16 @@ namespace ModularSystem.Server.Repositories
         }
 
         /// <inheritdoc />
-        public IEnumerable<ModuleIdentity> ResolveDependencies(IEnumerable<ModuleIdentity> moduleIdentities)
+        public ICheckDependenciesResult CheckDependencies(ModuleInfo moduleInfo)
         {
-            HashSet<ModuleIdentity> result = new HashSet<ModuleIdentity>();
-            foreach (var moduleIdentity in moduleIdentities)
+            Dictionary<ModuleIdentity, Exception> failed = new Dictionary<ModuleIdentity, Exception>();
+            foreach (var dependency in moduleInfo.Dependencies)
             {
-                // If hashet contains moduleIdentity it will be just ignored
-                result.Add(moduleIdentity);
+                var module = GetModule(moduleInfo.ModuleIdentity);
+                if (module == null)
+                    failed.Add(dependency.ModuleIdentity, new ModuleMissedException(dependency.ModuleIdentity));
             }
-            return result;
+            return new CheckDependenciesResult(moduleInfo.ModuleIdentity, failed);
         }
     }
 }

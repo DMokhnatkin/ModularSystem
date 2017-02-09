@@ -8,6 +8,6 @@ namespace ModularSystem.Common.Repositories
         void UnregisterModule(ModuleIdentity moduleIdentity);
         IModule GetModule(ModuleIdentity moduleIdentity);
 
-        IEnumerable<ModuleIdentity> ResolveDependencies(IEnumerable<ModuleIdentity> moduleIdentities);
+        ICheckDependenciesResult CheckDependencies(ModuleInfo moduleInfo);
     }
 }
