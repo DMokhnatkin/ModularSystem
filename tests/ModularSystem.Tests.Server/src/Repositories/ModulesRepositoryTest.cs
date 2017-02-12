@@ -72,7 +72,14 @@ namespace ModularSystem.Tests.Server.Repositories
         [Test]
         public void TestRegisterModules()
         {
-            _repository.RegisterModules(_sampleModules);
+            _repository.RegisterModules(new []
+            {
+                _sampleModules[3],
+                _sampleModules[1],
+                _sampleModules[4],
+                _sampleModules[0],
+                _sampleModules[2],
+            });
             Assert.AreEqual(_sampleModules[0], _repository.GetModule(_sampleModules[0].ModuleInfo.ModuleIdentity));
             Assert.AreEqual(_sampleModules[1], _repository.GetModule(_sampleModules[1].ModuleInfo.ModuleIdentity));
             Assert.AreEqual(_sampleModules[2], _repository.GetModule(_sampleModules[2].ModuleInfo.ModuleIdentity));
@@ -104,7 +111,7 @@ namespace ModularSystem.Tests.Server.Repositories
         {
             _repository.RegisterModules(_sampleModules);
 
-            _repository.UnregisterModules(_sampleModules.Select(x => x.ModuleInfo.ModuleIdentity).Reverse());
+            _repository.UnregisterModules(_sampleModules.Select(x => x.ModuleInfo.ModuleIdentity));
             Assert.IsNull(_repository.GetModule(_sampleModules[0].ModuleInfo.ModuleIdentity));
             Assert.IsNull(_repository.GetModule(_sampleModules[1].ModuleInfo.ModuleIdentity));
             Assert.IsNull(_repository.GetModule(_sampleModules[2].ModuleInfo.ModuleIdentity));

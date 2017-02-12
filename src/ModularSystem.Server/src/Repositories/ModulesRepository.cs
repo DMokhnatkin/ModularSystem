@@ -26,6 +26,7 @@ namespace ModularSystem.Server.Repositories
         }
 
         /// <inheritdoc />
+        /// This method will try to register modules in right order
         public void RegisterModules(IEnumerable<IModule> modules)
         {
             // TODO: register in right order. modules[i] can require modules[i+k]. In this case swap them 
