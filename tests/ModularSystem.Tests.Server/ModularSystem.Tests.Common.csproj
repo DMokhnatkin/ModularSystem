@@ -81,7 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\CommunicationTest.cs" />
     <Compile Include="src\Repositories\ModulesRepositoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,10 +94,6 @@
     <ProjectReference Include="..\..\src\ModularSystem.Communication\ModularSystem.Communication.csproj">
       <Project>{3d149144-213d-4c07-a6a1-0a383aca0784}</Project>
       <Name>ModularSystem.Communication</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\ModularSystem.Server\ModularSystem.Server.csproj">
-      <Project>{a36e6f74-a58b-4a2e-bbe7-f89407f6ca61}</Project>
-      <Name>ModularSystem.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

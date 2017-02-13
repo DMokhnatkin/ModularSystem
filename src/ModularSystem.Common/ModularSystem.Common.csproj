@@ -45,10 +45,13 @@
     <Compile Include="src\Exceptions\WrongModuleTypeException.cs" />
     <Compile Include="src\IModule.cs" />
     <Compile Include="src\ICheckDependenciesResult.cs" />
+    <Compile Include="src\Module.cs" />
     <Compile Include="src\ModuleIdentity.cs" />
     <Compile Include="src\ModuleInfo.cs" />
     <Compile Include="src\ModuleType.cs" />
+    <Compile Include="src\Repositories\CheckDependenciesResult.cs" />
     <Compile Include="src\Repositories\IModulesRepository.cs" />
+    <Compile Include="src\Repositories\ModulesRepository.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

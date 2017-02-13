@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ModularSystem.Common;
-using ModularSystem.Server.Repositories;
+using ModularSystem.Common.Repositories;
 using Moq;
 using NUnit.Framework;
 

@@ -20,5 +20,15 @@ namespace ModularSystem.Communication.Data
             }
             return res;
         }
+
+        public static async Task<IModule> Unwrap(this ModuleDto module)
+        {
+            Module res = new Module()
+            {
+                ModuleInfo = module.ModuleInfo,
+                Data = new MemoryStream(module.Data)
+            };
+            return res;
+        }
     }
 }

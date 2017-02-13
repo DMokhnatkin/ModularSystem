@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ModularSystem.Common;
 using ModularSystem.Common.Exceptions;
-using ModularSystem.Common.Repositories;
 
-namespace ModularSystem.Server.Repositories
+namespace ModularSystem.Common.Repositories
 {
     public class ModulesRepository : IModulesRepository
     {

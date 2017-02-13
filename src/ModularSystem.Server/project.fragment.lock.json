@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "exports": {
+    "ModularSystem.Common/1.0.0": {
+      "type": "project",
+      "framework": ".NETStandard,Version=v1.4",
+      "compile": {
+        "bin/Debug/ModularSystem.Common.dll": {}
+      },
+      "runtime": {
+        "bin/Debug/ModularSystem.Common.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/ModularSystem.Common.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    },
+    "ModularSystem.Communication/1.0.0": {
+      "type": "project",
+      "framework": ".NETStandard,Version=v1.4",
+      "compile": {
+        "bin/Debug/ModularSystem.Communication.dll": {}
+      },
+      "runtime": {
+        "bin/Debug/ModularSystem.Communication.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/ModularSystem.Communication.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}
