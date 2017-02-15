@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ using ModularSystem.Server.Models;
 namespace ModularSystem.Server.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class ModulesController : Controller
     {
         private readonly IModulesRepository _modulesRepository;
@@ -24,22 +25,22 @@ namespace ModularSystem.Server.Controllers
             _modulesRepository = modulesRepository;
         }
 
-        [HttpPost]
+        [HttpPost("install")]
+        [Authorize(Policy = "AllowedConfig")]
         [FaultContract(typeof(ArgumentException))]
-        [Authorize(Roles = "Administrators")]
-        public async Task InstallModuleAsync(ModuleDto module)
+        public async Task InstallModuleAsync([FromBody]ModuleDto module)
         {
             _modulesRepository.RegisterModule(await module.Unwrap());
         }
 
-        [HttpPut]
-        [Authorize(Roles = "Administrators")]
+        [HttpPut("remove")]
+        [Authorize(Policy = "AllowedConfig")]
         public async Task RemoveModuleAsync(ModuleIdentity module)
         {
             _modulesRepository.UnregisterModule(module);
         }
 
-        [HttpGet]
+        [HttpGet("download")]
         public async Task<DownloadModulesResponse> DownloadModulesAsync(DownloadModulesRequest request)
         {
             List<ModuleDto> res = new List<ModuleDto>();
@@ -53,6 +54,14 @@ namespace ModularSystem.Server.Controllers
                 res.Add(await module.Wrap());
             }
             return new DownloadModulesResponse(res);
+        }
+
+        [HttpGet("test")]
+        [Authorize]
+        public string Test()
+        {
+            var z = User.FindFirst("ClientId");
+            return string.Concat(User.Claims.Select(x => x.Type.ToString() + x.Value.ToString()));
         }
     }
 }
