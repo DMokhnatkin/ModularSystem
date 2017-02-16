@@ -5,7 +5,7 @@ using ModularSystem.Common.Exceptions;
 
 namespace ModularSystem.Common.Repositories
 {
-    public class ModulesRepository : IModulesRepository
+    public class InMemoryModulesRepository : IModulesRepository
     {
         // PERFOMANCE: store in db?
         // PERFOMANCE: group by ModuleType, ModuleVersion or Name (now it isn't necessary)

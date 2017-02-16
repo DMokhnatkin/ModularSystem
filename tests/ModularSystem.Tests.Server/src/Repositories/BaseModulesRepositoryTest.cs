@@ -8,15 +8,17 @@ using NUnit.Framework;
 namespace ModularSystem.Tests.Server.Repositories
 {
     [TestFixture]
-    public class ModulesRepositoryTest
+    public abstract class BaseModulesRepositoryTest
     {
-        private ModulesRepository _repository;
+        public abstract IModulesRepository CreateModulesRepository();
+
+        private IModulesRepository _repository;
         private IModule[] _sampleModules;
 
         [SetUp]
         public void InitializeTest()
         {
-            _repository = new ModulesRepository();
+            _repository = CreateModulesRepository();
             _sampleModules = new IModule[5];
             _sampleModules[0] =
                 Mock.Of<IModule>(

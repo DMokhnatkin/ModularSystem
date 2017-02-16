@@ -52,7 +52,7 @@
     <Compile Include="src\Repositories\CheckDependenciesResult.cs" />
     <Compile Include="src\Repositories\IModulesRepository.cs" />
     <Compile Include="src\ModulesHelper.cs" />
-    <Compile Include="src\Repositories\ModulesRepository.cs" />
+    <Compile Include="src\Repositories\InMemoryModulesRepository.cs" />
     <Compile Include="src\Repositories\InMemoryUserModuleRequirmentsRepository.cs" />
   </ItemGroup>
   <ItemGroup />
