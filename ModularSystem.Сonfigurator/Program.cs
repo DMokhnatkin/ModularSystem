@@ -19,11 +19,11 @@ namespace ModularSystem.Сonfigurator
             var disco = await DiscoveryClient.GetAsync("http://localhost:5005");
 
             // request token
-            var tokenClient = new TokenClient(disco.TokenEndpoint, "client", "secret");
-            var tokenResponse = await tokenClient.RequestClientCredentialsAsync("api1");
+            var tokenClient = new TokenClient(disco.TokenEndpoint, "configurator", "g6wCBw");
+            var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync("alice", "password", "modules");
 
             return tokenResponse;
-        } 
+        }
 
         static async Task TestAsync()
         {

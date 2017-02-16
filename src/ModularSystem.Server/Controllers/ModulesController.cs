@@ -26,7 +26,7 @@ namespace ModularSystem.Server.Controllers
         }
 
         [HttpPost("install")]
-        [Authorize(Policy = "AllowedConfig")]
+        [Authorize(Policy = "ConfigModulesAllowed")]
         [FaultContract(typeof(ArgumentException))]
         public async Task InstallModuleAsync([FromBody]ModuleDto module)
         {
@@ -34,7 +34,7 @@ namespace ModularSystem.Server.Controllers
         }
 
         [HttpPut("remove")]
-        [Authorize(Policy = "AllowedConfig")]
+        [Authorize(Policy = "ConfigModulesAllowed")]
         public async Task RemoveModuleAsync(ModuleIdentity module)
         {
             _modulesRepository.UnregisterModule(module);
@@ -57,11 +57,10 @@ namespace ModularSystem.Server.Controllers
         }
 
         [HttpGet("test")]
-        [Authorize]
+        [Authorize(Policy = "ConfigModulesAllowed")]
         public string Test()
         {
-            var z = User.FindFirst("ClientId");
-            return string.Concat(User.Claims.Select(x => x.Type.ToString() + x.Value.ToString()));
+            return string.Concat(User.Claims.Select(x => x.Type.ToString() + " " + x.Value.ToString() + " "));
         }
     }
 }

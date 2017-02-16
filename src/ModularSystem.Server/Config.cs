@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Security.Claims;
 using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
@@ -21,7 +22,7 @@ namespace ModularSystem.Server
         {
             return new List<ApiResource>
             {
-                new ApiResource("api1", "My API")
+                new ApiResource("modules", "API for modules", new [] { "ConfigModules" })
             };
         }
 
@@ -31,19 +32,19 @@ namespace ModularSystem.Server
             {
                 new Client
                 {
-                    ClientId = "client",
+                    ClientId = "configurator",
 
                     // no interactive user, use the clientid/secret for authentication
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
 
                     // secret for authentication
                     ClientSecrets =
                     {
-                        new Secret("secret".Sha256())
+                        new Secret("g6wCBw".Sha256())
                     },
 
                     // scopes that client has access to
-                    AllowedScopes = { "api1" }
+                    AllowedScopes = { "modules" }
                 }
             };
         }
@@ -56,7 +57,11 @@ namespace ModularSystem.Server
                 {
                     SubjectId = "1",
                     Username = "alice",
-                    Password = "password"
+                    Password = "password",
+                    Claims =
+                    {
+                        new Claim("ConfigModules", "1")
+                    }
                 },
                 new TestUser
                 {

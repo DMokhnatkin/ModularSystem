@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
@@ -34,7 +35,7 @@ namespace ModularSystem.Server
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("AllowedConfig",
+                options.AddPolicy("ConfigModulesAllowed",
                                   policy => policy.RequireClaim("ConfigModules"));
             });
 
@@ -43,13 +44,15 @@ namespace ModularSystem.Server
 
             services.AddIdentityServer()
                 .AddTemporarySigningCredential()
-                .AddTestUsers(Config.GetUsers())
-                .AddConfigurationStore(builder =>
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.GetClients())
+                .AddTestUsers(Config.GetUsers());
+                /*.AddConfigurationStore(builder =>
                     builder.UseSqlServer(connectionString, options =>
                         options.MigrationsAssembly(migrationsAssembly)))
                 .AddOperationalStore(builder =>
                     builder.UseSqlServer(connectionString, options =>
-                        options.MigrationsAssembly(migrationsAssembly)));
+                        options.MigrationsAssembly(migrationsAssembly)));*/
 
             services.AddSingleton<IModulesRepository>(x => new ModulesRepository());
         }
@@ -65,7 +68,7 @@ namespace ModularSystem.Server
                 Authority = "http://localhost:5005",
                 RequireHttpsMetadata = false,
 
-                ApiName = "api1"
+                ApiName = "modules"
             });
 
             /*
