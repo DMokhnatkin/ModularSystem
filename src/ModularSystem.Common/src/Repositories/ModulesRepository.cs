@@ -24,13 +24,14 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        /// This method will try to register modules in right order
         public void RegisterModules(IEnumerable<IModule> modules)
         {
-            // TODO: register in right order. modules[i] can require modules[i+k]. In this case swap them 
-            foreach (var m in modules)
+            var enumerable = modules as IModule[] ?? modules.ToArray();
+            var identityToModule = enumerable.ToDictionary(x => x.ModuleInfo.ModuleIdentity, x => x); // Just for get IModule by ModuleIdentity
+            var orderedModules = ModulesHelper.OrderModules(enumerable.Select(x => x.ModuleInfo));
+            foreach (var m in orderedModules)
             {
-                RegisterModule(m);
+                RegisterModule(identityToModule[m.ModuleIdentity]);
             }
         }
 
@@ -49,10 +50,12 @@ namespace ModularSystem.Common.Repositories
         /// <inheritdoc />
         public void UnregisterModules(IEnumerable<ModuleIdentity> moduleIdentities)
         {
-            // TODO: unregister in right order. moduleIdentities[i] can require moduleIdentities[i-k]. In this case swap them 
-            foreach (var m in moduleIdentities)
+            var identities = moduleIdentities as ModuleIdentity[] ?? moduleIdentities.ToArray();
+            var infos = identities.Select(x => GetModule(x).ModuleInfo);
+            var orderedModules = ModulesHelper.OrderModules(infos).Reverse();
+            foreach (var m in orderedModules)
             {
-                UnregisterModule(m);
+                UnregisterModule(m.ModuleIdentity);
             }
         }
 
