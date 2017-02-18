@@ -81,8 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Repositories\InMemoryModulesRepositoryTest.cs" />
-    <Compile Include="src\Repositories\BaseModulesRepositoryTest.cs" />
+    <Compile Include="src\BLL\ModulesTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -18,6 +18,11 @@ namespace ModularSystem.Common.Exceptions
             Missed = modules;
         }
 
+        public ModuleMissedException(ModuleIdentity module, string message) : base(message)
+        {
+            Missed = new[] { module };
+        }
+
         /// <inheritdoc />
         public override string ToString()
         {

@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using ModularSystem.Common.BLL;
+using ModularSystem.Common.Exceptions;
+using ModularSystem.Common.Repositories;
 
 namespace ModularSystem.Common
 {
@@ -29,6 +33,39 @@ namespace ModularSystem.Common
                 }
             }
             return moduleInfos.OrderBy(x => linkesCt[x.ModuleIdentity]);
+        }
+
+        /// <summary>
+        /// Check dependencies of module in given list.
+        /// I.e. is given modules list is enough to install module.
+        /// </summary>
+        public static ICheckDependenciesResult CheckDependencies(ModuleInfo module, IEnumerable<ModuleIdentity> modules)
+        {
+            HashSet<ModuleIdentity> modulesSet = modules as HashSet<ModuleIdentity> ?? new HashSet<ModuleIdentity>(modules);
+            Dictionary<ModuleIdentity, Exception> missedModules = new Dictionary<ModuleIdentity, Exception>();
+            foreach (var moduleDependency in module.Dependencies)
+            {
+                if (!modulesSet.Contains(moduleDependency))
+                    missedModules.Add(moduleDependency, new ModuleMissedException(moduleDependency));
+            }
+            return new CheckDependenciesResult(module.ModuleIdentity, missedModules);
+        }
+
+        /// <summary>
+        /// Calc count of dependent modules for given module 
+        /// </summary>
+        public static int CalcCountOfDependent(ModuleIdentity module, IEnumerable<ModuleInfo> modules)
+        {
+            int res = 0;
+            foreach (var moduleInfo in modules)
+            {
+                foreach (var dependency in moduleInfo.Dependencies)
+                {
+                    if (dependency.Equals(module))
+                        res++;
+                }
+            }
+            return res;
         }
     }
 }
