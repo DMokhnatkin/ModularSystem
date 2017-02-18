@@ -1,15 +1,10 @@
-﻿using System.Runtime.Serialization;
-
-namespace ModularSystem.Common
+﻿namespace ModularSystem.Common
 {
-    [DataContract]
     public class ModuleInfo
     {
-        [DataMember]
-        public ModuleIdentity ModuleIdentity { get; set; }
+        public ModuleIdentity ModuleIdentity { get; }
 
-        [DataMember]
-        public ModuleIdentity[] Dependencies { get; private set; }
+        public ModuleIdentity[] Dependencies { get; }
 
         public ModuleInfo(ModuleIdentity identity, ModuleIdentity[] dependencies)
         {

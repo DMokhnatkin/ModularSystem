@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ModularSystem.Communication.Data.Dto;
 
 namespace ModularSystem.Communication.Data
 {

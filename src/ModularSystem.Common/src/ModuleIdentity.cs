@@ -3,16 +3,12 @@ using System.Runtime.Serialization;
 
 namespace ModularSystem.Common
 {
-    [DataContract]
     public struct ModuleIdentity
     {
-        [DataMember]
         public string Name { get; }
 
-        [DataMember]
         public Version Version { get; }
 
-        [DataMember]
         public ModuleType ModuleType { get; }
 
         public ModuleIdentity(string name, Version version, ModuleType moduleType)

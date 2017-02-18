@@ -1,8 +1,9 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using ModularSystem.Common;
+using ModularSystem.Communication.Data.Dto;
 
-namespace ModularSystem.Communication.Data
+namespace ModularSystem.Communication.Data.Mappers
 {
     public static class ModuleMapper
     {
@@ -10,7 +11,7 @@ namespace ModularSystem.Communication.Data
         {
             ModuleDto res = new ModuleDto
             {
-                ModuleInfo = module.ModuleInfo
+                ModuleInfo = module.ModuleInfo.Wrap()
             };
             // PERFOMANCE: now we read stream every time when wrap object. Maybe store byte[] as cache?
             using (MemoryStream writer = new MemoryStream())
@@ -25,7 +26,7 @@ namespace ModularSystem.Communication.Data
         {
             Module res = new Module()
             {
-                ModuleInfo = module.ModuleInfo,
+                ModuleInfo = module.ModuleInfo.Unwrap(),
                 Data = new MemoryStream(module.Data)
             };
             return res;

@@ -5,6 +5,9 @@ using ModularSystem.Common.Repositories;
 
 namespace ModularSystem.Common.BLL
 {
+    /// <summary>
+    /// Each user requires own set of modules. This class contains this list for each user.
+    /// </summary>
     public class UserModules
     {
         private readonly Modules _modules;
