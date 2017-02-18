@@ -15,7 +15,7 @@ namespace ModularSystem.Common.BLL
             _modulesRepository = modulesRepository;
         }
 
-        public void RegisterModule(IModule module)
+        public virtual void RegisterModule(IModule module)
         {
             var t = CheckDependencies(module.ModuleInfo);
             if (!t.IsCheckSuccess)
@@ -27,7 +27,7 @@ namespace ModularSystem.Common.BLL
         /// Register list of modules.
         /// This method will try to register modules in right order.
         /// </summary>
-        public void RegisterModules(IEnumerable<IModule> modules)
+        public virtual void RegisterModules(IEnumerable<IModule> modules)
         {
             var enumerable = modules as IModule[] ?? modules.ToArray();
             var identityToModule = enumerable.ToDictionary(x => x.ModuleInfo.ModuleIdentity, x => x); // Just for get IModule by ModuleIdentity
@@ -38,7 +38,7 @@ namespace ModularSystem.Common.BLL
             }
         }
 
-        public void UnregisterModule(ModuleIdentity moduleIdentity)
+        public virtual void UnregisterModule(ModuleIdentity moduleIdentity)
         {
             var t = GetDependent(moduleIdentity);
             var moduleIdentities = t as ModuleIdentity[] ?? t.ToArray();
@@ -51,7 +51,7 @@ namespace ModularSystem.Common.BLL
         /// Unregister list of modules.
         /// This method will try to unregister modules in right order.
         /// </summary>
-        public void UnregisterModules(IEnumerable<ModuleIdentity> moduleIdentities)
+        public virtual void UnregisterModules(IEnumerable<ModuleIdentity> moduleIdentities)
         {
             var identities = moduleIdentities as ModuleIdentity[] ?? moduleIdentities.ToArray();
             var infos = identities.Select(x => GetModule(x).ModuleInfo);
@@ -65,15 +65,15 @@ namespace ModularSystem.Common.BLL
         /// <summary>
         /// Returns module by it's identity
         /// </summary>
-        public IModule GetModule(ModuleIdentity moduleIdentity)
+        public virtual IModule GetModule(ModuleIdentity moduleIdentity)
         {
             return _modulesRepository.GetModule(moduleIdentity);
         }
 
         /// <summary>
-        /// Check if module can be used. (check all module dependencies)
+        /// Check if module can be registered. (check all module dependencies)
         /// </summary>
-        public ICheckDependenciesResult CheckDependencies(ModuleInfo moduleInfo)
+        public virtual ICheckDependenciesResult CheckDependencies(ModuleInfo moduleInfo)
         {
             Dictionary<ModuleIdentity, Exception> failed = new Dictionary<ModuleIdentity, Exception>();
             foreach (var dependency in moduleInfo.Dependencies)
@@ -88,7 +88,7 @@ namespace ModularSystem.Common.BLL
         /// <summary>
         /// Get all dependent modules
         /// </summary>
-        public IEnumerable<ModuleIdentity> GetDependent(ModuleIdentity moduleInfo)
+        public virtual IEnumerable<ModuleIdentity> GetDependent(ModuleIdentity moduleInfo)
         {
             List<ModuleIdentity> res = new List<ModuleIdentity>();
             foreach (var module in _modulesRepository)

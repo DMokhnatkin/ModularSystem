@@ -54,7 +54,7 @@ namespace ModularSystem.Server
                     builder.UseSqlServer(connectionString, options =>
                         options.MigrationsAssembly(migrationsAssembly)));*/
 
-            services.AddSingleton<IModulesRepository>(x => new InMemoryModulesRepository());
+            services.AddSingleton<IModulesRepository>(x => new MemoryModulesRepository());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

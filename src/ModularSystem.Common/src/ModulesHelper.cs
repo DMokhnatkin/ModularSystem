@@ -52,17 +52,18 @@ namespace ModularSystem.Common
         }
 
         /// <summary>
-        /// Calc count of dependent modules for given module 
+        /// Get all modules dependent on specifed module in collection.
         /// </summary>
-        public static int CalcCountOfDependent(ModuleIdentity module, IEnumerable<ModuleInfo> modules)
+        /// <returns></returns>
+        public static IEnumerable<ModuleIdentity> GetDependent(ModuleIdentity module, IEnumerable<ModuleInfo> modules)
         {
-            int res = 0;
+            var res = new List<ModuleIdentity>();
             foreach (var moduleInfo in modules)
             {
                 foreach (var dependency in moduleInfo.Dependencies)
                 {
                     if (dependency.Equals(module))
-                        res++;
+                        res.Add(dependency);
                 }
             }
             return res;

@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\BLL\UserModules.cs" />
     <Compile Include="src\Exceptions\ModuleIsRequiredException.cs" />
     <Compile Include="src\Exceptions\ModuleMissedException.cs" />
     <Compile Include="src\Exceptions\WrongModuleTypeException.cs" />
@@ -48,12 +49,14 @@
     <Compile Include="src\Module.cs" />
     <Compile Include="src\ModuleIdentity.cs" />
     <Compile Include="src\ModuleInfo.cs" />
+    <Compile Include="src\BLL\Modules.cs" />
     <Compile Include="src\ModuleType.cs" />
-    <Compile Include="src\Repositories\CheckDependenciesResult.cs" />
+    <Compile Include="src\BLL\CheckDependenciesResult.cs" />
+    <Compile Include="src\Repositories\IUserModulesRepository.cs" />
     <Compile Include="src\Repositories\IModulesRepository.cs" />
     <Compile Include="src\ModulesHelper.cs" />
-    <Compile Include="src\Repositories\InMemoryModulesRepository.cs" />
-    <Compile Include="src\Repositories\InMemoryUserModuleRequirmentsRepository.cs" />
+    <Compile Include="src\Repositories\MemoryModulesRepository.cs" />
+    <Compile Include="src\Repositories\MemoryUserModulesRepository.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ModularSystem.Common.Repositories
 {
-    public class InMemoryModulesRepository : IModulesRepository
+    public class MemoryModulesRepository : IModulesRepository
     {
-        // PERFOMANCE: store in db?
-        // PERFOMANCE: group by ModuleType, ModuleVersion or Name (now it isn't necessary)
-        // PERFOMANCE: GetDependent is very long. Can be improved by change collection type of dependecies in module info. Or by adding cache.
         private Dictionary<ModuleIdentity, IModule> _modules = new Dictionary<ModuleIdentity, IModule>();
 
         /// <inheritdoc />
