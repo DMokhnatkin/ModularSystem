@@ -1,8 +1,10 @@
 ﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using IdentityModel.Client;
-using Newtonsoft.Json.Linq;
+using System.IO;
+using System.Threading;
+using ModularSystem.Common;
+using ModularSystem.Communication.Data;
+using ModularSystem.Communication.Data.Mappers;
+using ModularSystem.Сonfigurator.Proxies;
 
 namespace ModularSystem.Сonfigurator
 {
@@ -10,37 +12,15 @@ namespace ModularSystem.Сonfigurator
     {
         static void Main(string[] args)
         {
-            TestAsync().Wait();
+            Thread.Sleep(2000);
+            ModulesProxy proxy = new ModulesProxy();
+            Module test = new Module()
+            {
+                Data = new MemoryStream(new byte[] {0, 0, 0, 1, 2, 3, 4, 56, 7}),
+                ModuleInfo = new ModuleInfo(new ModuleIdentity("mytest", new Version(1, 0), ModuleType.Server), new ModuleIdentity[0])
+            };
+            var res = proxy.InstallModuleAsync(test.Wrap().Result).Result;
             Console.ReadLine();
-        }
-
-        static async Task<TokenResponse> GetTokenAsync()
-        {
-            var disco = await DiscoveryClient.GetAsync("http://localhost:5005");
-
-            // request token
-            var tokenClient = new TokenClient(disco.TokenEndpoint, "configurator", "g6wCBw");
-            var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync("alice", "password", "modules");
-
-            return tokenResponse;
-        }
-
-        static async Task TestAsync()
-        {
-            // call api
-            var client = new HttpClient();
-            client.SetBearerToken((await GetTokenAsync()).AccessToken);
-
-            var response = await client.GetAsync("http://localhost:5005/api/modules/test");
-            if (!response.IsSuccessStatusCode)
-            {
-                Console.WriteLine(response.StatusCode);
-            }
-            else
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(content);
-            }
         }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ModularSystem.Common.BLL;
 using ModularSystem.Common.Repositories;
 
 namespace ModularSystem.Server
@@ -53,8 +54,10 @@ namespace ModularSystem.Server
                 .AddOperationalStore(builder =>
                     builder.UseSqlServer(connectionString, options =>
                         options.MigrationsAssembly(migrationsAssembly)));*/
-
-            services.AddSingleton<IModulesRepository>(x => new MemoryModulesRepository());
+            
+            Modules modules = new Modules(new MemoryModulesRepository());
+            services.AddSingleton(x => modules);
+            services.AddSingleton(x => new UserModules(modules, new MemoryUserModulesRepository()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

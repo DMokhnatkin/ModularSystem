@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.ServiceModel;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModularSystem.Common;
+using ModularSystem.Common.BLL;
 using ModularSystem.Common.Exceptions;
-using ModularSystem.Common.Repositories;
 using ModularSystem.Communication.Data;
+using ModularSystem.Communication.Data.Dto;
+using ModularSystem.Communication.Data.Mappers;
 using ModularSystem.Server.Models;
 
 namespace ModularSystem.Server.Controllers
@@ -18,11 +20,13 @@ namespace ModularSystem.Server.Controllers
     //[Authorize]
     public class ModulesController : Controller
     {
-        private readonly IModulesRepository _modulesRepository;
+        private readonly Modules _modules;
+        private readonly UserModules _userModules;
 
-        public ModulesController(IModulesRepository modulesRepository)
+        public ModulesController(Modules modules, UserModules userModules)
         {
-            _modulesRepository = modulesRepository;
+            _modules = modules;
+            _userModules = userModules;
         }
 
         [HttpPost("install")]
@@ -30,14 +34,14 @@ namespace ModularSystem.Server.Controllers
         [FaultContract(typeof(ArgumentException))]
         public async Task InstallModuleAsync([FromBody]ModuleDto module)
         {
-            _modulesRepository.AddModule(await module.Unwrap());
+            _modules.RegisterModule(await module.Unwrap());
         }
 
         [HttpPut("remove")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         public async Task RemoveModuleAsync(ModuleIdentity module)
         {
-            _modulesRepository.RemoveModule(module);
+            _modules.UnregisterModule(module);
         }
 
         [HttpGet("download")]
@@ -48,7 +52,7 @@ namespace ModularSystem.Server.Controllers
             {
                 if (moduleIdentity.ModuleType != ModuleType.Client)
                     throw new WrongModuleTypeException(moduleIdentity, new[] { ModuleType.Client });
-                var module = _modulesRepository.GetModule(moduleIdentity);
+                var module = _modules.GetModule(moduleIdentity);
                 if (module == null)
                     throw new ModuleMissedException(moduleIdentity);
                 res.Add(await module.Wrap());

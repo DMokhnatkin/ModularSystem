@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using ModularSystem.Communication.Data;
+using ModularSystem.Communication.Data.Dto;
 
 namespace ModularSystem.Server.Models
 {
