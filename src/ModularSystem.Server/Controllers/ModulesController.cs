@@ -30,14 +30,14 @@ namespace ModularSystem.Server.Controllers
         [FaultContract(typeof(ArgumentException))]
         public async Task InstallModuleAsync([FromBody]ModuleDto module)
         {
-            _modulesRepository.RegisterModule(await module.Unwrap());
+            _modulesRepository.AddModule(await module.Unwrap());
         }
 
         [HttpPut("remove")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         public async Task RemoveModuleAsync(ModuleIdentity module)
         {
-            _modulesRepository.UnregisterModule(module);
+            _modulesRepository.RemoveModule(module);
         }
 
         [HttpGet("download")]

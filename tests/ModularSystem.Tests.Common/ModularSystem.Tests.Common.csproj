@@ -7,8 +7,8 @@
     <ProjectGuid>{B4F6F272-2911-49C6-B69F-C9B6A4D6C981}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ModularSystem.Tests.Server</RootNamespace>
-    <AssemblyName>ModularSystem.Tests.Server</AssemblyName>
+    <RootNamespace>ModularSystem.Tests.Common</RootNamespace>
+    <AssemblyName>ModularSystem.Tests.Common</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

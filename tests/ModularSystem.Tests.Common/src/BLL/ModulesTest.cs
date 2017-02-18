@@ -6,7 +6,7 @@ using ModularSystem.Common.Repositories;
 using Moq;
 using NUnit.Framework;
 
-namespace ModularSystem.Tests.Server.BLL
+namespace ModularSystem.Tests.Common.BLL
 {
     [TestFixture]
     public class ModulesTest
