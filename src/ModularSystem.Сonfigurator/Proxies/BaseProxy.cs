@@ -11,10 +11,13 @@ namespace ModularSystem.Сonfigurator.Proxies
 
         public MediaTypeFormatter MediaTypeFormatter { get; set; } = new JsonMediaTypeFormatter();
 
-        protected BaseProxy()
+        public string BaseUrl { get; set; }
+
+        protected BaseProxy(string baseUrl)
         {
             client = new HttpClient();
             client.SetBearerToken(GetTokenAsync().Result.AccessToken);
+            BaseUrl = baseUrl;
         }
 
         static async Task<TokenResponse> GetTokenAsync()
