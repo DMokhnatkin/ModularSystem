@@ -71,6 +71,15 @@ namespace ModularSystem.Common.BLL
         }
 
         /// <summary>
+        /// Get all registered modules
+        /// </summary>
+        /// <returns></returns>
+        public virtual IEnumerable<IModule> GetRegisteredModules()
+        {
+            return _modulesRepository;
+        }
+
+        /// <summary>
         /// Check if module can be registered. (check all module dependencies)
         /// </summary>
         public virtual ICheckDependenciesResult CheckDependencies(ModuleInfo moduleInfo)

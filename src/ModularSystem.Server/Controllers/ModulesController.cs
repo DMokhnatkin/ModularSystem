@@ -44,6 +44,15 @@ namespace ModularSystem.Server.Controllers
             _modules.UnregisterModule(module);
         }
 
+        [HttpGet]
+        [Authorize(Policy = "ConfigModulesAllowed")]
+        public async Task<ModuleIdentityDto[]> GetModulesListAsync()
+        {
+            var modules = await Task.Factory.StartNew(() => _modules.GetRegisteredModules());
+            var dtos = modules.Select(x => x.ModuleInfo.ModuleIdentity.Wrap()).ToArray();
+            return dtos;
+        }
+
         [HttpGet("download")]
         public async Task<DownloadModulesResponse> DownloadModulesAsync(DownloadModulesRequest request)
         {

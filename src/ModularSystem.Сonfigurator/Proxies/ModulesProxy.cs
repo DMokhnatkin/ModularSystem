@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ModularSystem.Common;
 using ModularSystem.Communication.Data.Dto;
+using Newtonsoft.Json;
 
 namespace ModularSystem.Сonfigurator.Proxies
 {
@@ -19,6 +20,12 @@ namespace ModularSystem.Сonfigurator.Proxies
         public async Task<HttpResponseMessage> RemoveModuleAsync(ModuleIdentity identity)
         {
             return await client.PutAsync($"{BaseUrl}/api/modules/remove", new ObjectContent(typeof(ModuleIdentityDto), identity, MediaTypeFormatter));
+        }
+
+        public async Task<ModuleIdentityDto[]> GetModulesListAsync()
+        {
+            var res = await client.GetAsync($"{BaseUrl}/api/modules");
+            return JsonConvert.DeserializeObject<ModuleIdentityDto[]>(await res.Content.ReadAsStringAsync());
         }
     }
 }
