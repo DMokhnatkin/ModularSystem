@@ -17,7 +17,7 @@ namespace ModularSystem.Сonfigurator.Proxies
             return await client.PostAsync($"{BaseUrl}/api/modules/install", new ObjectContent(typeof(ModuleDto), module, MediaTypeFormatter));
         }
 
-        public async Task<HttpResponseMessage> RemoveModuleAsync(ModuleIdentity identity)
+        public async Task<HttpResponseMessage> RemoveModuleAsync(ModuleIdentityDto identity)
         {
             return await client.PutAsync($"{BaseUrl}/api/modules/remove", new ObjectContent(typeof(ModuleIdentityDto), identity, MediaTypeFormatter));
         }

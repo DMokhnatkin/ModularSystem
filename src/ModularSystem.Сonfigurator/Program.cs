@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
+using CommandLine;
+using CommandLine.Text;
 using ModularSystem.Common;
-using ModularSystem.Communication.Data.Dto;
-using ModularSystem.Communication.Data.Mappers;
+using ModularSystem.Сonfigurator.BLL;
+using ModularSystem.Сonfigurator.InputOptions;
 using ModularSystem.Сonfigurator.Proxies;
 
 namespace ModularSystem.Сonfigurator
@@ -15,71 +14,36 @@ namespace ModularSystem.Сonfigurator
     {
         static void Main(string[] args)
         {
-            Thread.Sleep(2000);
-            ModulesProxy proxy = new ModulesProxy("http://localhost:5005");
+            HttpModules modules = new HttpModules(new ModulesProxy("http://localhost:5005"));
 
-            Console.WriteLine("Type man to get help");
-
-            do
+            while (true)
             {
-                var command = ReadLine.Read(">");
-                switch (command)
-                {
-                    case "man":
-                        PrintMan();
-                        break;
-                    case "install":
-                        Console.WriteLine(InstallModule(proxy));
-                        break;
-                    case "list":
-                        var r = GetListOfModules(proxy);
-                        if (!r.Any())
+                var s = ReadLine.Read(">");
+                var command = s.Split(' ');
+
+                Parser.Default
+                    .ParseArguments<InstallOptions, RemoveOptions, ListOptions, ExitOptions>(command)
+                    .WithParsed<InstallOptions>(
+                        opts => Console.WriteLine(modules.InstallModule(null) ? "success" : "error"))
+                    .WithParsed<InstallOptions>(
+                        opts => Console.WriteLine(modules.InstallModule(null) ? "success" : "error"))
+                    .WithParsed<RemoveOptions>(opts => { })
+                    .WithParsed<ListOptions>(opts =>
+                    {
+                        var r = modules.GetListOfModules();
+                        var moduleIdentities = r as ModuleIdentity[] ?? r.ToArray();
+                        if (!moduleIdentities.Any())
                             Console.WriteLine("No modules are installed");
                         else
                         {
-                            foreach (var moduleIdentity in r)
+                            foreach (var moduleIdentity in moduleIdentities)
                             {
                                 Console.WriteLine(" - " + moduleIdentity);
                             }
                         }
-                        break;
-                    case "exit":
-                        return;
-                }
+                    })
+                    .WithParsed<ExitOptions>(opts => Environment.Exit(0));
             }
-            while (true);
         }
-
-        static HttpResponseMessage InstallModule(ModulesProxy proxy)
-        {
-            ModuleDto dto = new ModuleDto()
-            {
-                ModuleInfo = new ModuleInfoDto()
-                {
-                    ModuleIdentity = new ModuleIdentityDto()
-                    {
-                        ModuleType = 0,
-                        Name = "test3",
-                        Version = (new Version(1, 0)).ToString()
-                    },
-                    Dependencies = new ModuleIdentityDto[0]
-                },
-                Data = new byte[] { 1, 2, 3, 4, 5 }
-            };
-            return proxy.InstallModuleAsync(dto).Result;
-        }
-
-        static IEnumerable<ModuleIdentity> GetListOfModules(ModulesProxy proxy)
-        {
-            return proxy.GetModulesListAsync().Result.Select(x => x.Unwrap());
-        }
-
-        static void PrintMan()
-        {
-            Console.WriteLine("man for configurator");
-            Console.WriteLine("* install : install module");
-            Console.WriteLine("* list : get list of installed modules");
-            Console.WriteLine("* exit : exit from configurator");
-        } 
     }
 }

@@ -31,7 +31,7 @@ namespace ModularSystem.Server.Controllers
 
         [HttpPost("install")]
         [Authorize(Policy = "ConfigModulesAllowed")]
-        [FaultContract(typeof(ArgumentException))]
+        //[FaultContract(typeof(ArgumentException))]
         public async Task InstallModuleAsync([FromBody]ModuleDto module)
         {
             _modules.RegisterModule(await module.Unwrap());
@@ -41,7 +41,7 @@ namespace ModularSystem.Server.Controllers
         [Authorize(Policy = "ConfigModulesAllowed")]
         public async Task RemoveModuleAsync(ModuleIdentity module)
         {
-            _modules.UnregisterModule(module);
+            await Task.Factory.StartNew(() => _modules.UnregisterModule(module));
         }
 
         [HttpGet]
