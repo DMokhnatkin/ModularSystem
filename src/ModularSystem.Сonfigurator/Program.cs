@@ -1,8 +1,9 @@
 ﻿using System;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading;
 using CommandLine;
-using CommandLine.Text;
 using ModularSystem.Common;
 using ModularSystem.Сonfigurator.BLL;
 using ModularSystem.Сonfigurator.InputOptions;
@@ -14,6 +15,7 @@ namespace ModularSystem.Сonfigurator
     {
         static void Main(string[] args)
         {
+            Thread.Sleep(1000);
             HttpModules modules = new HttpModules(new ModulesProxy("http://localhost:5005"));
 
             while (true)
@@ -24,9 +26,7 @@ namespace ModularSystem.Сonfigurator
                 Parser.Default
                     .ParseArguments<InstallOptions, RemoveOptions, ListOptions, ExitOptions>(command)
                     .WithParsed<InstallOptions>(
-                        opts => Console.WriteLine(modules.InstallModule(null) ? "success" : "error"))
-                    .WithParsed<InstallOptions>(
-                        opts => Console.WriteLine(modules.InstallModule(null) ? "success" : "error"))
+                        opts => Install(modules, opts))
                     .WithParsed<RemoveOptions>(opts => { })
                     .WithParsed<ListOptions>(opts =>
                     {
@@ -45,5 +45,12 @@ namespace ModularSystem.Сonfigurator
                     .WithParsed<ExitOptions>(opts => Environment.Exit(0));
             }
         }
+
+        private static void Install(HttpModules modules, InstallOptions opts)
+        {
+            var r = modules.InstallModulePackage(File.OpenRead(opts.FilePath));
+            Console.WriteLine(r.IsSuccessStatusCode ? "success" : $"error {r.StatusCode}");
+        }
     }
 }
+

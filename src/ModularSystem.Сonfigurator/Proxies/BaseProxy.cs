@@ -2,6 +2,7 @@
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 using IdentityModel.Client;
+using Newtonsoft.Json;
 
 namespace ModularSystem.Сonfigurator.Proxies
 {
@@ -9,7 +10,13 @@ namespace ModularSystem.Сonfigurator.Proxies
     {
         protected HttpClient client;
 
-        public MediaTypeFormatter MediaTypeFormatter { get; set; } = new JsonMediaTypeFormatter();
+        public MediaTypeFormatter MediaTypeFormatter { get; set; } = new JsonMediaTypeFormatter()
+        {
+            SerializerSettings = new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }
+        };
 
         public string BaseUrl { get; set; }
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using System.ServiceModel;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,12 +29,26 @@ namespace ModularSystem.Server.Controllers
             _userModules = userModules;
         }
 
+        /*
         [HttpPost("install")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         //[FaultContract(typeof(ArgumentException))]
         public async Task InstallModuleAsync([FromBody]ModuleDto module)
         {
             _modules.RegisterModule(await module.Unwrap());
+        }*/
+
+        [HttpPost("install")]
+        [Authorize(Policy = "ConfigModulesAllowed")]
+        //[FaultContract(typeof(ArgumentException))]
+        public async Task InstallModulePackageAsync()
+        {
+            // TODO: use model bind
+            using (ZipArchive modulePackage = new ZipArchive(Request.Body))
+            {
+                
+            }
+            //_modules.RegisterModule(await module.Unwrap());
         }
 
         [HttpPut("remove")]

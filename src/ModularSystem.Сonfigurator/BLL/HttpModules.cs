@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using ModularSystem.Common;
 using ModularSystem.Communication.Data.Mappers;
 using ModularSystem.Сonfigurator.Proxies;
@@ -16,9 +19,9 @@ namespace ModularSystem.Сonfigurator.BLL
             _proxy = proxy;
         }
 
-        public bool InstallModule(IModule module)
+        public HttpResponseMessage InstallModulePackage(FileStream package)
         {
-            return _proxy.InstallModuleAsync(module.Wrap().Result).Result.StatusCode == HttpStatusCode.OK;
+            return _proxy.InstallModulePackageAsync(package).Result;
         }
 
         public bool RemoveModule(ModuleIdentity module)

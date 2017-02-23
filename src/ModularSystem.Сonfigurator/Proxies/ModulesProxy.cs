@@ -1,6 +1,9 @@
-﻿using System.Net.Http;
+﻿using System.IO;
+using System.IO.Compression;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Threading.Tasks;
-using ModularSystem.Common;
 using ModularSystem.Communication.Data.Dto;
 using Newtonsoft.Json;
 
@@ -12,9 +15,11 @@ namespace ModularSystem.Сonfigurator.Proxies
         public ModulesProxy(string baseUrl) : base(baseUrl)
         { }
 
-        public async Task<HttpResponseMessage> InstallModuleAsync(ModuleDto module)
+        public async Task<HttpResponseMessage> InstallModulePackageAsync(FileStream modulePackage)
         {
-            return await client.PostAsync($"{BaseUrl}/api/modules/install", new ObjectContent(typeof(ModuleDto), module, MediaTypeFormatter));
+            var content = new StreamContent(modulePackage);
+            content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Zip);
+            return await client.PostAsync($"{BaseUrl}/api/modules/install", content);
         }
 
         public async Task<HttpResponseMessage> RemoveModuleAsync(ModuleIdentityDto identity)
