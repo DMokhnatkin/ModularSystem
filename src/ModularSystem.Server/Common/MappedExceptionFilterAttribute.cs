@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ModularSystem.Server.Common
 {
+    /// <summary>
+    /// This filter will return info about server exception in httpresponse.
+    /// </summary>
     public class MappedExceptionFilterAttribute : ExceptionFilterAttribute
     {
         public MappedExceptionFilterAttribute(Type exceptionType, HttpStatusCode httpStatusCode, bool onlyMessage = true)
