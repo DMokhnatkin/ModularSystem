@@ -44,7 +44,8 @@ namespace ModularSystem.Сonfigurator
                     .ParseArguments<InstallOptions, RemoveOptions, ListOptions, ExitOptions>(command)
                     .WithParsed<InstallOptions>(
                         opts => Install(modules, opts))
-                    .WithParsed<RemoveOptions>(opts => { })
+                    .WithParsed<RemoveOptions>(
+                        opts => Remove(modules, opts))
                     .WithParsed<ListOptions>(opts =>
                     {
                         var r = modules.GetListOfModules();
@@ -66,6 +67,12 @@ namespace ModularSystem.Сonfigurator
         private static void Install(HttpModules modules, InstallOptions opts)
         {
             var r = modules.InstallModulePackage(File.OpenRead(opts.FilePath));
+            Console.WriteLine(r.IsSuccessStatusCode ? "success" : $"error {r.StatusCode}");
+        }
+
+        private static void Remove(HttpModules modules, RemoveOptions opts)
+        {
+            var r = modules.RemoveModule(ModuleIdentity.Parse($"{opts.Name} {opts.Version} {opts.Type}"));
             Console.WriteLine(r.IsSuccessStatusCode ? "success" : $"error {r.StatusCode}");
         }
     }

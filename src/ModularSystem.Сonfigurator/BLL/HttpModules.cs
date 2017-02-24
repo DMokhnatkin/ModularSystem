@@ -24,9 +24,9 @@ namespace ModularSystem.Сonfigurator.BLL
             return _proxy.InstallModulePackageAsync(package).Result;
         }
 
-        public bool RemoveModule(ModuleIdentity module)
+        public HttpResponseMessage RemoveModule(ModuleIdentity module)
         {
-            return _proxy.RemoveModuleAsync(module.Wrap()).Result.StatusCode == HttpStatusCode.OK;
+            return _proxy.RemoveModuleAsync(module.Wrap()).Result;
         }
 
         public IEnumerable<ModuleIdentity> GetListOfModules()

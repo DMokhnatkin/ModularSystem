@@ -62,9 +62,10 @@ namespace ModularSystem.Server.Controllers
 
         [HttpPut("remove")]
         [Authorize(Policy = "ConfigModulesAllowed")]
-        public async Task RemoveModuleAsync(ModuleIdentity module)
+        [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
+        public async Task RemoveModuleAsync([FromBody]ModuleIdentityDto module)
         {
-            await Task.Factory.StartNew(() => _modules.UnregisterModule(module));
+            await Task.Factory.StartNew(() => _modules.UnregisterModule(module.Unwrap()));
         }
 
         [HttpGet]
