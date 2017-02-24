@@ -6,7 +6,8 @@ namespace ModularSystem.Common.Exceptions
 {
     public class ModuleIsRequiredException : ArgumentException
     {
-        public ModuleIsRequiredException(ModuleIdentity module, IEnumerable<ModuleIdentity> dependentModules)
+        public ModuleIsRequiredException(ModuleIdentity module, IEnumerable<ModuleIdentity> dependentModules) : 
+            base($"Module {module} is required for {string.Concat(dependentModules.Select(x => x.ToString() + "; "))}.")
         {
             ModuleIdentity = module;
             DependentModules = dependentModules;
@@ -15,11 +16,5 @@ namespace ModularSystem.Common.Exceptions
         public IEnumerable<ModuleIdentity> DependentModules { get; }
 
         public ModuleIdentity ModuleIdentity { get; }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"Module {ModuleIdentity} is required for {DependentModules.Select(x => x.ToString() + "; ")}.";
-        }
     }
 }

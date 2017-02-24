@@ -19,7 +19,7 @@ namespace ModularSystem.Common.BLL
         {
             var t = CheckDependencies(module.ModuleInfo);
             if (!t.IsCheckSuccess)
-                throw new ArgumentException($"CheckDependencies for {module.ModuleInfo} failed.", t.ToOneException());
+                throw t.ToOneException();
             _modulesRepository.AddModule(module);
         }
 

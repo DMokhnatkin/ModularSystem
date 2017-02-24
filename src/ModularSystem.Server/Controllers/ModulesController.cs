@@ -44,6 +44,7 @@ namespace ModularSystem.Server.Controllers
         [HttpPost("install")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleMissedException), HttpStatusCode.BadRequest)]
+        [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
         public async Task InstallModulePackageAsync()
         {
             // TODO: use model bind
@@ -63,6 +64,7 @@ namespace ModularSystem.Server.Controllers
         [HttpPut("remove")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
+        [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
         public async Task RemoveModuleAsync([FromBody]ModuleIdentityDto module)
         {
             await Task.Factory.StartNew(() => _modules.UnregisterModule(module.Unwrap()));

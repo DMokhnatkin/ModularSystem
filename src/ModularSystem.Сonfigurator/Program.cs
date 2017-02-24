@@ -67,13 +67,13 @@ namespace ModularSystem.Сonfigurator
         private static void Install(HttpModules modules, InstallOptions opts)
         {
             var r = modules.InstallModulePackage(File.OpenRead(opts.FilePath));
-            Console.WriteLine(r.IsSuccessStatusCode ? "success" : $"error {r.StatusCode}");
+            Console.WriteLine(r.IsSuccessStatusCode ? "success" : $"error {r.StatusCode} : {r.Content.ReadAsStringAsync().Result}");
         }
 
         private static void Remove(HttpModules modules, RemoveOptions opts)
         {
             var r = modules.RemoveModule(ModuleIdentity.Parse($"{opts.Name} {opts.Version} {opts.Type}"));
-            Console.WriteLine(r.IsSuccessStatusCode ? "success" : $"error {r.StatusCode}");
+            Console.WriteLine(r.IsSuccessStatusCode ? "success" : $"error {r.StatusCode} : {r.Content.ReadAsStringAsync().Result}");
         }
     }
 }

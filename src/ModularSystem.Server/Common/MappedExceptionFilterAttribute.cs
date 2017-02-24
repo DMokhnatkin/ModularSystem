@@ -7,15 +7,18 @@ namespace ModularSystem.Server.Common
 {
     public class MappedExceptionFilterAttribute : ExceptionFilterAttribute
     {
-        public MappedExceptionFilterAttribute(Type exceptionType, HttpStatusCode httpStatusCode)
+        public MappedExceptionFilterAttribute(Type exceptionType, HttpStatusCode httpStatusCode, bool onlyMessage = true)
         {
             ExceptionType = exceptionType;
             HttpStatusCode = httpStatusCode;
+            OnlyMessage = onlyMessage;
         }
 
         public Type ExceptionType { get; }
 
         public HttpStatusCode HttpStatusCode { get; }
+
+        public bool OnlyMessage { get; }
 
         /// <inheritdoc />
         public override void OnException(ExceptionContext context)
@@ -25,7 +28,7 @@ namespace ModularSystem.Server.Common
             {
                 var res = new ContentResult
                 {
-                    Content = context.Exception.ToString(),
+                    Content = OnlyMessage ? context.Exception.Message : context.Exception.ToString(),
                     StatusCode = (int)HttpStatusCode
                 };
                 context.Result = res;
