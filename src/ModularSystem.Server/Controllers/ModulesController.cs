@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using ModularSystem.Common;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Exceptions;
+using ModularSystem.Communication;
 using ModularSystem.Communication.Data;
 using ModularSystem.Communication.Data.Dto;
 using ModularSystem.Communication.Data.Files;

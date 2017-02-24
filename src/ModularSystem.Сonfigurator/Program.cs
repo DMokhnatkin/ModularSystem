@@ -6,7 +6,6 @@ using System.Threading;
 using CommandLine;
 using ModularSystem.Common;
 using ModularSystem.Communication.Data.Dto;
-using ModularSystem.Communication.Data.Files;
 using ModularSystem.Communication.Data.Mappers;
 using ModularSystem.Сonfigurator.BLL;
 using ModularSystem.Сonfigurator.InputOptions;

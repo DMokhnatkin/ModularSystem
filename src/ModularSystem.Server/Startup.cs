@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using IdentityServer4.EntityFramework.DbContexts;
@@ -11,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Repositories;
+using ModularSystem.Communication.Repositories;
 
 namespace ModularSystem.Server
 {
@@ -55,7 +58,7 @@ namespace ModularSystem.Server
                     builder.UseSqlServer(connectionString, options =>
                         options.MigrationsAssembly(migrationsAssembly)));*/
             
-            Modules modules = new Modules(new MemoryModulesRepository());
+            Modules modules = new Modules(new FileSystemModulesRepository(Path.Combine(AppContext.BaseDirectory, "modules"))); // TODO: change application data path
             services.AddSingleton(x => modules);
             services.AddSingleton(x => new UserModules(modules, new MemoryUserModulesRepository()));
         }
