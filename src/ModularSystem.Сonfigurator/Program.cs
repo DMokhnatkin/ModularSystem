@@ -5,6 +5,9 @@ using System.Linq;
 using System.Threading;
 using CommandLine;
 using ModularSystem.Common;
+using ModularSystem.Communication.Data.Dto;
+using ModularSystem.Communication.Data.Files;
+using ModularSystem.Communication.Data.Mappers;
 using ModularSystem.Сonfigurator.BLL;
 using ModularSystem.Сonfigurator.InputOptions;
 using ModularSystem.Сonfigurator.Proxies;
@@ -16,7 +19,21 @@ namespace ModularSystem.Сonfigurator
         static void Main(string[] args)
         {
             Thread.Sleep(1000);
+
             HttpModules modules = new HttpModules(new ModulesProxy("http://localhost:5005"));
+
+            /*
+            ModuleDto dto = new ModuleDto()
+            {
+                ModuleInfo = new ModuleInfoDto()
+                {
+                    ModuleIdentity = new ModuleIdentity("test", "1.0", ModuleType.Server).Wrap(),
+                    Dependencies = new[] {new ModuleIdentity("test2", "1.0", ModuleType.Server).Wrap()}
+                },
+                Data = File.ReadAllBytes("t2.zip")
+            };
+
+            dto.WriteToDirectory("t3");*/
 
             while (true)
             {

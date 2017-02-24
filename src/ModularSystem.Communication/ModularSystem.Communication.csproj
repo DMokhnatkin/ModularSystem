@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Data\Files\ModuleDtoFileSystem.cs" />
     <Compile Include="src\Data\IDownloadModulesRequest.cs" />
     <Compile Include="src\Data\IDownloadModulesResponse.cs" />
     <Compile Include="src\Data\IResolveRequest.cs" />

@@ -3,7 +3,9 @@
   "dependencies": {
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
     "NETStandard.Library": "1.6.1",
-    "SharpCompress": "0.15.1",
+    "Newtonsoft.Json": "9.0.1",
+    "System.IO.Compression": "4.3.0",
+    "System.IO.Compression.ZipFile": "4.3.0",
     "System.Runtime.Serialization.Primitives": "4.3.0"
   },
   "frameworks": {
