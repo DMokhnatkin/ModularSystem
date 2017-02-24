@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,9 @@ using ModularSystem.Common.BLL;
 using ModularSystem.Common.Exceptions;
 using ModularSystem.Communication.Data;
 using ModularSystem.Communication.Data.Dto;
+using ModularSystem.Communication.Data.Files;
 using ModularSystem.Communication.Data.Mappers;
+using ModularSystem.Server.Common;
 using ModularSystem.Server.Models;
 
 namespace ModularSystem.Server.Controllers
@@ -40,15 +43,21 @@ namespace ModularSystem.Server.Controllers
 
         [HttpPost("install")]
         [Authorize(Policy = "ConfigModulesAllowed")]
-        //[FaultContract(typeof(ArgumentException))]
+        [MappedExceptionFilter(typeof(ModuleMissedException), HttpStatusCode.BadRequest)]
         public async Task InstallModulePackageAsync()
         {
             // TODO: use model bind
+            string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             using (ZipArchive modulePackage = new ZipArchive(Request.Body))
             {
-                
+                modulePackage.ExtractToDirectory(tempPath);
             }
-            //_modules.RegisterModule(await module.Unwrap());
+            var modules = new List<IModule>();
+            foreach (var t in Directory.GetDirectories(tempPath))
+            {
+                modules.Add(await ModuleDtoFileSystem.ReadFromDirectory(t).Unwrap());
+            }
+            _modules.RegisterModules(modules);
         }
 
         [HttpPut("remove")]
