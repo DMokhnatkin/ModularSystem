@@ -42,17 +42,17 @@ namespace ModularSystem.Сonfigurator
                 var command = s.Split(' ');
 
                 Parser.Default
-                    .ParseArguments<InstallOptions, RemoveOptions, ListOptions, ExitOptions, AddUserModulesOptions, GetUserModulesOptions>(command)
+                    .ParseArguments<InstallOptions, RemoveOptions, ListOptions, ExitOptions, AddUserModulesOptions>(command)
                     .WithParsed<InstallOptions>(opts => Install(modules, opts))
                     .WithParsed<RemoveOptions>(opts => Remove(modules, opts))
                     .WithParsed<ListOptions>(opts =>
                     {
-                        var r = modules.GetListOfModules();
-                        var moduleIdentities = r as ModuleIdentity[] ?? r.ToArray();
-                        HandleEnumerableResult(moduleIdentities);
+                        IEnumerable<ModuleIdentity> res = opts.UserId == null
+                            ? modules.GetListOfModules()
+                            : modules.GetUserModules(opts.UserId);
+                        HandleEnumerableResult(res);
                     })
                     .WithParsed<AddUserModulesOptions>(opts => AddUserModules(modules, opts))
-                    .WithParsed<GetUserModulesOptions>(opts => GetUserModules(modules, opts))
                     .WithParsed<ExitOptions>(opts => Environment.Exit(0));
             }
         }
@@ -75,12 +75,6 @@ namespace ModularSystem.Сonfigurator
                 opts.ModuleIdentities.Select(ModuleIdentity.Parse);
             var r = modules.AddUserModules(opts.UserId, moduleIdentities);
             HandleResult(r);
-        }
-
-        private static void GetUserModules(HttpModules modules, GetUserModulesOptions opts)
-        {
-            var r = modules.GetUserModules(opts.UserId);
-            HandleEnumerableResult(r);
         }
 
         private static void HandleResult(HttpResponseMessage resp)

@@ -161,7 +161,6 @@
     <Compile Include="BLL\HttpModules.cs" />
     <Compile Include="InputOptions\AddUserModulesOptions.cs" />
     <Compile Include="InputOptions\ExitOptions.cs" />
-    <Compile Include="InputOptions\GetUserModulesOptions.cs" />
     <Compile Include="InputOptions\ListOptions.cs" />
     <Compile Include="InputOptions\RemoveOptions.cs" />
     <Compile Include="InputOptions\InstallOptions.cs" />
