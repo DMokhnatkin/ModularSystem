@@ -35,9 +35,9 @@ namespace ModularSystem.Сonfigurator.BLL
             return _proxy.GetModulesListAsync().Result.Select(x => x.Unwrap());
         }
 
-        public HttpResponseMessage AddUserModules(IEnumerable<ModuleIdentity> moduleIdentities)
+        public HttpResponseMessage AddUserModules(string userId, IEnumerable<ModuleIdentity> moduleIdentities)
         {
-            return _proxy.AddUserModules(moduleIdentities.Select(x => x.Wrap()).ToArray()).Result;
+            return _proxy.AddUserModules(userId, moduleIdentities.Select(x => x.Wrap()).ToArray()).Result;
         }
 
         public IEnumerable<ModuleIdentity> GetUserModules(string userId)

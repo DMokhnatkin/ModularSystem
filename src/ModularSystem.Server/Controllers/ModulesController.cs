@@ -99,12 +99,11 @@ namespace ModularSystem.Server.Controllers
             return new DownloadModulesResponse(res);
         }
 
-        [HttpPost("addForUser")]
+        [HttpPost("addForUser/{userId}")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
-        public void AddUserModules([FromBody]IEnumerable<ModuleIdentityDto> moduleIdentity)
+        public void AddUserModules(string userId, [FromBody]IEnumerable<ModuleIdentityDto> moduleIdentity)
         {
-            var userId = User.FindFirst("sub").Value;
             _userModules.AddModules(userId, moduleIdentity.Select(x => x.Unwrap()));
         }
 

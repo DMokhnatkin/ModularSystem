@@ -73,7 +73,7 @@ namespace ModularSystem.Сonfigurator
         {
             var moduleIdentities =
                 opts.ModuleIdentities.Select(ModuleIdentity.Parse);
-            var r = modules.AddUserModules(moduleIdentities);
+            var r = modules.AddUserModules(opts.UserId, moduleIdentities);
             HandleResult(r);
         }
 
