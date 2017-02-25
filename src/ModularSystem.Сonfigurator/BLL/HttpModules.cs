@@ -40,6 +40,11 @@ namespace ModularSystem.Сonfigurator.BLL
             return _proxy.AddUserModules(userId, moduleIdentities.Select(x => x.Wrap()).ToArray()).Result;
         }
 
+        public HttpResponseMessage RemoveUserModules(string userId, IEnumerable<ModuleIdentity> moduleIdentities)
+        {
+            return _proxy.RemoveUserModules(userId, moduleIdentities.Select(x => x.Wrap()).ToArray()).Result;
+        }
+
         public IEnumerable<ModuleIdentity> GetUserModules(string userId)
         {
             return _proxy.GetUserModules(userId).Result.Select(x => x.Unwrap());

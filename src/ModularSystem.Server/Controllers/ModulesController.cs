@@ -101,12 +101,21 @@ namespace ModularSystem.Server.Controllers
         [HttpPost("user/{userId}")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
-        public void AddUserModules(string userId, [FromBody]IEnumerable<ModuleIdentityDto> moduleIdentity)
+        public void AddUserModules(string userId, [FromBody]IEnumerable<ModuleIdentityDto> moduleIdentities)
         {
-            _modules.AddModules(userId, moduleIdentity.Select(x => x.Unwrap()));
+            _modules.AddModules(userId, moduleIdentities.Select(x => x.Unwrap()));
+        }
+
+        [HttpDelete("user/{userId}")]
+        [Authorize(Policy = "ConfigModulesAllowed")]
+        [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
+        public void RemoveUserModules(string userId, IEnumerable<string> moduleIdentities)
+        {
+            _modules.RemoveModules(userId, moduleIdentities.Select(ModuleIdentity.Parse));
         }
 
         [HttpGet("user/{userId}")]
+        // TODO: allow user gets its modules
         [Authorize(Policy = "ConfigModulesAllowed")]
         public IEnumerable<ModuleIdentityDto> GetUserModules(string userId)
         {
@@ -115,7 +124,6 @@ namespace ModularSystem.Server.Controllers
                 return new ModuleIdentityDto[0];
             return _modules.GetModules(userId).Select(x => x.Wrap());
         }
-
         #endregion
 
         [HttpGet("test")]

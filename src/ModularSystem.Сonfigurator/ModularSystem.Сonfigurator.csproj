@@ -164,6 +164,7 @@
     <Compile Include="InputOptions\ListOptions.cs" />
     <Compile Include="InputOptions\RemoveOptions.cs" />
     <Compile Include="InputOptions\InstallOptions.cs" />
+    <Compile Include="InputOptions\RemoveUserModulesOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxies\BaseProxy.cs" />

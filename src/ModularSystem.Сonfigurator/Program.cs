@@ -42,7 +42,7 @@ namespace ModularSystem.Сonfigurator
                 var command = s.Split(' ');
 
                 Parser.Default
-                    .ParseArguments<InstallOptions, RemoveOptions, ListOptions, ExitOptions, AddUserModulesOptions>(command)
+                    .ParseArguments<InstallOptions, RemoveOptions, ListOptions, ExitOptions, AddUserModulesOptions, RemoveUserModulesOptions>(command)
                     .WithParsed<InstallOptions>(opts => Install(modules, opts))
                     .WithParsed<RemoveOptions>(opts => Remove(modules, opts))
                     .WithParsed<ListOptions>(opts =>
@@ -53,6 +53,7 @@ namespace ModularSystem.Сonfigurator
                         HandleEnumerableResult(res);
                     })
                     .WithParsed<AddUserModulesOptions>(opts => AddUserModules(modules, opts))
+                    .WithParsed<RemoveUserModulesOptions>(opts => RemoveUserModules(modules, opts))
                     .WithParsed<ExitOptions>(opts => Environment.Exit(0));
             }
         }
@@ -74,6 +75,14 @@ namespace ModularSystem.Сonfigurator
             var moduleIdentities =
                 opts.ModuleIdentities.Select(ModuleIdentity.Parse);
             var r = modules.AddUserModules(opts.UserId, moduleIdentities);
+            HandleResult(r);
+        }
+
+        private static void RemoveUserModules(HttpModules modules, RemoveUserModulesOptions opts)
+        {
+            var moduleIdentities =
+                opts.ModuleIdentities.Select(ModuleIdentity.Parse);
+            var r = modules.RemoveUserModules(opts.UserId, moduleIdentities);
             HandleResult(r);
         }
 
