@@ -35,12 +35,12 @@ namespace ModularSystem.Сonfigurator.Proxies
 
         public async Task<HttpResponseMessage> AddUserModules(string userId, ModuleIdentityDto[] dtos)
         {
-            return await client.PostAsync($"{BaseUrl}/api/modules/addForUser/{userId}", new ObjectContent(typeof(ModuleIdentityDto[]), dtos, MediaTypeFormatter));
+            return await client.PostAsync($"{BaseUrl}/api/modules/user/{userId}", new ObjectContent(typeof(ModuleIdentityDto[]), dtos, MediaTypeFormatter));
         }
 
         public async Task<ModuleIdentityDto[]> GetUserModules(string userId)
         {
-            var res = await client.GetAsync($"{BaseUrl}/api/modules/getForUser/{userId}");
+            var res = await client.GetAsync($"{BaseUrl}/api/modules/user/{userId}");
             return JsonConvert.DeserializeObject<ModuleIdentityDto[]>(await res.Content.ReadAsStringAsync());
         }
     }

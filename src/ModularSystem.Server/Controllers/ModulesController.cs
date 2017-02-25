@@ -99,7 +99,8 @@ namespace ModularSystem.Server.Controllers
             return new DownloadModulesResponse(res);
         }
 
-        [HttpPost("addForUser/{userId}")]
+        #region User modules
+        [HttpPost("user/{userId}")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
         public void AddUserModules(string userId, [FromBody]IEnumerable<ModuleIdentityDto> moduleIdentity)
@@ -107,7 +108,7 @@ namespace ModularSystem.Server.Controllers
             _userModules.AddModules(userId, moduleIdentity.Select(x => x.Unwrap()));
         }
 
-        [HttpGet("getForUser/{userId}")]
+        [HttpGet("user/{userId}")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         public IEnumerable<ModuleIdentityDto> GetUserModules(string userId)
         {
@@ -116,6 +117,8 @@ namespace ModularSystem.Server.Controllers
                 return new ModuleIdentityDto[0];
             return _userModules.GetModules(userId).Select(x => x.Wrap());
         }
+
+        #endregion
 
         [HttpGet("test")]
         [Authorize(Policy = "ConfigModulesAllowed")]
