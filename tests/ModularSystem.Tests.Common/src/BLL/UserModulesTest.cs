@@ -12,14 +12,12 @@ namespace ModularSystem.Tests.Common.BLL
     public class UserModulesTest
     {
         private Modules _modules;
-        private UserModules _userModules;
         private IModule[] _sampleModules;
 
         [SetUp]
         public void InitializeTest()
         {
-            _modules = new Modules(new MemoryModulesRepository()); // Mock should be used
-            _userModules = new UserModules(_modules, new MemoryUserModulesRepository());
+            _modules = new Modules(new MemoryModulesRepository(), new MemoryUserModulesRepository()); // Mock should be used
             _sampleModules = new IModule[5];
             _sampleModules[0] =
                 Mock.Of<IModule>(
@@ -54,74 +52,74 @@ namespace ModularSystem.Tests.Common.BLL
         public void TestAddModule()
         {
             // Add module 0
-            _userModules.AddModule("1", _sampleModules[0].ModuleInfo.ModuleIdentity);
-            Assert.IsTrue(_userModules.GetModules("1").Contains(_sampleModules[0].ModuleInfo.ModuleIdentity));
+            _modules.AddModule("1", _sampleModules[0].ModuleInfo.ModuleIdentity);
+            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[0].ModuleInfo.ModuleIdentity));
 
             // Add module 1
-            _userModules.AddModule("1", _sampleModules[1].ModuleInfo.ModuleIdentity);
-            Assert.IsTrue(_userModules.GetModules("1").Contains(_sampleModules[1].ModuleInfo.ModuleIdentity));
+            _modules.AddModule("1", _sampleModules[1].ModuleInfo.ModuleIdentity);
+            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[1].ModuleInfo.ModuleIdentity));
 
             // Module 3 can't be added (required module 2 is not added)
-            Assert.Throws<ModuleMissedException>(() => _userModules.AddModule("1", _sampleModules[3].ModuleInfo.ModuleIdentity));
+            Assert.Throws<ModuleMissedException>(() => _modules.AddModule("1", _sampleModules[3].ModuleInfo.ModuleIdentity));
 
             // Add module 2
-            _userModules.AddModule("1", _sampleModules[2].ModuleInfo.ModuleIdentity);
-            Assert.IsTrue(_userModules.GetModules("1").Contains(_sampleModules[2].ModuleInfo.ModuleIdentity));
+            _modules.AddModule("1", _sampleModules[2].ModuleInfo.ModuleIdentity);
+            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[2].ModuleInfo.ModuleIdentity));
 
             // Now module 3 can be added
-            _userModules.AddModule("1", _sampleModules[3].ModuleInfo.ModuleIdentity);
+            _modules.AddModule("1", _sampleModules[3].ModuleInfo.ModuleIdentity);
         }
 
         [Test]
         public void TestAddModules()
         {
-            _userModules.AddModules("1", _sampleModules.Select(x => x.ModuleInfo.ModuleIdentity).Reverse());
+            _modules.AddModules("1", _sampleModules.Select(x => x.ModuleInfo.ModuleIdentity).Reverse());
 
             // Check module 0
-            Assert.IsTrue(_userModules.GetModules("1").Contains(_sampleModules[0].ModuleInfo.ModuleIdentity));
+            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[0].ModuleInfo.ModuleIdentity));
 
             // Check module 1
-            Assert.IsTrue(_userModules.GetModules("1").Contains(_sampleModules[1].ModuleInfo.ModuleIdentity));
+            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[1].ModuleInfo.ModuleIdentity));
 
             // Check module 2
-            Assert.IsTrue(_userModules.GetModules("1").Contains(_sampleModules[2].ModuleInfo.ModuleIdentity));
+            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[2].ModuleInfo.ModuleIdentity));
 
             // Check module 3
-            Assert.IsTrue(_userModules.GetModules("1").Contains(_sampleModules[3].ModuleInfo.ModuleIdentity));
+            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[3].ModuleInfo.ModuleIdentity));
         }
 
         [Test]
         public void TestRemoveModule()
         {
             // Add all modules
-            _userModules.AddModules("1", _sampleModules.Select(x => x.ModuleInfo.ModuleIdentity));
+            _modules.AddModules("1", _sampleModules.Select(x => x.ModuleInfo.ModuleIdentity));
 
             // Remove module 3
-            _userModules.RemoveModule("1", _sampleModules[3].ModuleInfo.ModuleIdentity);
+            _modules.RemoveModule("1", _sampleModules[3].ModuleInfo.ModuleIdentity);
 
             // We can't remove module 0. There are some dependent modules
-            Assert.Throws<ModuleIsRequiredException>(() => _userModules.RemoveModule("1", _sampleModules[0].ModuleInfo.ModuleIdentity));
+            Assert.Throws<ModuleIsRequiredException>(() => _modules.RemoveModule("1", _sampleModules[0].ModuleInfo.ModuleIdentity));
 
             // Remove module 2
-            _userModules.RemoveModule("1", _sampleModules[2].ModuleInfo.ModuleIdentity);
+            _modules.RemoveModule("1", _sampleModules[2].ModuleInfo.ModuleIdentity);
 
             // Remove module 1
-            _userModules.RemoveModule("1", _sampleModules[1].ModuleInfo.ModuleIdentity);
+            _modules.RemoveModule("1", _sampleModules[1].ModuleInfo.ModuleIdentity);
 
             // Now we can remove module 0
-            _userModules.RemoveModule("1", _sampleModules[0].ModuleInfo.ModuleIdentity);
+            _modules.RemoveModule("1", _sampleModules[0].ModuleInfo.ModuleIdentity);
         }
 
         [Test]
         public void TestRemoveModules()
         {
             // Add all modules
-            _userModules.AddModules("1", _sampleModules.Select(x => x.ModuleInfo.ModuleIdentity));
+            _modules.AddModules("1", _sampleModules.Select(x => x.ModuleInfo.ModuleIdentity));
 
             // Remove all modules
-            _userModules.RemoveModules("1", _sampleModules.Select(x => x.ModuleInfo.ModuleIdentity));
+            _modules.RemoveModules("1", _sampleModules.Select(x => x.ModuleInfo.ModuleIdentity));
 
-            Assert.IsTrue(!_userModules.GetModules("1").Any());
+            Assert.IsTrue(!_modules.GetModules("1").Any());
         }
     }
 }

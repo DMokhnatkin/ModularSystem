@@ -17,7 +17,7 @@ namespace ModularSystem.Tests.Common.BLL
         [SetUp]
         public void InitializeTest()
         {
-            _modules = new Modules(new MemoryModulesRepository());
+            _modules = new Modules(new MemoryModulesRepository(), new MemoryUserModulesRepository());
             _sampleModules = new IModule[5];
             _sampleModules[0] =
                 Mock.Of<IModule>(
