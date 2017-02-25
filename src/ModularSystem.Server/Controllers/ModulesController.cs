@@ -28,12 +28,10 @@ namespace ModularSystem.Server.Controllers
     public class ModulesController : Controller
     {
         private readonly Modules _modules;
-        private readonly UserModules _userModules;
 
-        public ModulesController(Modules modules, UserModules userModules)
+        public ModulesController(Modules modules)
         {
             _modules = modules;
-            _userModules = userModules;
         }
 
         /*
@@ -105,17 +103,17 @@ namespace ModularSystem.Server.Controllers
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
         public void AddUserModules(string userId, [FromBody]IEnumerable<ModuleIdentityDto> moduleIdentity)
         {
-            _userModules.AddModules(userId, moduleIdentity.Select(x => x.Unwrap()));
+            _modules.AddModules(userId, moduleIdentity.Select(x => x.Unwrap()));
         }
 
         [HttpGet("user/{userId}")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         public IEnumerable<ModuleIdentityDto> GetUserModules(string userId)
         {
-            var r = _userModules.GetModules(userId);
+            var r = _modules.GetModules(userId);
             if (r == null)
                 return new ModuleIdentityDto[0];
-            return _userModules.GetModules(userId).Select(x => x.Wrap());
+            return _modules.GetModules(userId).Select(x => x.Wrap());
         }
 
         #endregion

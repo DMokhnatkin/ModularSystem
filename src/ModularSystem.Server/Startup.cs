@@ -58,9 +58,8 @@ namespace ModularSystem.Server
                     builder.UseSqlServer(connectionString, options =>
                         options.MigrationsAssembly(migrationsAssembly)));*/
             
-            Modules modules = new Modules(new FileSystemModulesRepository(Path.Combine(AppContext.BaseDirectory, "modules"))); // TODO: change application data path
+            Modules modules = new Modules(new FileSystemModulesRepository(Path.Combine(AppContext.BaseDirectory, "modules")), new MemoryUserModulesRepository()); // TODO: change application data path
             services.AddSingleton(x => modules);
-            services.AddSingleton(x => new UserModules(modules, new MemoryUserModulesRepository()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
