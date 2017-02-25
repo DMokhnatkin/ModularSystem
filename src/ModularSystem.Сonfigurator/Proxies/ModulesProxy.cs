@@ -32,5 +32,16 @@ namespace ModularSystem.Сonfigurator.Proxies
             var res = await client.GetAsync($"{BaseUrl}/api/modules");
             return JsonConvert.DeserializeObject<ModuleIdentityDto[]>(await res.Content.ReadAsStringAsync());
         }
+
+        public async Task<HttpResponseMessage> AddUserModules(ModuleIdentityDto[] dtos)
+        {
+            return await client.PostAsync($"{BaseUrl}/api/modules/addForUser", new ObjectContent(typeof(ModuleIdentityDto[]), dtos, MediaTypeFormatter));
+        }
+
+        public async Task<ModuleIdentityDto[]> GetUserModules(string userId)
+        {
+            var res = await client.GetAsync($"{BaseUrl}/api/modules/getForUser/{userId}");
+            return JsonConvert.DeserializeObject<ModuleIdentityDto[]>(await res.Content.ReadAsStringAsync());
+        }
     }
 }

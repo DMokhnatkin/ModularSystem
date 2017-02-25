@@ -4,8 +4,11 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ModularSystem.Common;
 using ModularSystem.Common.BLL;
@@ -94,6 +97,25 @@ namespace ModularSystem.Server.Controllers
                 res.Add(await module.Wrap());
             }
             return new DownloadModulesResponse(res);
+        }
+
+        [HttpPost("addForUser")]
+        [Authorize(Policy = "ConfigModulesAllowed")]
+        [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
+        public void AddUserModules([FromBody]IEnumerable<ModuleIdentityDto> moduleIdentity)
+        {
+            var userId = User.FindFirst("sub").Value;
+            _userModules.AddModules(userId, moduleIdentity.Select(x => x.Unwrap()));
+        }
+
+        [HttpGet("getForUser/{userId}")]
+        [Authorize(Policy = "ConfigModulesAllowed")]
+        public IEnumerable<ModuleIdentityDto> GetUserModules(string userId)
+        {
+            var r = _userModules.GetModules(userId);
+            if (r == null)
+                return new ModuleIdentityDto[0];
+            return _userModules.GetModules(userId).Select(x => x.Wrap());
         }
 
         [HttpGet("test")]

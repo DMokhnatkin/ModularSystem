@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using CommandLine;
 using ModularSystem.Common;
@@ -40,39 +42,64 @@ namespace ModularSystem.Сonfigurator
                 var command = s.Split(' ');
 
                 Parser.Default
-                    .ParseArguments<InstallOptions, RemoveOptions, ListOptions, ExitOptions>(command)
-                    .WithParsed<InstallOptions>(
-                        opts => Install(modules, opts))
-                    .WithParsed<RemoveOptions>(
-                        opts => Remove(modules, opts))
+                    .ParseArguments<InstallOptions, RemoveOptions, ListOptions, ExitOptions, AddUserModulesOptions, GetUserModulesOptions>(command)
+                    .WithParsed<InstallOptions>(opts => Install(modules, opts))
+                    .WithParsed<RemoveOptions>(opts => Remove(modules, opts))
                     .WithParsed<ListOptions>(opts =>
                     {
                         var r = modules.GetListOfModules();
                         var moduleIdentities = r as ModuleIdentity[] ?? r.ToArray();
-                        if (!moduleIdentities.Any())
-                            Console.WriteLine("No modules are installed");
-                        else
-                        {
-                            foreach (var moduleIdentity in moduleIdentities)
-                            {
-                                Console.WriteLine(" - " + moduleIdentity);
-                            }
-                        }
+                        HandleEnumerableResult(moduleIdentities);
                     })
+                    .WithParsed<AddUserModulesOptions>(opts => AddUserModules(modules, opts))
+                    .WithParsed<GetUserModulesOptions>(opts => GetUserModules(modules, opts))
                     .WithParsed<ExitOptions>(opts => Environment.Exit(0));
             }
         }
 
         private static void Install(HttpModules modules, InstallOptions opts)
         {
-            var r = modules.InstallModulePackage(File.OpenRead(opts.FilePath));
-            Console.WriteLine(r.IsSuccessStatusCode ? "success" : $"error {r.StatusCode} : {r.Content.ReadAsStringAsync().Result}");
+            var r = modules.InstallModulePackage(File.OpenRead(opts.PackagePath));
+            HandleResult(r);
         }
 
         private static void Remove(HttpModules modules, RemoveOptions opts)
         {
             var r = modules.RemoveModule(ModuleIdentity.Parse($"{opts.Name} {opts.Version} {opts.Type}"));
-            Console.WriteLine(r.IsSuccessStatusCode ? "success" : $"error {r.StatusCode} : {r.Content.ReadAsStringAsync().Result}");
+            HandleResult(r);
+        }
+
+        private static void AddUserModules(HttpModules modules, AddUserModulesOptions opts)
+        {
+            var moduleIdentities =
+                opts.ModuleIdentities.Select(ModuleIdentity.Parse);
+            var r = modules.AddUserModules(moduleIdentities);
+            HandleResult(r);
+        }
+
+        private static void GetUserModules(HttpModules modules, GetUserModulesOptions opts)
+        {
+            var r = modules.GetUserModules(opts.UserId);
+            HandleEnumerableResult(r);
+        }
+
+        private static void HandleResult(HttpResponseMessage resp)
+        {
+            Console.WriteLine(resp.IsSuccessStatusCode ? "success" : $"error {resp.StatusCode} : {resp.Content.ReadAsStringAsync().Result}");
+        }
+
+        private static void HandleEnumerableResult<T>(IEnumerable<T> objs)
+        {
+            var enumerable = objs as T[] ?? objs.ToArray();
+            if (!enumerable.Any())
+                Console.WriteLine("Enumerable is empty");
+            else
+            {
+                foreach (var obj in enumerable)
+                {
+                    Console.WriteLine(" * " + obj);
+                }
+            }
         }
     }
 }

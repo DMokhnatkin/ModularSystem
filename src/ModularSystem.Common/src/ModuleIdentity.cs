@@ -31,7 +31,7 @@ namespace ModularSystem.Common
         /// <inheritdoc />
         public override string ToString()
         {
-            return $"{Name} {Version} {ModuleType}";
+            return $"{Name}-{Version}-{ModuleType}";
         }
 
         /// <inheritdoc />
@@ -42,7 +42,7 @@ namespace ModularSystem.Common
 
         public static ModuleIdentity Parse(string str)
         {
-            var r = str.Split(' ');
+            var r = str.Split('-');
             return new ModuleIdentity(r[0], r[1], (ModuleType)Enum.Parse(typeof(ModuleType), r[2]));
         }
     }
