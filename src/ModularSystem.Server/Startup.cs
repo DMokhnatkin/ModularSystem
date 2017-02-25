@@ -58,7 +58,9 @@ namespace ModularSystem.Server
                     builder.UseSqlServer(connectionString, options =>
                         options.MigrationsAssembly(migrationsAssembly)));*/
             
-            Modules modules = new Modules(new FileSystemModulesRepository(Path.Combine(AppContext.BaseDirectory, "modules")), new MemoryUserModulesRepository()); // TODO: change application data path
+            Modules modules = new Modules(
+                new FileSystemModulesRepository(Path.Combine(AppContext.BaseDirectory, "modules")), 
+                new FileUserModulesRepository(Path.Combine(AppContext.BaseDirectory, "userModules.json"))); // TODO: change application data path
             services.AddSingleton(x => modules);
         }
 

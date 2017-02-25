@@ -138,7 +138,7 @@ namespace ModularSystem.Common.BLL
         /// </summary>
         public void AddModules(string userId, IEnumerable<ModuleIdentity> modules)
         {
-            var ordered = ModulesHelper.OrderModules(modules.Select(x => _modulesRepository.GetModule(x).ModuleInfo));
+            var ordered = ModulesHelper.OrderModules(modules.Select(x => _modulesRepository.GetModule(x)?.ModuleInfo));
 
             foreach (var moduleInfo in ordered)
             {
