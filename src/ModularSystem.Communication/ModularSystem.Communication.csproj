@@ -54,6 +54,7 @@
     <Compile Include="src\Data\ResolveResponse.cs" />
     <Compile Include="src\Data\Files\ModuleFileSystemHelper.cs" />
     <Compile Include="src\Repositories\FileSystemModulesRepository.cs" />
+    <Compile Include="src\Repositories\FileUserModulesRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ModularSystem.Common\ModularSystem.Common.csproj">

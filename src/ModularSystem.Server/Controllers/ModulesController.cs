@@ -4,8 +4,11 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ModularSystem.Common;
 using ModularSystem.Common.BLL;
@@ -25,12 +28,10 @@ namespace ModularSystem.Server.Controllers
     public class ModulesController : Controller
     {
         private readonly Modules _modules;
-        private readonly UserModules _userModules;
 
-        public ModulesController(Modules modules, UserModules userModules)
+        public ModulesController(Modules modules)
         {
             _modules = modules;
-            _userModules = userModules;
         }
 
         /*
@@ -95,6 +96,35 @@ namespace ModularSystem.Server.Controllers
             }
             return new DownloadModulesResponse(res);
         }
+
+        #region User modules
+        [HttpPost("user/{userId}")]
+        [Authorize(Policy = "ConfigModulesAllowed")]
+        [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
+        public void AddUserModules(string userId, [FromBody]IEnumerable<ModuleIdentityDto> moduleIdentities)
+        {
+            _modules.AddModules(userId, moduleIdentities.Select(x => x.Unwrap()));
+        }
+
+        [HttpDelete("user/{userId}")]
+        [Authorize(Policy = "ConfigModulesAllowed")]
+        [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
+        public void RemoveUserModules(string userId, IEnumerable<string> moduleIdentities)
+        {
+            _modules.RemoveModules(userId, moduleIdentities.Select(ModuleIdentity.Parse));
+        }
+
+        [HttpGet("user/{userId}")]
+        // TODO: allow user gets its modules
+        [Authorize(Policy = "ConfigModulesAllowed")]
+        public IEnumerable<ModuleIdentityDto> GetUserModules(string userId)
+        {
+            var r = _modules.GetModules(userId);
+            if (r == null)
+                return new ModuleIdentityDto[0];
+            return _modules.GetModules(userId).Select(x => x.Wrap());
+        }
+        #endregion
 
         [HttpGet("test")]
         [Authorize(Policy = "ConfigModulesAllowed")]
