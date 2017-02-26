@@ -27,27 +27,27 @@ namespace ModularSystem.Сonfigurator.BLL
 
         public HttpResponseMessage RemoveModule(ModuleIdentity module)
         {
-            return _proxy.RemoveModuleAsync(module.Wrap()).Result;
+            return _proxy.RemoveModuleAsync(module.ToString()).Result;
         }
 
         public IEnumerable<ModuleIdentity> GetListOfModules()
         {
-            return _proxy.GetModulesListAsync().Result.Select(x => x.Unwrap());
+            return _proxy.GetModulesListAsync().Result.Select(ModuleIdentity.Parse);
         }
 
         public HttpResponseMessage AddUserModules(string userId, IEnumerable<ModuleIdentity> moduleIdentities)
         {
-            return _proxy.AddUserModules(userId, moduleIdentities.Select(x => x.Wrap()).ToArray()).Result;
+            return _proxy.AddUserModules(userId, moduleIdentities.Select(x => x.ToString()).ToArray()).Result;
         }
 
         public HttpResponseMessage RemoveUserModules(string userId, IEnumerable<ModuleIdentity> moduleIdentities)
         {
-            return _proxy.RemoveUserModules(userId, moduleIdentities.Select(x => x.Wrap()).ToArray()).Result;
+            return _proxy.RemoveUserModules(userId, moduleIdentities.Select(x => x.ToString()).ToArray()).Result;
         }
 
         public IEnumerable<ModuleIdentity> GetUserModules(string userId)
         {
-            return _proxy.GetUserModules(userId).Result.Select(x => x.Unwrap());
+            return _proxy.GetUserModules(userId).Result.Select(ModuleIdentity.Parse);
         }
     }
 }

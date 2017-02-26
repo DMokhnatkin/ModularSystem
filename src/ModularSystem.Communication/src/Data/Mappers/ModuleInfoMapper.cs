@@ -10,14 +10,14 @@ namespace ModularSystem.Communication.Data.Mappers
         {
             return new ModuleInfoDto
             {
-                Dependencies = obj.Dependencies.Select(x => ModuleIdentityMapper.Wrap(x)).ToArray(),
-                ModuleIdentity = obj.ModuleIdentity.Wrap()
+                Dependencies = obj.Dependencies.Select(x => x.ToString()).ToArray(),
+                ModuleIdentity = obj.ModuleIdentity.ToString()
             };
         }
 
         public static ModuleInfo Unwrap(this ModuleInfoDto dto)
         {
-            return new ModuleInfo(dto.ModuleIdentity.Unwrap(), dto.Dependencies.Select(x => x.Unwrap()).ToArray());
+            return new ModuleInfo(ModuleIdentity.Parse(dto.ModuleIdentity), dto.Dependencies.Select(ModuleIdentity.Parse).ToArray());
         }
     }
 }

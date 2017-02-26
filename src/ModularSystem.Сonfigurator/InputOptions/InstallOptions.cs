@@ -5,7 +5,7 @@ namespace ModularSystem.Сonfigurator.InputOptions
     [Verb("install", HelpText = "Install new module")]
     public class InstallOptions
     {
-        [Option("p", HelpText = "File of package")]
+        [Option('p', HelpText = "File of package")]
         public string PackagePath { get; set; }
 
         /*

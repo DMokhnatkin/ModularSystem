@@ -4,17 +4,12 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ModularSystem.Common;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Exceptions;
-using ModularSystem.Communication;
-using ModularSystem.Communication.Data;
 using ModularSystem.Communication.Data.Dto;
 using ModularSystem.Communication.Data.Files;
 using ModularSystem.Communication.Data.Mappers;
@@ -67,17 +62,17 @@ namespace ModularSystem.Server.Controllers
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
         [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
-        public async Task RemoveModuleAsync([FromBody]ModuleIdentityDto module)
+        public async Task RemoveModuleAsync([FromBody]string module)
         {
-            await Task.Factory.StartNew(() => _modules.UnregisterModule(module.Unwrap()));
+            await Task.Factory.StartNew(() => _modules.UnregisterModule(ModuleIdentity.Parse(module)));
         }
 
         [HttpGet]
         [Authorize(Policy = "ConfigModulesAllowed")]
-        public async Task<ModuleIdentityDto[]> GetModulesListAsync()
+        public async Task<string[]> GetModulesListAsync()
         {
             var modules = await Task.Factory.StartNew(() => _modules.GetRegisteredModules());
-            var dtos = modules.Select(x => x.ModuleInfo.ModuleIdentity.Wrap()).ToArray();
+            var dtos = modules.Select(x => x.ModuleInfo.ModuleIdentity.ToString()).ToArray();
             return dtos;
         }
 
@@ -101,9 +96,9 @@ namespace ModularSystem.Server.Controllers
         [HttpPost("user/{userId}")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
-        public void AddUserModules(string userId, [FromBody]IEnumerable<ModuleIdentityDto> moduleIdentities)
+        public void AddUserModules(string userId, [FromBody]IEnumerable<string> moduleIdentities)
         {
-            _modules.AddModules(userId, moduleIdentities.Select(x => x.Unwrap()));
+            _modules.AddModules(userId, moduleIdentities.Select(ModuleIdentity.Parse));
         }
 
         [HttpDelete("user/{userId}")]
@@ -117,12 +112,12 @@ namespace ModularSystem.Server.Controllers
         [HttpGet("user/{userId}")]
         // TODO: allow user gets its modules
         [Authorize(Policy = "ConfigModulesAllowed")]
-        public IEnumerable<ModuleIdentityDto> GetUserModules(string userId)
+        public IEnumerable<string> GetUserModules(string userId)
         {
             var r = _modules.GetModules(userId);
             if (r == null)
-                return new ModuleIdentityDto[0];
-            return _modules.GetModules(userId).Select(x => x.Wrap());
+                return new string[0];
+            return _modules.GetModules(userId).Select(x => x.ToString());
         }
         #endregion
 

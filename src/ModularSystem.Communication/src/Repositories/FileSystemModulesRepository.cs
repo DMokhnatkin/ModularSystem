@@ -16,6 +16,9 @@ namespace ModularSystem.Communication.Repositories
         public FileSystemModulesRepository(string basePath)
         {
             BasePath = basePath;
+
+            if (!Directory.Exists(basePath))
+                Directory.CreateDirectory(basePath);
         }
 
         /// <inheritdoc />

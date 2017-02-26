@@ -6,9 +6,9 @@ namespace ModularSystem.Communication.Data.Dto
     public struct ModuleInfoDto
     {
         [DataMember]
-        public ModuleIdentityDto ModuleIdentity { get; set; }
+        public string ModuleIdentity { get; set; }
 
         [DataMember]
-        public ModuleIdentityDto[] Dependencies { get; set; }
+        public string[] Dependencies { get; set; }
     }
 }
