@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using CommandLine;
 using ModularSystem.Common;
-using ModularSystem.Communication.Data.Dto;
-using ModularSystem.Communication.Data.Mappers;
 using ModularSystem.Сonfigurator.BLL;
 using ModularSystem.Сonfigurator.InputOptions;
 using ModularSystem.Сonfigurator.Proxies;

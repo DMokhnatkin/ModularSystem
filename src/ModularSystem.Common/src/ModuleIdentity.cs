@@ -10,7 +10,7 @@ namespace ModularSystem.Common
 
         public ModuleType ModuleType { get; }
 
-        public ModuleIdentity(string name, Version version, ModuleType moduleType)
+        public ModuleIdentity(string name, ModuleType moduleType, Version version)
         {
             if (name.Contains(" "))
                 throw new ArgumentException("Module identity name can't contain spaces");
@@ -19,7 +19,7 @@ namespace ModularSystem.Common
             ModuleType = moduleType;
         }
 
-        public ModuleIdentity(string name, string version, ModuleType moduleType)
+        public ModuleIdentity(string name, ModuleType moduleType, string version)
         {
             if (name.Contains(" "))
                 throw new ArgumentException("Module identity name can't contain spaces");
@@ -31,7 +31,7 @@ namespace ModularSystem.Common
         /// <inheritdoc />
         public override string ToString()
         {
-            return $"{Name}-{Version}-{ModuleType}";
+            return $"{Name}-{ModuleType}-{Version}";
         }
 
         /// <inheritdoc />
@@ -43,7 +43,7 @@ namespace ModularSystem.Common
         public static ModuleIdentity Parse(string str)
         {
             var r = str.Split('-');
-            return new ModuleIdentity(r[0], r[1], (ModuleType)Enum.Parse(typeof(ModuleType), r[2]));
+            return new ModuleIdentity(r[0], (ModuleType)Enum.Parse(typeof(ModuleType), r[1]), r[2]);
         }
     }
 }
