@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,6 @@ using ModularSystem.Communication.Data.Dto;
 using ModularSystem.Communication.Data.Files;
 using ModularSystem.Communication.Data.Mappers;
 using ModularSystem.Server.Common;
-using ModularSystem.Server.Models;
 
 namespace ModularSystem.Server.Controllers
 {
@@ -29,15 +29,7 @@ namespace ModularSystem.Server.Controllers
             _modules = modules;
         }
 
-        /*
-        [HttpPost("install")]
-        [Authorize(Policy = "ConfigModulesAllowed")]
-        //[FaultContract(typeof(ArgumentException))]
-        public async Task InstallModuleAsync([FromBody]ModuleDto module)
-        {
-            _modules.RegisterModule(await module.Unwrap());
-        }*/
-
+        #region Modules
         [HttpPost("install")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleMissedException), HttpStatusCode.BadRequest)]
@@ -75,22 +67,7 @@ namespace ModularSystem.Server.Controllers
             var dtos = modules.Select(x => x.ModuleInfo.ModuleIdentity.ToString()).ToArray();
             return dtos;
         }
-
-        [HttpGet("download")]
-        public async Task<DownloadModulesResponse> DownloadModulesAsync(DownloadModulesRequest request)
-        {
-            List<ModuleDto> res = new List<ModuleDto>();
-            foreach (var moduleIdentity in request.ModuleIdentities)
-            {
-                if (moduleIdentity.ModuleType != ModuleType.Client)
-                    throw new WrongModuleTypeException(moduleIdentity, new[] { ModuleType.Client });
-                var module = _modules.GetModule(moduleIdentity);
-                if (module == null)
-                    throw new ModuleMissedException(moduleIdentity);
-                res.Add(await module.Wrap());
-            }
-            return new DownloadModulesResponse(res);
-        }
+        #endregion
 
         #region User modules
         [HttpPost("user/{userId}")]
@@ -114,18 +91,33 @@ namespace ModularSystem.Server.Controllers
         [Authorize(Policy = "ConfigModulesAllowed")]
         public IEnumerable<string> GetUserModules(string userId)
         {
-            var r = _modules.GetModules(userId);
+            var r = _modules.GetModuleIdentities(userId);
             if (r == null)
                 return new string[0];
-            return _modules.GetModules(userId).Select(x => x.ToString());
+            return _modules.GetModuleIdentities(userId).Select(x => x.ToString());
+        }
+
+        [HttpGet("download")]
+        [Authorize]
+        public async Task<IActionResult> DownloadModulesAsync()
+        {
+            var userId = User.FindFirst("sub");
+            if (userId == null)
+                return Forbid();
+
+            string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}");
+            Directory.CreateDirectory(path);
+            var t = _modules.GetModules(userId.Value);
+            foreach (var module in t)
+            {
+                var p = Path.Combine(path, module.ModuleInfo.ModuleIdentity.ToString());
+                (await module.Wrap()).WriteToDirectory(p);
+            }
+
+            string path2 = $"{path}.zip";
+            ZipFile.CreateFromDirectory(path, path2);
+            return File(System.IO.File.OpenRead(path2), "application/zip");
         }
         #endregion
-
-        [HttpGet("test")]
-        [Authorize(Policy = "ConfigModulesAllowed")]
-        public string Test()
-        {
-            return string.Concat(User.Claims.Select(x => x.Type.ToString() + " " + x.Value.ToString() + " "));
-        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -14,6 +15,7 @@ namespace ModularSystem.Сonfigurator
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             Thread.Sleep(1000);
@@ -57,8 +59,11 @@ namespace ModularSystem.Сonfigurator
 
         private static void Install(HttpModules modules, InstallOptions opts)
         {
-            var r = modules.InstallModulePackage(File.OpenRead(opts.PackagePath));
-            HandleResult(r);
+            if (opts.PackagePath != null)
+            {
+                var r = modules.InstallModulePackage(File.OpenRead(opts.PackagePath));
+                HandleResult(r);
+            }
         }
 
         private static void Remove(HttpModules modules, RemoveOptions opts)

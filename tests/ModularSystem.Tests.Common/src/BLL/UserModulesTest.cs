@@ -53,18 +53,18 @@ namespace ModularSystem.Tests.Common.BLL
         {
             // Add module 0
             _modules.AddModule("1", _sampleModules[0].ModuleInfo.ModuleIdentity);
-            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[0].ModuleInfo.ModuleIdentity));
+            Assert.IsTrue(_modules.GetModuleIdentities("1").Contains(_sampleModules[0].ModuleInfo.ModuleIdentity));
 
             // Add module 1
             _modules.AddModule("1", _sampleModules[1].ModuleInfo.ModuleIdentity);
-            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[1].ModuleInfo.ModuleIdentity));
+            Assert.IsTrue(_modules.GetModuleIdentities("1").Contains(_sampleModules[1].ModuleInfo.ModuleIdentity));
 
             // Module 3 can't be added (required module 2 is not added)
             Assert.Throws<ModuleMissedException>(() => _modules.AddModule("1", _sampleModules[3].ModuleInfo.ModuleIdentity));
 
             // Add module 2
             _modules.AddModule("1", _sampleModules[2].ModuleInfo.ModuleIdentity);
-            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[2].ModuleInfo.ModuleIdentity));
+            Assert.IsTrue(_modules.GetModuleIdentities("1").Contains(_sampleModules[2].ModuleInfo.ModuleIdentity));
 
             // Now module 3 can be added
             _modules.AddModule("1", _sampleModules[3].ModuleInfo.ModuleIdentity);
@@ -76,16 +76,16 @@ namespace ModularSystem.Tests.Common.BLL
             _modules.AddModules("1", _sampleModules.Select(x => x.ModuleInfo.ModuleIdentity).Reverse());
 
             // Check module 0
-            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[0].ModuleInfo.ModuleIdentity));
+            Assert.IsTrue(_modules.GetModuleIdentities("1").Contains(_sampleModules[0].ModuleInfo.ModuleIdentity));
 
             // Check module 1
-            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[1].ModuleInfo.ModuleIdentity));
+            Assert.IsTrue(_modules.GetModuleIdentities("1").Contains(_sampleModules[1].ModuleInfo.ModuleIdentity));
 
             // Check module 2
-            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[2].ModuleInfo.ModuleIdentity));
+            Assert.IsTrue(_modules.GetModuleIdentities("1").Contains(_sampleModules[2].ModuleInfo.ModuleIdentity));
 
             // Check module 3
-            Assert.IsTrue(_modules.GetModules("1").Contains(_sampleModules[3].ModuleInfo.ModuleIdentity));
+            Assert.IsTrue(_modules.GetModuleIdentities("1").Contains(_sampleModules[3].ModuleInfo.ModuleIdentity));
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace ModularSystem.Tests.Common.BLL
             // Remove all modules
             _modules.RemoveModules("1", _sampleModules.Select(x => x.ModuleInfo.ModuleIdentity));
 
-            Assert.IsTrue(!_modules.GetModules("1").Any());
+            Assert.IsTrue(!_modules.GetModuleIdentities("1").Any());
         }
     }
 }

@@ -121,7 +121,7 @@ namespace ModularSystem.Common.BLL
             var t = _modulesRepository.GetModule(module)?.ModuleInfo;
             if (t == null)
                 throw new ModuleMissedException(module);
-            var depRes = ModulesHelper.CheckDependencies(t, GetModules(userId) ?? new ModuleIdentity[0]);
+            var depRes = ModulesHelper.CheckDependencies(t, GetModuleIdentities(userId) ?? new ModuleIdentity[0]);
             if (depRes.IsCheckSuccess)
             {
                 _userModulesRepository.AddModule(userId, module);
@@ -173,9 +173,14 @@ namespace ModularSystem.Common.BLL
             }
         }
 
-        public IEnumerable<ModuleIdentity> GetModules(string userId)
+        public IEnumerable<ModuleIdentity> GetModuleIdentities(string userId)
         {
             return _userModulesRepository.GetModules(userId);
+        }
+
+        public IEnumerable<IModule> GetModules(string userId)
+        {
+            return GetModuleIdentities(userId).Select(GetModule);
         }
         #endregion
     }
