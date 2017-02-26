@@ -20,7 +20,7 @@ namespace ModularSystem.Сonfigurator
         {
             Thread.Sleep(1000);
 
-            HttpModules modules = new HttpModules(new ModulesProxy("http://localhost:5005"));
+            HttpModules modules = new HttpModules(new ModulesProxy("http://localhost:5005", "configurator", "g6wCBw", "alice", "password"));
 
             /*
             ModuleDto dto = new ModuleDto()

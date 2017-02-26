@@ -8,11 +8,11 @@ namespace ModularSystem.Сonfigurator.Proxies
 {
     public abstract class BaseProxy
     {
-        protected HttpClient client;
+        protected HttpClient Client;
 
         public MediaTypeFormatter MediaTypeFormatter { get; set; } = new JsonMediaTypeFormatter()
         {
-            SerializerSettings = new JsonSerializerSettings()
+            SerializerSettings = new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             }
@@ -20,22 +20,30 @@ namespace ModularSystem.Сonfigurator.Proxies
 
         public string BaseUrl { get; set; }
 
-        protected BaseProxy(string baseUrl)
+        protected BaseProxy(string baseUrl, string clientId, string clientSecret, string userName, string password, string scope = null)
         {
-            client = new HttpClient();
-            client.SetBearerToken(GetTokenAsync().Result.AccessToken);
-            BaseUrl = baseUrl;
+            InitializeAsync(baseUrl, clientId, clientSecret, userName, password, scope).GetAwaiter().GetResult();
         }
 
-        static async Task<TokenResponse> GetTokenAsync()
+        /// <summary>
+        /// Don't initialize proxy. Before use this proxy call InitializeAsync manually.
+        /// </summary>
+        protected BaseProxy()
         {
-            var disco = await DiscoveryClient.GetAsync("http://localhost:5005");
+        }
+
+        public async Task InitializeAsync(string baseUrl, string clientId, string clientSecret, string userName, string password, string scope = null)
+        {
+            BaseUrl = baseUrl;
+
+            var disco = await DiscoveryClient.GetAsync(BaseUrl);
 
             // request token
-            var tokenClient = new TokenClient(disco.TokenEndpoint, "configurator", "g6wCBw");
-            var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync("alice", "password", "modules");
+            var tokenClient =new TokenClient(disco.TokenEndpoint, "configurator", "g6wCBw");
+            var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync(userName, password, scope);
 
-            return tokenResponse;
+            Client = new HttpClient();
+            Client.SetBearerToken(tokenResponse.AccessToken);
         }
     }
 }
