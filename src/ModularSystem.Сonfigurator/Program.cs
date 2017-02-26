@@ -4,6 +4,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Security;
+using System.Text;
 using System.Threading;
 using CommandLine;
 using ModularSystem.Common;
@@ -20,7 +22,20 @@ namespace ModularSystem.Сonfigurator
         {
             Thread.Sleep(1000);
 
-            HttpModules modules = new HttpModules(new ModulesProxy("http://localhost:5005", "configurator", "g6wCBw", "alice", "password"));
+            var userName = ReadLine.Read("user name: ");
+            var userPassword = new StringBuilder();
+            Console.Write("user password: ");
+            while (true)
+            {
+                var c = Console.ReadKey(true);
+                if (c.Key == ConsoleKey.Enter)
+                    break;
+                Console.Write('*');
+                userPassword.Append(c.KeyChar);
+            }
+            Console.WriteLine();
+
+            HttpModules modules = new HttpModules(new ModulesProxy("http://localhost:5005", "configurator", "g6wCBw", userName, userPassword.ToString()));
 
             /*
             ModuleDto dto = new ModuleDto()
