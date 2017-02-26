@@ -43,7 +43,7 @@ namespace ModularSystem.Common
         public static ModuleIdentity Parse(string str)
         {
             var r = str.Split('-');
-            return new ModuleIdentity(r[0], (ModuleType)Enum.Parse(typeof(ModuleType), r[1]), r[2]);
+            return new ModuleIdentity(r[0], (ModuleType)Enum.Parse(typeof(ModuleType), r[1], true), r[2]);
         }
     }
 }
