@@ -22,28 +22,34 @@ namespace ModularSystem.Сonfigurator.Proxies
 
         protected BaseProxy(string baseUrl, string clientId, string clientSecret, string userName, string password, string scope = null)
         {
-            InitializeAsync(baseUrl, clientId, clientSecret, userName, password, scope).GetAwaiter().GetResult();
+            Client = new HttpClient();
+            BaseUrl = baseUrl;
+
+            GetTokenAsync(clientId, clientSecret, userName, password, scope).GetAwaiter().GetResult();
         }
 
         /// <summary>
-        /// Don't initialize proxy. Before use this proxy call InitializeAsync manually.
+        /// Don't initialize proxy. Before use this proxy call GetTokenAsync manually.
         /// </summary>
-        protected BaseProxy()
+        protected BaseProxy(string baseUrl)
         {
+            Client = new HttpClient();
+            BaseUrl = baseUrl;
         }
 
-        public async Task InitializeAsync(string baseUrl, string clientId, string clientSecret, string userName, string password, string scope = null)
+        public async Task<bool> GetTokenAsync(string clientId, string clientSecret, string userName, string password, string scope = null)
         {
-            BaseUrl = baseUrl;
-
             var disco = await DiscoveryClient.GetAsync(BaseUrl);
 
             // request token
             var tokenClient =new TokenClient(disco.TokenEndpoint, "configurator", "g6wCBw");
             var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync(userName, password, scope);
 
-            Client = new HttpClient();
+            if (tokenResponse.IsError)
+                return false;
+
             Client.SetBearerToken(tokenResponse.AccessToken);
+            return true;
         }
     }
 }

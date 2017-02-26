@@ -16,6 +16,9 @@ namespace ModularSystem.Сonfigurator.Proxies
             : base(baseUrl, clientId, clientSecret, userName, password, "modules")
         { }
 
+        public ModulesProxy(string baseUrl) : base(baseUrl)
+        { }
+
         public async Task<HttpResponseMessage> InstallModulePackageAsync(FileStream modulePackage)
         {
             var content = new StreamContent(modulePackage);

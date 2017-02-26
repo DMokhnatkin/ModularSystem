@@ -22,33 +22,28 @@ namespace ModularSystem.Сonfigurator
         {
             Thread.Sleep(1000);
 
-            var userName = ReadLine.Read("user name: ");
-            var userPassword = new StringBuilder();
-            Console.Write("user password: ");
+            var proxy = new ModulesProxy("http://localhost:5005");
+            HttpModules modules = new HttpModules(proxy);
+
+            // Authenticate
             while (true)
             {
-                var c = Console.ReadKey(true);
-                if (c.Key == ConsoleKey.Enter)
-                    break;
-                Console.Write('*');
-                userPassword.Append(c.KeyChar);
-            }
-            Console.WriteLine();
-
-            HttpModules modules = new HttpModules(new ModulesProxy("http://localhost:5005", "configurator", "g6wCBw", userName, userPassword.ToString()));
-
-            /*
-            ModuleDto dto = new ModuleDto()
-            {
-                ModuleInfo = new ModuleInfoDto()
+                var userName = ReadLine.Read("user name: ");
+                var userPassword = new StringBuilder();
+                Console.Write("user password: ");
+                while (true)
                 {
-                    ModuleIdentity = new ModuleIdentity("test", "1.0", ModuleType.Server).Wrap(),
-                    Dependencies = new[] {new ModuleIdentity("test2", "1.0", ModuleType.Server).Wrap()}
-                },
-                Data = File.ReadAllBytes("t2.zip")
-            };
-
-            dto.WriteToDirectory("t3");*/
+                    var c = Console.ReadKey(true);
+                    if (c.Key == ConsoleKey.Enter)
+                        break;
+                    Console.Write('*');
+                    userPassword.Append(c.KeyChar);
+                }
+                Console.WriteLine();
+                if (proxy.GetTokenAsync("configurator", "g6wCBw", userName, userPassword.ToString()).Result)
+                    break;
+                Console.WriteLine("Authentication error");
+            }
 
             while (true)
             {
