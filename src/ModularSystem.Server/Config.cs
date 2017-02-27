@@ -45,7 +45,23 @@ namespace ModularSystem.Server
 
                     // scopes that client has access to
                     AllowedScopes = { "modules" }
-                }
+                },
+                new Client
+                {
+                    ClientId = "wpfclient",
+
+                    // no interactive user, use the clientid/secret for authentication
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+
+                    // secret for authentication
+                    ClientSecrets =
+                    {
+                        new Secret("g6wCBw2".Sha256())
+                    },
+
+                    // scopes that client has access to
+                    AllowedScopes = { "modules" }
+                },
             };
         }
 

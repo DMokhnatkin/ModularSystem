@@ -5,17 +5,13 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using ModularSystem.Communication.Proxies;
 using Newtonsoft.Json;
 
 namespace ModularSystem.Сonfigurator.Proxies
 {
     public class ModulesProxy : BaseProxy
     {
-        /// <inheritdoc />
-        public ModulesProxy(string baseUrl, string clientId, string clientSecret, string userName, string password) 
-            : base(baseUrl, clientId, clientSecret, userName, password, "modules")
-        { }
-
         public ModulesProxy(string baseUrl) : base(baseUrl)
         { }
 

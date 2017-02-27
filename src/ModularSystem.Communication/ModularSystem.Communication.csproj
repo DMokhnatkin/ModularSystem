@@ -49,6 +49,7 @@
     <Compile Include="src\Data\ResolveRequest.cs" />
     <Compile Include="src\Data\ResolveResponse.cs" />
     <Compile Include="src\Data\Files\ModuleFileSystemHelper.cs" />
+    <Compile Include="src\Proxies\BaseProxy.cs" />
     <Compile Include="src\Repositories\FileSystemModulesRepository.cs" />
     <Compile Include="src\Repositories\FileUserModulesRepository.cs" />
   </ItemGroup>
@@ -60,6 +61,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\ModularSystem.Сonfigurator\bin\Debug\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

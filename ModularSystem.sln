@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModularSystem.Сonfigurator
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModularSystem.Tests.Common", "tests\ModularSystem.Tests.Common\ModularSystem.Tests.Common.csproj", "{B4F6F272-2911-49C6-B69F-C9B6A4D6C981}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModularSystem.Clients.Wpf", "src\ModularSystem.Clients.Wpf\ModularSystem.Clients.Wpf.csproj", "{47DE6FEC-85E3-4368-A8AA-89952AA9B7EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{B4F6F272-2911-49C6-B69F-C9B6A4D6C981}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4F6F272-2911-49C6-B69F-C9B6A4D6C981}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4F6F272-2911-49C6-B69F-C9B6A4D6C981}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47DE6FEC-85E3-4368-A8AA-89952AA9B7EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47DE6FEC-85E3-4368-A8AA-89952AA9B7EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47DE6FEC-85E3-4368-A8AA-89952AA9B7EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47DE6FEC-85E3-4368-A8AA-89952AA9B7EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +59,6 @@ Global
 		{04C8805E-B511-4BAD-BF1C-420B906E6BAE} = {E91ECB31-B70C-4D52-8914-77C1BBE1841C}
 		{0B91EF1D-C089-4E53-8AB7-C7774DE3D426} = {E91ECB31-B70C-4D52-8914-77C1BBE1841C}
 		{B4F6F272-2911-49C6-B69F-C9B6A4D6C981} = {DB13F30D-58CD-4DD5-9478-2FE945D6F941}
+		{47DE6FEC-85E3-4368-A8AA-89952AA9B7EC} = {E91ECB31-B70C-4D52-8914-77C1BBE1841C}
 	EndGlobalSection
 EndGlobal

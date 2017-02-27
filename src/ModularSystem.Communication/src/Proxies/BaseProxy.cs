@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using IdentityModel.Client;
 using Newtonsoft.Json;
 
-namespace ModularSystem.Сonfigurator.Proxies
+namespace ModularSystem.Communication.Proxies
 {
     public abstract class BaseProxy
     {
@@ -20,14 +20,6 @@ namespace ModularSystem.Сonfigurator.Proxies
 
         public string BaseUrl { get; set; }
 
-        protected BaseProxy(string baseUrl, string clientId, string clientSecret, string userName, string password, string scope = null)
-        {
-            Client = new HttpClient();
-            BaseUrl = baseUrl;
-
-            GetTokenAsync(clientId, clientSecret, userName, password, scope).GetAwaiter().GetResult();
-        }
-
         /// <summary>
         /// Don't initialize proxy. Before use this proxy call GetTokenAsync manually.
         /// </summary>
@@ -42,7 +34,7 @@ namespace ModularSystem.Сonfigurator.Proxies
             var disco = await DiscoveryClient.GetAsync(BaseUrl);
 
             // request token
-            var tokenClient =new TokenClient(disco.TokenEndpoint, "configurator", "g6wCBw");
+            var tokenClient = new TokenClient(disco.TokenEndpoint, clientId, clientSecret);
             var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync(userName, password, scope);
 
             if (tokenResponse.IsError)

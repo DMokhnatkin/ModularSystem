@@ -25,6 +25,7 @@
         "bin/Debug/ModularSystem.Communication.dll": {}
       },
       "runtime": {
+        "../ModularSystem.Сonfigurator/bin/Debug/System.Net.Http.Formatting.dll": {},
         "bin/Debug/ModularSystem.Communication.dll": {}
       },
       "contentFiles": {

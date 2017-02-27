@@ -40,7 +40,7 @@ namespace ModularSystem.Сonfigurator
                     userPassword.Append(c.KeyChar);
                 }
                 Console.WriteLine();
-                if (proxy.GetTokenAsync("configurator", "g6wCBw", userName, userPassword.ToString()).Result)
+                if (proxy.GetTokenAsync("configurator", "g6wCBw", userName, userPassword.ToString(), "modules").Result)
                     break;
                 Console.WriteLine("Authentication error");
             }
