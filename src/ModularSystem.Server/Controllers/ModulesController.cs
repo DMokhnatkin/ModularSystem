@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,17 +34,8 @@ namespace ModularSystem.Server.Controllers
         public async Task InstallModulePackageAsync()
         {
             // TODO: use model bind
-            string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            using (ZipArchive modulePackage = new ZipArchive(Request.Body))
-            {
-                modulePackage.ExtractToDirectory(tempPath);
-            }
-            var modules = new List<IModule>();
-            foreach (var t in Directory.GetDirectories(tempPath))
-            {
-                modules.Add(await ModuleDtoFileSystem.ReadFromDirectory(t).Unwrap());
-            }
-            _modules.RegisterModules(modules);
+            var package = await ModulesPackage.Decompress(Request.Body);
+            _modules.RegisterModules(package.Modules);
         }
 
         [HttpPut("remove")]
@@ -105,18 +93,8 @@ namespace ModularSystem.Server.Controllers
             if (userId == null)
                 return Forbid();
 
-            string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}");
-            Directory.CreateDirectory(path);
-            var t = _modules.GetModules(userId.Value);
-            foreach (var module in t)
-            {
-                var p = Path.Combine(path, module.ModuleInfo.ModuleIdentity.ToString());
-                (await module.Wrap()).WriteToDirectory(p);
-            }
-
-            string path2 = $"{path}.zip";
-            ZipFile.CreateFromDirectory(path, path2);
-            return File(System.IO.File.OpenRead(path2), "application/zip");
+            var package = new ModulesPackage(_modules.GetModules(userId.Value));
+            return File(await package.Compress(), "application/zip");
         }
         #endregion
     }

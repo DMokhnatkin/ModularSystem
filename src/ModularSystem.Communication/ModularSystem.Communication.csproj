@@ -42,6 +42,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Data\Dto\ModuleDto.cs" />
     <Compile Include="src\Data\Dto\ModuleInfoDto.cs" />
+    <Compile Include="src\Data\Files\ModulesPackage.cs" />
     <Compile Include="src\Data\Mappers\ModuleInfoMapper.cs" />
     <Compile Include="src\Data\Mappers\ModuleMapper.cs" />
     <Compile Include="src\Data\Files\ModuleFileSystemHelper.cs" />
