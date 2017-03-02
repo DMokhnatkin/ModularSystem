@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ModularSystem.Clients.Wpf.ViewModels;
+using ModularSystem.Clients.Wpf.Views;
 
 namespace ModularSystem.Clients.Wpf
 {
@@ -26,9 +27,26 @@ namespace ModularSystem.Clients.Wpf
             InitializeComponent();
         }
 
+        internal MainWindowViewModel ViewModel
+        {
+            get { return (MainWindowViewModel)DataContext; }
+            set { SetValue(DataContextProperty, value); }
+        }
+
         private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             ((MainWindowViewModel)DataContext).DownloadExecute();
+        }
+
+        private void MainWindow_OnInitialized(object sender, EventArgs e)
+        {
+            OpenLogin();
+        }
+
+        private void OpenLogin()
+        {
+            LoginView v = new LoginView { DataContext = ViewModel.LoginViewModel };
+            var r = v.ShowDialog();
         }
     }
 }

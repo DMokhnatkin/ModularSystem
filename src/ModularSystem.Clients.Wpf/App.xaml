@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:ModularSystem.Clients.Wpf"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:MainWindow x:Key="MainViewModel"></local:MainWindow>
     </Application.Resources>
 </Application>

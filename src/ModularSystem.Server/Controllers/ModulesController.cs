@@ -33,7 +33,6 @@ namespace ModularSystem.Server.Controllers
         [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
         public async Task InstallModulePackageAsync()
         {
-            // TODO: use model bind
             var package = await ModulesPackage.Decompress(Request.Body);
             _modules.RegisterModules(package.Modules);
         }

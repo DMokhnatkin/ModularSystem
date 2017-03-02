@@ -3,11 +3,14 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using ModularSystem.Clients.Wpf.Proxies;
+using Prism.Mvvm;
 
 namespace ModularSystem.Clients.Wpf.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    class MainWindowViewModel : BindableBase
     {
+        public LoginViewModel LoginViewModel { get; } = new LoginViewModel();
+
         public async Task DownloadExecute()
         {
             ModulesProxy proxy = new ModulesProxy("http://localhost:5005");
