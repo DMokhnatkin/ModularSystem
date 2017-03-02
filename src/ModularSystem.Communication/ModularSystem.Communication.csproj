@@ -55,9 +55,7 @@
       <Name>ModularSystem.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\Security\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Reference Include="System.Net.Http.Formatting">
       <HintPath>..\ModularSystem.Сonfigurator\bin\Debug\System.Net.Http.Formatting.dll</HintPath>
