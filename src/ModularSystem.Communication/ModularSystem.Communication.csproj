@@ -40,14 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Data\IResolveRequest.cs" />
-    <Compile Include="src\Data\IResolveResponse.cs" />
     <Compile Include="src\Data\Dto\ModuleDto.cs" />
     <Compile Include="src\Data\Dto\ModuleInfoDto.cs" />
     <Compile Include="src\Data\Mappers\ModuleInfoMapper.cs" />
     <Compile Include="src\Data\Mappers\ModuleMapper.cs" />
-    <Compile Include="src\Data\ResolveRequest.cs" />
-    <Compile Include="src\Data\ResolveResponse.cs" />
     <Compile Include="src\Data\Files\ModuleFileSystemHelper.cs" />
     <Compile Include="src\Proxies\BaseProxy.cs" />
     <Compile Include="src\Repositories\FileSystemModulesRepository.cs" />
