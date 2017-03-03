@@ -1,4 +1,4 @@
-﻿<Window x:Class="ModularSystem.Clients.Wpf.MainWindow"
+﻿<Window x:Class="ModularSystem.Clients.Wpf.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,16 +7,14 @@
         xmlns:local="clr-namespace:ModularSystem.Clients.Wpf"
         xmlns:viewModels="clr-namespace:ModularSystem.Clients.Wpf.ViewModels"
         xmlns:routedCommands="clr-namespace:ModularSystem.Clients.Wpf.ViewModels.RoutedCommands"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Wpf client" Height="350" Width="525"
         Initialized="MainWindow_OnInitialized" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
-    <Window.CommandBindings>
-        <CommandBinding Command="{x:Static routedCommands:RoutedCommands.DownloadCommand}" Executed="CommandBinding_OnExecuted"></CommandBinding>
-    </Window.CommandBindings>
-    <Grid>
-        <Button Content="Download" Command="{x:Static routedCommands:RoutedCommands.DownloadCommand}"></Button>
-    </Grid>
+    <xctk:BusyIndicator IsBusy="{Binding IsBusy}">
+        <ContentControl Content="{Binding Content}"/>
+    </xctk:BusyIndicator>
 </Window>

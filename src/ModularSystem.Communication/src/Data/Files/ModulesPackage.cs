@@ -20,7 +20,7 @@ namespace ModularSystem.Communication.Data.Files
 
         public static async Task<ModulesPackage> Decompress(Stream compressedPackage)
         {
-            string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             using (ZipArchive modulePackage = new ZipArchive(compressedPackage))
             {
                 modulePackage.ExtractToDirectory(tempPath);
@@ -37,7 +37,7 @@ namespace ModularSystem.Communication.Data.Files
 
         public async Task<Stream> Compress()
         {
-            string path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            string path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             Directory.CreateDirectory(path);
             foreach (var module in Modules)
             {

@@ -2,7 +2,10 @@
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using System.Windows;
 using ModularSystem.Clients.Wpf.Proxies;
+using ModularSystem.Common.Wpf.Helpers;
+using ModularSystem.Communication.Data.Files;
 using Prism.Mvvm;
 
 namespace ModularSystem.Clients.Wpf.ViewModels
@@ -11,15 +14,29 @@ namespace ModularSystem.Clients.Wpf.ViewModels
     {
         public LoginViewModel LoginViewModel { get; } = new LoginViewModel();
 
-        public async Task DownloadExecute()
+        private FrameworkElement _content;
+        public FrameworkElement Content
+        {
+            get { return _content; }
+            set { SetProperty(ref _content, value); }
+        }
+
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set { SetProperty(ref _isBusy, value); }
+        }
+
+        public async Task DownloadModules()
         {
             ModulesProxy proxy = new ModulesProxy("http://localhost:5005");
-            await proxy.GetTokenAsync("wpfclient", "g6wCBw2", "alice", "password");
+            proxy.SetToken(LoginViewModel.Token);
             var t = await proxy.DownloadModules();
-            using (ZipArchive z = new ZipArchive(await t.Content.ReadAsStreamAsync()))
-            {
-                z.ExtractToDirectory(Path.Combine(AppContext.BaseDirectory, "curmodules"));
-            }
+            var p = await ModulesPackage.Decompress(await t.Content.ReadAsStreamAsync());
+            if (Directory.Exists(Path.Combine(AppContext.BaseDirectory, "curmodules")))
+                Directory.Delete(Path.Combine(AppContext.BaseDirectory, "curmodules"), true);
+            p.InstallToClient(Path.Combine(AppContext.BaseDirectory, "curmodules"));
         }
     }
 }

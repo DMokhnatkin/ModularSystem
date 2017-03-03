@@ -29,6 +29,11 @@ namespace ModularSystem.Communication.Proxies
             BaseUrl = baseUrl;
         }
 
+        public void SetToken(string token)
+        {
+            Client.SetBearerToken(token);
+        }
+
         public async Task<bool> GetTokenAsync(string clientId, string clientSecret, string userName, string password, string scope = null)
         {
             var disco = await DiscoveryClient.GetAsync(BaseUrl);

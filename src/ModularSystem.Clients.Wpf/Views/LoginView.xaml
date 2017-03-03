@@ -8,7 +8,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModels:LoginViewModel, IsDesignTimeCreatable=True}"
-        Title="{x:Static properties:Resources.LogInText}" Height="300" Width="300" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ShowInTaskbar="False" WindowStyle="ToolWindow">
+        Title="{x:Static properties:Resources.LogInText}" Height="300" Width="300" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow">
     <xctk:BusyIndicator IsBusy="{Binding IsBusy}">
         <StackPanel Orientation="Vertical" Margin="30,10" MinWidth="150">
             <StackPanel Orientation="Vertical">
