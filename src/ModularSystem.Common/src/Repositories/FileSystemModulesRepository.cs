@@ -2,12 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using ModularSystem.Common;
-using ModularSystem.Common.Repositories;
-using ModularSystem.Communication.Data.Files;
-using ModularSystem.Communication.Data.Mappers;
+using ModularSystem.Common.Modules;
 
-namespace ModularSystem.Communication.Repositories
+namespace ModularSystem.Common.Repositories
 {
     public class FileSystemModulesRepository : IModulesRepository
     {
@@ -22,11 +19,13 @@ namespace ModularSystem.Communication.Repositories
         }
 
         /// <inheritdoc />
-        public IEnumerator<IModule> GetEnumerator()
+        public IEnumerator<IPathModule> GetEnumerator()
         {
-            foreach (var directory in Directory.GetDirectories(BasePath))
+            foreach (var f in Directory.GetFiles(BasePath))
             {
-                yield return ModuleDtoFileSystem.ReadFromDirectory(directory).Unwrap().Result;
+                var z = new ZipPackagedModule();
+                z.InitializeFromPath(f);
+                yield return z;
             }
         }
 
@@ -37,11 +36,11 @@ namespace ModularSystem.Communication.Repositories
         }
 
         /// <inheritdoc />
-        public void AddModule(IModule module)
+        public void AddModule(IPathModule packagedModule)
         {
-            if (IsModuleRegistered(module.ModuleInfo.ModuleIdentity))
-                throw new ArgumentException($"Module {module.ModuleInfo.ModuleIdentity} is already registered");
-            module.Wrap().Result.WriteToDirectory(Path.Combine(BasePath, module.ModuleInfo.ModuleIdentity.ToString()));
+            if (IsModuleRegistered(packagedModule.ModuleInfo.ModuleIdentity))
+                throw new ArgumentException($"Module {packagedModule.ModuleInfo.ModuleIdentity} is already registered");
+            File.Copy(packagedModule.Path, Path.Combine(BasePath, packagedModule.ModuleInfo.ModuleIdentity.ToString()));
         }
 
         /// <inheritdoc />
@@ -53,16 +52,18 @@ namespace ModularSystem.Communication.Repositories
         }
 
         /// <inheritdoc />
-        public IModule GetModule(ModuleIdentity moduleIdentity)
+        public IPathModule GetModule(ModuleIdentity moduleIdentity)
         {
             if (!IsModuleRegistered(moduleIdentity))
                 return null;
-            return ModuleDtoFileSystem.ReadFromDirectory(Path.Combine(BasePath, moduleIdentity.ToString())).Unwrap().Result;
+            var z = new ZipPackagedModule();
+            z.InitializeFromPath(Path.Combine(BasePath, moduleIdentity.ToString()));
+            return z;
         }
 
         private bool IsModuleRegistered(ModuleIdentity moduleIdentity)
         {
-            return Directory.Exists(Path.Combine(BasePath, moduleIdentity.ToString()));
+            return File.Exists(Path.Combine(BasePath, moduleIdentity.ToString()));
         }
     }
 }

@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ModularSystem.Common;
-using ModularSystem.Communication.Data.Mappers;
+using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Communication.Data.Files
 {
     public class ModulesPackage
     {
-        public ModulesPackage(IEnumerable<IModule> modules)
+        public ModulesPackage(IEnumerable<IPathModule> modules)
         {
-            Modules = modules.ToArray();
+            PackagedModules = modules.ToArray();
         }
 
-        public IModule[] Modules { get; private set; }
+        public IPathModule[] PackagedModules { get; private set; }
 
         public static async Task<ModulesPackage> Decompress(Stream compressedPackage)
         {
@@ -26,10 +27,12 @@ namespace ModularSystem.Communication.Data.Files
                 modulePackage.ExtractToDirectory(tempPath);
             }
 
-            var modules = new List<IModule>();
-            foreach (var t in Directory.GetDirectories(tempPath))
+            var modules = new List<IPathModule>();
+            foreach (var t in Directory.GetFiles(tempPath))
             {
-                modules.Add(await ModuleDtoFileSystem.ReadFromDirectory(t).Unwrap());
+                var z = new ZipPackagedModule();
+                z.InitializeFromPath(t);
+                modules.Add(z);
             }
 
             return new ModulesPackage(modules.ToArray());
@@ -39,10 +42,10 @@ namespace ModularSystem.Communication.Data.Files
         {
             string path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             Directory.CreateDirectory(path);
-            foreach (var module in Modules)
+            foreach (var module in PackagedModules)
             {
                 var p = Path.Combine(path, module.ModuleInfo.ModuleIdentity.ToString());
-                (await module.Wrap()).WriteToDirectory(p);
+                File.Copy(module.Path, p);
             }
 
             string path2 = $"{path}.zip";

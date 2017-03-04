@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ModularSystem.Common;
-using ModularSystem.Communication.Data.Mappers;
 using ModularSystem.Сonfigurator.Proxies;
 
 namespace ModularSystem.Сonfigurator.BLL

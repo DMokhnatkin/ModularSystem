@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ModularSystem.Common.Exceptions;
+using ModularSystem.Common.Modules;
 using ModularSystem.Common.Repositories;
 
 namespace ModularSystem.Common.BLL
@@ -18,21 +19,21 @@ namespace ModularSystem.Common.BLL
         }
 
         #region Modules
-        public virtual void RegisterModule(IModule module)
+        public virtual void RegisterModule(IPathModule packagedModule)
         {
-            var t = CheckDependencies(module.ModuleInfo);
+            var t = CheckDependencies(packagedModule.ModuleInfo);
             if (!t.IsCheckSuccess)
                 throw t.ToOneException();
-            _modulesRepository.AddModule(module);
+            _modulesRepository.AddModule(packagedModule);
         }
 
         /// <summary>
         /// Register list of modules.
         /// This method will try to register modules in right order.
         /// </summary>
-        public virtual void RegisterModules(IEnumerable<IModule> modules)
+        public virtual void RegisterModules(IEnumerable<IPathModule> modules)
         {
-            var enumerable = modules as IModule[] ?? modules.ToArray();
+            var enumerable = modules as IPathModule[] ?? modules.ToArray();
             var identityToModule = enumerable.ToDictionary(x => x.ModuleInfo.ModuleIdentity, x => x); // Just for get IModule by ModuleIdentity
             var orderedModules = ModulesHelper.OrderModules(enumerable.Select(x => x.ModuleInfo));
             foreach (var m in orderedModules)
@@ -68,7 +69,7 @@ namespace ModularSystem.Common.BLL
         /// <summary>
         /// Returns module by it's identity
         /// </summary>
-        public virtual IModule GetModule(ModuleIdentity moduleIdentity)
+        public virtual IPathModule GetModule(ModuleIdentity moduleIdentity)
         {
             return _modulesRepository.GetModule(moduleIdentity);
         }
@@ -77,7 +78,7 @@ namespace ModularSystem.Common.BLL
         /// Get all registered modules
         /// </summary>
         /// <returns></returns>
-        public virtual IEnumerable<IModule> GetRegisteredModules()
+        public virtual IEnumerable<IPathModule> GetRegisteredModules()
         {
             return _modulesRepository;
         }
@@ -178,7 +179,7 @@ namespace ModularSystem.Common.BLL
             return _userModulesRepository.GetModules(userId);
         }
 
-        public IEnumerable<IModule> GetModules(string userId)
+        public IEnumerable<IPathModule> GetModules(string userId)
         {
             return GetModuleIdentities(userId).Select(GetModule);
         }

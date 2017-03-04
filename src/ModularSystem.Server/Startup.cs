@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Repositories;
-using ModularSystem.Communication.Repositories;
 
 namespace ModularSystem.Server
 {

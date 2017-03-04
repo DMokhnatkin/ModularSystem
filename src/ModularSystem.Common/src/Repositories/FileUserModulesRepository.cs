@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ModularSystem.Common;
-using ModularSystem.Common.Repositories;
-using ModularSystem.Communication.Data.Mappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ModularSystem.Communication.Repositories
+namespace ModularSystem.Common.Repositories
 {
     /// <summary>
     /// Store user -> modules relations in json file
@@ -60,7 +56,7 @@ namespace ModularSystem.Communication.Repositories
                 t = (JObject)JToken.ReadFrom(r);
                 JToken identities;
                 t.TryGetValue(userId, out identities);
-                var jT = ((JArray) identities)?.First(x => x.Value<string>() == module.ToString());
+                var jT = ((JArray) identities)?.First(x => Extensions.Value<string>(x) == module.ToString());
                 ((JArray) identities)?.Remove(jT);
             }
             using (JsonWriter w = new JsonTextWriter(new StreamWriter(File.OpenWrite(FilePath))))

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ModularSystem.Communication.Data.Dto
+namespace ModularSystem.Common.Transfer.Dto
 {
     [DataContract]
     public struct ModuleInfoDto
