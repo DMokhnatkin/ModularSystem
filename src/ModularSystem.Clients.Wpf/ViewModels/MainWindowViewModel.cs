@@ -43,7 +43,7 @@ namespace ModularSystem.Clients.Wpf.ViewModels
             if (Directory.Exists(Path.Combine(AppContext.BaseDirectory, "curmodules")))
                 Directory.Delete(Path.Combine(AppContext.BaseDirectory, "curmodules"), true);
             p.InstallToClient(Path.Combine(AppContext.BaseDirectory, "curmodules"));
-            foreach (var pModule in p.Modules)
+            foreach (var pModule in p.PackagedModules)
             {
                 _sessionModules.AddModule(pModule);
             }

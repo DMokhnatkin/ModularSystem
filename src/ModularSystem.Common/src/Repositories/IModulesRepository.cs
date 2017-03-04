@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
+using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Repositories
 {
-    public interface IModulesRepository : IEnumerable<IModule>
+    public interface IModulesRepository : IEnumerable<IPackagedModule>
     {
-        void AddModule(IModule module);
+        void AddModule(IPackagedModule packagedModule);
         void RemoveModule(ModuleIdentity moduleIdentity);
 
         /// <summary>
         /// Returns module by it's identity
         /// </summary>
-        IModule GetModule(ModuleIdentity moduleIdentity);
+        IPackagedModule GetModule(ModuleIdentity moduleIdentity);
     }
 }

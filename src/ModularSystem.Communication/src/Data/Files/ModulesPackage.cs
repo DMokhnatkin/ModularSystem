@@ -5,18 +5,19 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using ModularSystem.Common;
+using ModularSystem.Common.Modules;
 using ModularSystem.Communication.Data.Mappers;
 
 namespace ModularSystem.Communication.Data.Files
 {
     public class ModulesPackage
     {
-        public ModulesPackage(IEnumerable<IModule> modules)
+        public ModulesPackage(IEnumerable<IPackagedModule> modules)
         {
-            Modules = modules.ToArray();
+            PackagedModules = modules.ToArray();
         }
 
-        public IModule[] Modules { get; private set; }
+        public IPackagedModule[] PackagedModules { get; private set; }
 
         public static async Task<ModulesPackage> Decompress(Stream compressedPackage)
         {
@@ -26,7 +27,7 @@ namespace ModularSystem.Communication.Data.Files
                 modulePackage.ExtractToDirectory(tempPath);
             }
 
-            var modules = new List<IModule>();
+            var modules = new List<IPackagedModule>();
             foreach (var t in Directory.GetDirectories(tempPath))
             {
                 modules.Add(await ModuleDtoFileSystem.ReadFromDirectory(t).Unwrap());
@@ -39,7 +40,7 @@ namespace ModularSystem.Communication.Data.Files
         {
             string path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             Directory.CreateDirectory(path);
-            foreach (var module in Modules)
+            foreach (var module in PackagedModules)
             {
                 var p = Path.Combine(path, module.ModuleInfo.ModuleIdentity.ToString());
                 (await module.Wrap()).WriteToDirectory(p);

@@ -34,7 +34,7 @@ namespace ModularSystem.Server.Controllers
         public async Task InstallModulePackageAsync()
         {
             var package = await ModulesPackage.Decompress(Request.Body);
-            _modules.RegisterModules(package.Modules);
+            _modules.RegisterModules(package.PackagedModules);
         }
 
         [HttpPut("remove")]

@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Repositories
 {
     public class MemoryModulesRepository : IModulesRepository
     {
-        private Dictionary<ModuleIdentity, IModule> _modules = new Dictionary<ModuleIdentity, IModule>();
+        private Dictionary<ModuleIdentity, IPackagedModule> _modules = new Dictionary<ModuleIdentity, IPackagedModule>();
 
         /// <inheritdoc />
-        public void AddModule(IModule module)
+        public void AddModule(IPackagedModule packagedModule)
         {
-            if (_modules.ContainsKey(module.ModuleInfo.ModuleIdentity))
-                throw new ArgumentException($"Module {module.ModuleInfo.ModuleIdentity} is already registered");
-            _modules.Add(module.ModuleInfo.ModuleIdentity, module);
+            if (_modules.ContainsKey(packagedModule.ModuleInfo.ModuleIdentity))
+                throw new ArgumentException($"Module {packagedModule.ModuleInfo.ModuleIdentity} is already registered");
+            _modules.Add(packagedModule.ModuleInfo.ModuleIdentity, packagedModule);
         }
 
         /// <inheritdoc />
@@ -25,9 +26,9 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public IModule GetModule(ModuleIdentity moduleIdentity)
+        public IPackagedModule GetModule(ModuleIdentity moduleIdentity)
         {
-            IModule res;
+            IPackagedModule res;
             _modules.TryGetValue(moduleIdentity, out res);
             return res;
         }
@@ -39,7 +40,7 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public IEnumerator<IModule> GetEnumerator()
+        public IEnumerator<IPackagedModule> GetEnumerator()
         {
             return _modules.Values.GetEnumerator();
         }
