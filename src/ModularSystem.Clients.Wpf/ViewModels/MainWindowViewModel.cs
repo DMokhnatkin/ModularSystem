@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Windows;
 using ModularSystem.Clients.Wpf.Proxies;
+using ModularSystem.Common.Repositories;
 using ModularSystem.Common.Wpf.Helpers;
 using ModularSystem.Communication.Data.Files;
 using Prism.Mvvm;
@@ -13,6 +14,11 @@ namespace ModularSystem.Clients.Wpf.ViewModels
     class MainWindowViewModel : BindableBase
     {
         public LoginViewModel LoginViewModel { get; } = new LoginViewModel();
+
+        /// <summary>
+        /// Modules which was downloaded for cur user
+        /// </summary>
+        private IModulesRepository _sessionModules = new MemoryModulesRepository();
 
         private FrameworkElement _content;
         public FrameworkElement Content
@@ -37,6 +43,10 @@ namespace ModularSystem.Clients.Wpf.ViewModels
             if (Directory.Exists(Path.Combine(AppContext.BaseDirectory, "curmodules")))
                 Directory.Delete(Path.Combine(AppContext.BaseDirectory, "curmodules"), true);
             p.InstallToClient(Path.Combine(AppContext.BaseDirectory, "curmodules"));
+            foreach (var pModule in p.Modules)
+            {
+                _sessionModules.AddModule(pModule);
+            }
         }
     }
 }

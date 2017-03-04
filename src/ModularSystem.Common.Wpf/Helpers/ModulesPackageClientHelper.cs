@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using ModularSystem.Communication.Data.Files;
@@ -9,6 +10,7 @@ namespace ModularSystem.Common.Wpf.Helpers
     {
         public static void InstallToClient(this ModulesPackage package, string basePath)
         {
+            List<IModule> res = new List<IModule>();
             foreach (var packageModule in package.Modules)
             {
                 var t = Directory.CreateDirectory(Path.Combine(basePath, packageModule.ModuleInfo.ModuleIdentity.ToString()));
