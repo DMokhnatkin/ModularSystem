@@ -1,8 +1,7 @@
 ﻿using System.Linq;
-using ModularSystem.Common;
-using ModularSystem.Communication.Data.Dto;
+using ModularSystem.Common.Transfer.Dto;
 
-namespace ModularSystem.Communication.Data.Mappers
+namespace ModularSystem.Common.Transfer.Mappers
 {
     public static class ModuleInfoMapper
     {

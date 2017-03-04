@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using ModularSystem.Common;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Exceptions;
-using ModularSystem.Communication.Data.Dto;
 using ModularSystem.Communication.Data.Files;
-using ModularSystem.Communication.Data.Mappers;
 using ModularSystem.Server.Common;
 
 namespace ModularSystem.Server.Controllers

@@ -24,9 +24,11 @@ namespace ModularSystem.Communication.Repositories
         /// <inheritdoc />
         public IEnumerator<IPathModule> GetEnumerator()
         {
-            foreach (var directory in Directory.GetFiles(BasePath))
+            foreach (var f in Directory.GetFiles(BasePath))
             {
-                yield return ZipPackagedModuleIo.InitializeForZip(directory);
+                var z = new ZipPackagedModule();
+                z.InitializeFromPath(f);
+                yield return z;
             }
         }
 
@@ -57,7 +59,9 @@ namespace ModularSystem.Communication.Repositories
         {
             if (!IsModuleRegistered(moduleIdentity))
                 return null;
-            return ZipPackagedModuleIo.InitializeForZip(Path.Combine(BasePath, moduleIdentity.ToString()));
+            var z = new ZipPackagedModule();
+            z.InitializeFromPath(Path.Combine(BasePath, moduleIdentity.ToString()));
+            return z;
         }
 
         private bool IsModuleRegistered(ModuleIdentity moduleIdentity)

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using ModularSystem.Common;
 using ModularSystem.Common.Repositories;
-using ModularSystem.Communication.Data.Mappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

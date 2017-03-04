@@ -13,7 +13,7 @@
         string Path { get; }
 
         /// <summary>
-        /// Initialize IPathModule instance using file ot directory.
+        /// Initialize IPathModule instance using file or directory.
         /// </summary>
         void InitializeFromPath(string path);
     }

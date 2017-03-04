@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ModularSystem.Common;
 using ModularSystem.Common.Modules;
-using ModularSystem.Communication.Data.Mappers;
 
 namespace ModularSystem.Communication.Data.Files
 {
@@ -30,7 +30,9 @@ namespace ModularSystem.Communication.Data.Files
             var modules = new List<IPathModule>();
             foreach (var t in Directory.GetFiles(tempPath))
             {
-                modules.Add(ZipPackagedModuleIo.InitializeForZip(t));
+                var z = new ZipPackagedModule();
+                z.InitializeFromPath(t);
+                modules.Add(z);
             }
 
             return new ModulesPackage(modules.ToArray());
