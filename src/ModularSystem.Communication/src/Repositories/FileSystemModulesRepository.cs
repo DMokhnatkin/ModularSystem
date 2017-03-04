@@ -6,7 +6,6 @@ using ModularSystem.Common;
 using ModularSystem.Common.Modules;
 using ModularSystem.Common.Repositories;
 using ModularSystem.Communication.Data.Files;
-using ModularSystem.Communication.Data.Mappers;
 
 namespace ModularSystem.Communication.Repositories
 {
@@ -23,11 +22,11 @@ namespace ModularSystem.Communication.Repositories
         }
 
         /// <inheritdoc />
-        public IEnumerator<IPackagedModule> GetEnumerator()
+        public IEnumerator<IPathModule> GetEnumerator()
         {
-            foreach (var directory in Directory.GetDirectories(BasePath))
+            foreach (var directory in Directory.GetFiles(BasePath))
             {
-                yield return ModuleDtoFileSystem.ReadFromDirectory(directory).Unwrap().Result;
+                yield return ZipPackagedModuleIo.InitializeForZip(directory);
             }
         }
 
@@ -38,11 +37,11 @@ namespace ModularSystem.Communication.Repositories
         }
 
         /// <inheritdoc />
-        public void AddModule(IPackagedModule packagedModule)
+        public void AddModule(IPathModule packagedModule)
         {
             if (IsModuleRegistered(packagedModule.ModuleInfo.ModuleIdentity))
                 throw new ArgumentException($"Module {packagedModule.ModuleInfo.ModuleIdentity} is already registered");
-            packagedModule.Wrap().Result.WriteToDirectory(Path.Combine(BasePath, packagedModule.ModuleInfo.ModuleIdentity.ToString()));
+            File.Copy(packagedModule.Path, Path.Combine(BasePath, packagedModule.ModuleInfo.ModuleIdentity.ToString()));
         }
 
         /// <inheritdoc />
@@ -54,16 +53,16 @@ namespace ModularSystem.Communication.Repositories
         }
 
         /// <inheritdoc />
-        public IPackagedModule GetModule(ModuleIdentity moduleIdentity)
+        public IPathModule GetModule(ModuleIdentity moduleIdentity)
         {
             if (!IsModuleRegistered(moduleIdentity))
                 return null;
-            return ModuleDtoFileSystem.ReadFromDirectory(Path.Combine(BasePath, moduleIdentity.ToString())).Unwrap().Result;
+            return ZipPackagedModuleIo.InitializeForZip(Path.Combine(BasePath, moduleIdentity.ToString()));
         }
 
         private bool IsModuleRegistered(ModuleIdentity moduleIdentity)
         {
-            return Directory.Exists(Path.Combine(BasePath, moduleIdentity.ToString()));
+            return File.Exists(Path.Combine(BasePath, moduleIdentity.ToString()));
         }
     }
 }

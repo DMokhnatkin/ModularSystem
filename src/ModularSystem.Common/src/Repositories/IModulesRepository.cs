@@ -3,14 +3,14 @@ using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Repositories
 {
-    public interface IModulesRepository : IEnumerable<IPackagedModule>
+    public interface IModulesRepository : IEnumerable<IPathModule>
     {
-        void AddModule(IPackagedModule packagedModule);
+        void AddModule(IPathModule packagedModule);
         void RemoveModule(ModuleIdentity moduleIdentity);
 
         /// <summary>
         /// Returns module by it's identity
         /// </summary>
-        IPackagedModule GetModule(ModuleIdentity moduleIdentity);
+        IPathModule GetModule(ModuleIdentity moduleIdentity);
     }
 }

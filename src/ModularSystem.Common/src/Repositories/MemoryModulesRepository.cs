@@ -7,10 +7,10 @@ namespace ModularSystem.Common.Repositories
 {
     public class MemoryModulesRepository : IModulesRepository
     {
-        private Dictionary<ModuleIdentity, IPackagedModule> _modules = new Dictionary<ModuleIdentity, IPackagedModule>();
+        private Dictionary<ModuleIdentity, IPathModule> _modules = new Dictionary<ModuleIdentity, IPathModule>();
 
         /// <inheritdoc />
-        public void AddModule(IPackagedModule packagedModule)
+        public void AddModule(IPathModule packagedModule)
         {
             if (_modules.ContainsKey(packagedModule.ModuleInfo.ModuleIdentity))
                 throw new ArgumentException($"Module {packagedModule.ModuleInfo.ModuleIdentity} is already registered");
@@ -26,9 +26,9 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public IPackagedModule GetModule(ModuleIdentity moduleIdentity)
+        public IPathModule GetModule(ModuleIdentity moduleIdentity)
         {
-            IPackagedModule res;
+            IPathModule res;
             _modules.TryGetValue(moduleIdentity, out res);
             return res;
         }
@@ -40,7 +40,7 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public IEnumerator<IPackagedModule> GetEnumerator()
+        public IEnumerator<IPathModule> GetEnumerator()
         {
             return _modules.Values.GetEnumerator();
         }

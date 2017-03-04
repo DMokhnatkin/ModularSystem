@@ -1,18 +1,15 @@
 ﻿using System.IO;
 using System.IO.Compression;
-using ModularSystem.Common.Modules.Generic;
+using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common
 {
-    public class ZipPackagedModule : IPackagedModule<ZipArchive>
+    public class ZipPackagedModule : IPathModule
     {
         /// <inheritdoc />
         public ModuleInfo ModuleInfo { get; set; }
 
         /// <inheritdoc />
-        public Stream Data { get; set; }
-
-        /// <inheritdoc />
-        ZipArchive IPackagedModule<ZipArchive>.Data => new ZipArchive(Data);
+        public string Path { get; set; }
     }
 }

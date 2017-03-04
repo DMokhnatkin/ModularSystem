@@ -12,12 +12,12 @@ namespace ModularSystem.Communication.Data.Files
 {
     public class ModulesPackage
     {
-        public ModulesPackage(IEnumerable<IPackagedModule> modules)
+        public ModulesPackage(IEnumerable<IPathModule> modules)
         {
             PackagedModules = modules.ToArray();
         }
 
-        public IPackagedModule[] PackagedModules { get; private set; }
+        public IPathModule[] PackagedModules { get; private set; }
 
         public static async Task<ModulesPackage> Decompress(Stream compressedPackage)
         {
@@ -27,10 +27,10 @@ namespace ModularSystem.Communication.Data.Files
                 modulePackage.ExtractToDirectory(tempPath);
             }
 
-            var modules = new List<IPackagedModule>();
-            foreach (var t in Directory.GetDirectories(tempPath))
+            var modules = new List<IPathModule>();
+            foreach (var t in Directory.GetFiles(tempPath))
             {
-                modules.Add(await ModuleDtoFileSystem.ReadFromDirectory(t).Unwrap());
+                modules.Add(ZipPackagedModuleIo.InitializeForZip(t));
             }
 
             return new ModulesPackage(modules.ToArray());
@@ -43,7 +43,7 @@ namespace ModularSystem.Communication.Data.Files
             foreach (var module in PackagedModules)
             {
                 var p = Path.Combine(path, module.ModuleInfo.ModuleIdentity.ToString());
-                (await module.Wrap()).WriteToDirectory(p);
+                File.Copy(module.Path, p);
             }
 
             string path2 = $"{path}.zip";

@@ -43,12 +43,8 @@
     <Compile Include="src\Exceptions\ModuleIsRequiredException.cs" />
     <Compile Include="src\Exceptions\ModuleMissedException.cs" />
     <Compile Include="src\Exceptions\WrongModuleTypeException.cs" />
-    <Compile Include="src\Modules\Generic\IPackagedModule.cs" />
-    <Compile Include="src\Modules\IInstalledClientModule.cs" />
-    <Compile Include="src\Modules\IInstalledModule.cs" />
-    <Compile Include="src\Modules\IInstalledServerModule.cs" />
+    <Compile Include="src\Modules\IPathModule.cs" />
     <Compile Include="src\Modules\IModule.cs" />
-    <Compile Include="src\Modules\IPackagedModule.cs" />
     <Compile Include="src\ICheckDependenciesResult.cs" />
     <Compile Include="src\ZipPackagedModule.cs" />
     <Compile Include="src\ModuleIdentity.cs" />

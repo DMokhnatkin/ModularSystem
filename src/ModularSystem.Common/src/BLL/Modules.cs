@@ -19,7 +19,7 @@ namespace ModularSystem.Common.BLL
         }
 
         #region Modules
-        public virtual void RegisterModule(IPackagedModule packagedModule)
+        public virtual void RegisterModule(IPathModule packagedModule)
         {
             var t = CheckDependencies(packagedModule.ModuleInfo);
             if (!t.IsCheckSuccess)
@@ -31,9 +31,9 @@ namespace ModularSystem.Common.BLL
         /// Register list of modules.
         /// This method will try to register modules in right order.
         /// </summary>
-        public virtual void RegisterModules(IEnumerable<IPackagedModule> modules)
+        public virtual void RegisterModules(IEnumerable<IPathModule> modules)
         {
-            var enumerable = modules as IPackagedModule[] ?? modules.ToArray();
+            var enumerable = modules as IPathModule[] ?? modules.ToArray();
             var identityToModule = enumerable.ToDictionary(x => x.ModuleInfo.ModuleIdentity, x => x); // Just for get IModule by ModuleIdentity
             var orderedModules = ModulesHelper.OrderModules(enumerable.Select(x => x.ModuleInfo));
             foreach (var m in orderedModules)
@@ -69,7 +69,7 @@ namespace ModularSystem.Common.BLL
         /// <summary>
         /// Returns module by it's identity
         /// </summary>
-        public virtual IPackagedModule GetModule(ModuleIdentity moduleIdentity)
+        public virtual IPathModule GetModule(ModuleIdentity moduleIdentity)
         {
             return _modulesRepository.GetModule(moduleIdentity);
         }
@@ -78,7 +78,7 @@ namespace ModularSystem.Common.BLL
         /// Get all registered modules
         /// </summary>
         /// <returns></returns>
-        public virtual IEnumerable<IPackagedModule> GetRegisteredModules()
+        public virtual IEnumerable<IPathModule> GetRegisteredModules()
         {
             return _modulesRepository;
         }
@@ -179,7 +179,7 @@ namespace ModularSystem.Common.BLL
             return _userModulesRepository.GetModules(userId);
         }
 
-        public IEnumerable<IPackagedModule> GetModules(string userId)
+        public IEnumerable<IPathModule> GetModules(string userId)
         {
             return GetModuleIdentities(userId).Select(GetModule);
         }

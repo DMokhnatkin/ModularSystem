@@ -13,35 +13,35 @@ namespace ModularSystem.Tests.Common.BLL
     public class ModulesTest
     {
         private Modules _modules;
-        private IPackagedModule[] _samplePackagedModules;
+        private IPathModule[] _samplePackagedModules;
 
         [SetUp]
         public void InitializeTest()
         {
             _modules = new Modules(new MemoryModulesRepository(), new MemoryUserModulesRepository());
-            _samplePackagedModules = new IPackagedModule[5];
+            _samplePackagedModules = new IPathModule[5];
             _samplePackagedModules[0] =
-                Mock.Of<IPackagedModule>(
+                Mock.Of<IPathModule>(
                     x =>
                         x.ModuleInfo ==
                         new ModuleInfo(new ModuleIdentity("test", ModuleType.Server, "1.0"), new ModuleIdentity[0]));
             _samplePackagedModules[1] =
-                Mock.Of<IPackagedModule>(
+                Mock.Of<IPathModule>(
                     x =>
                         x.ModuleInfo ==
                         new ModuleInfo(new ModuleIdentity("test",ModuleType.Client, "1.0"), new [] { _samplePackagedModules[0].ModuleInfo.ModuleIdentity }));
             _samplePackagedModules[2] =
-                Mock.Of<IPackagedModule>(
+                Mock.Of<IPathModule>(
                     x =>
                         x.ModuleInfo ==
                         new ModuleInfo(new ModuleIdentity("test", ModuleType.Server, "2.0"), new [] { _samplePackagedModules[0].ModuleInfo.ModuleIdentity }));
             _samplePackagedModules[3] =
-                Mock.Of<IPackagedModule>(
+                Mock.Of<IPathModule>(
                     x =>
                         x.ModuleInfo ==
                         new ModuleInfo(new ModuleIdentity("test", ModuleType.Client, "2.0"), new [] { _samplePackagedModules[1].ModuleInfo.ModuleIdentity, _samplePackagedModules[2].ModuleInfo.ModuleIdentity }));
             _samplePackagedModules[4] =
-                Mock.Of<IPackagedModule>(
+                Mock.Of<IPathModule>(
                     x =>
                         x.ModuleInfo ==
                         new ModuleInfo(new ModuleIdentity("test2", ModuleType.Client, "1.0"), new ModuleIdentity[0]));
