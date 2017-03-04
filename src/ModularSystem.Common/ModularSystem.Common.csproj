@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Repositories\FileSystemModulesRepository.cs" />
+    <Compile Include="src\Repositories\FileUserModulesRepository.cs" />
     <Compile Include="src\Transfer\Mappers\ModuleInfoMapper.cs" />
     <Compile Include="src\Transfer\Dto\ModuleInfoDto.cs" />
     <Compile Include="src\Exceptions\ModuleIsRequiredException.cs" />

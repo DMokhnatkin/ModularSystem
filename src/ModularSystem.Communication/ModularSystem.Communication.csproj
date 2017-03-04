@@ -43,8 +43,6 @@
     <Compile Include="src\Data\Files\ModulesPackage.cs" />
     <Compile Include="src\Proxies\AuthorizationHelper.cs" />
     <Compile Include="src\Proxies\BaseProxy.cs" />
-    <Compile Include="src\Repositories\FileSystemModulesRepository.cs" />
-    <Compile Include="src\Repositories\FileUserModulesRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ModularSystem.Common\ModularSystem.Common.csproj">

@@ -2,12 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using ModularSystem.Common;
 using ModularSystem.Common.Modules;
-using ModularSystem.Common.Repositories;
-using ModularSystem.Communication.Data.Files;
 
-namespace ModularSystem.Communication.Repositories
+namespace ModularSystem.Common.Repositories
 {
     public class FileSystemModulesRepository : IModulesRepository
     {
