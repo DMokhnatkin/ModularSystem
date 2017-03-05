@@ -44,7 +44,7 @@ namespace ModularSystem.Communication.Data.Files
             Directory.CreateDirectory(path);
             foreach (var module in PackagedModules)
             {
-                var p = Path.Combine(path, module.ModuleInfo.ModuleIdentity.ToString());
+                var p = Path.Combine(path, $"{module.ModuleInfo.ModuleIdentity}.zip" );
                 File.Copy(module.Path, p);
             }
 

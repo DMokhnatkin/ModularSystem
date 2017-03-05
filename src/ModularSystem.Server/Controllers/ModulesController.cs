@@ -85,6 +85,7 @@ namespace ModularSystem.Server.Controllers
 
         [HttpGet("download")]
         [Authorize]
+        [MappedExceptionFilter(typeof(ModuleMissedException), HttpStatusCode.Conflict)]
         public async Task<IActionResult> DownloadModulesAsync()
         {
             var userId = User.FindFirst("sub");

@@ -180,7 +180,15 @@ namespace ModularSystem.Common.BLL
 
         public IEnumerable<ZipPackagedModule> GetModules(string userId)
         {
-            return GetModuleIdentities(userId).Select(GetModule);
+            var res = new List<ZipPackagedModule>();
+            foreach (var moduleIdentity in GetModuleIdentities(userId))
+            {
+                var t = GetModule(moduleIdentity);
+                if (t == null)
+                    throw new ModuleMissedException(moduleIdentity);
+                res.Add(t);
+            }
+            return res;
         }
         #endregion
     }
