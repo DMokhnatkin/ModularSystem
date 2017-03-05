@@ -8,6 +8,7 @@
         xmlns:viewModels="clr-namespace:ModularSystem.Clients.Wpf.ViewModels"
         xmlns:routedCommands="clr-namespace:ModularSystem.Clients.Wpf.ViewModels.RoutedCommands"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
         mc:Ignorable="d"
         Title="Wpf client" Height="350" Width="525"
         Initialized="MainWindow_OnInitialized" WindowStartupLocation="CenterScreen" WindowState="Maximized">
@@ -15,6 +16,7 @@
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy}">
-        <ContentControl Name="ContentWrapper"/>
+        <!--<xcad:DockingManager x:Name="dockManager" Grid.Row="1"/>-->
+        <ContentControl Grid.Row="1" Name="ContentWrapper"/>
     </xctk:BusyIndicator>
 </Window>

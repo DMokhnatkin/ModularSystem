@@ -39,7 +39,7 @@ namespace ModularSystem.Common.Repositories
         {
             if (IsModuleRegistered(module.ModuleInfo.ModuleIdentity))
                 throw new ArgumentException($"Module {module.ModuleInfo.ModuleIdentity} is already registered");
-            File.Copy(module.Path, Path.Combine(BasePath, module.ModuleInfo.ModuleIdentity.ToString()));
+            File.Copy(module.Path, Path.Combine(BasePath, $"{module.ModuleInfo.ModuleIdentity}.zip"));
         }
 
         /// <inheritdoc />
@@ -47,7 +47,7 @@ namespace ModularSystem.Common.Repositories
         {
             if (!IsModuleRegistered(moduleIdentity))
                 throw new ArgumentException($"Module {moduleIdentity} wasn't registered");
-            Directory.Delete(Path.Combine(BasePath, moduleIdentity.ToString()), true);
+            Directory.Delete(Path.Combine(BasePath, $"{moduleIdentity}.zip"), true);
         }
 
         /// <inheritdoc />
@@ -56,13 +56,13 @@ namespace ModularSystem.Common.Repositories
             if (!IsModuleRegistered(moduleIdentity))
                 return null;
             var z = new ZipPackagedModule();
-            z.InitializeFromPath(Path.Combine(BasePath, moduleIdentity.ToString()));
+            z.InitializeFromPath(Path.Combine(BasePath, $"{moduleIdentity}.zip"));
             return z;
         }
 
         private bool IsModuleRegistered(ModuleIdentity moduleIdentity)
         {
-            return File.Exists(Path.Combine(BasePath, moduleIdentity.ToString()));
+            return File.Exists(Path.Combine(BasePath, $"{moduleIdentity}.zip"));
         }
     }
 }
