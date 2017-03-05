@@ -6,7 +6,7 @@ using System.Windows;
 using ModularSystem.Clients.Wpf.Proxies;
 using ModularSystem.Common.Modules;
 using ModularSystem.Common.Repositories;
-using ModularSystem.Common.Wpf.Helpers;
+using ModularSystem.Common.Wpf.Modules;
 using ModularSystem.Communication.Data.Files;
 using Prism.Mvvm;
 
@@ -19,7 +19,7 @@ namespace ModularSystem.Clients.Wpf.ViewModels
         /// <summary>
         /// Modules which was downloaded for cur user
         /// </summary>
-        private IModulesRepository<IPathModule> _sessionModules = new MemoryModulesRepository<IPathModule>();
+        private readonly InstalledModuleCollection _sessionModules = new InstalledModuleCollection(Path.Combine(AppContext.BaseDirectory, "curmodules"));
 
         private FrameworkElement _content;
         public FrameworkElement Content
@@ -41,12 +41,10 @@ namespace ModularSystem.Clients.Wpf.ViewModels
             proxy.SetToken(LoginViewModel.Token);
             var t = await proxy.DownloadModules();
             var p = await ModulesPackage.Decompress(await t.Content.ReadAsStreamAsync());
-            if (Directory.Exists(Path.Combine(AppContext.BaseDirectory, "curmodules")))
-                Directory.Delete(Path.Combine(AppContext.BaseDirectory, "curmodules"), true);
-            p.InstallToClient(Path.Combine(AppContext.BaseDirectory, "curmodules"));
-            foreach (var pModule in p.PackagedModules)
+
+            foreach (var packageModule in p.PackagedModules)
             {
-                _sessionModules.AddModule(pModule);
+                _sessionModules.InstallZipPackagedModule(packageModule);
             }
         }
     }

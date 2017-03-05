@@ -9,8 +9,6 @@ namespace ModularSystem.Common
 {
     public class ZipPackagedModule : IPathModule
     {
-        private const string ConfigFileName = "conf.json";
-
         /// <inheritdoc />
         public ModuleInfo ModuleInfo { get; set; }
 
@@ -24,7 +22,7 @@ namespace ModularSystem.Common
         {
             using (ZipArchive z = new ZipArchive(File.OpenRead(path)))
             {
-                using (JsonReader sr = new JsonTextReader(new StreamReader(z.GetEntry(ConfigFileName).Open())))
+                using (JsonReader sr = new JsonTextReader(new StreamReader(z.GetEntry(ModuleSettings.ConfFileName).Open())))
                 {
                     var t = new JsonSerializer
                     {
