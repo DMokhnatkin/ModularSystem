@@ -2,6 +2,6 @@
 {
     public class ModuleSettings
     {
-        public const string ConfFileName = "conf.json";
+        public const string ConfFileName = "config.json";
     }
 }

@@ -21,13 +21,6 @@ namespace ModularSystem.Clients.Wpf.ViewModels
         /// </summary>
         private readonly InstalledModuleCollection _sessionModules = new InstalledModuleCollection(Path.Combine(AppContext.BaseDirectory, "curmodules"));
 
-        private FrameworkElement _content;
-        public FrameworkElement Content
-        {
-            get { return _content; }
-            set { SetProperty(ref _content, value); }
-        }
-
         private bool _isBusy;
         public bool IsBusy
         {
@@ -46,6 +39,8 @@ namespace ModularSystem.Clients.Wpf.ViewModels
             {
                 _sessionModules.InstallZipPackagedModule(packageModule);
             }
+
+            _sessionModules.StartModules();
         }
     }
 }

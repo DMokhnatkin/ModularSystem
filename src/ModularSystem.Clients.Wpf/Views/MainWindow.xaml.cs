@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using ModularSystem.Clients.Wpf.ViewModels;
+using ModularSystem.Common.Wpf;
 
 namespace ModularSystem.Clients.Wpf.Views
 {
@@ -26,6 +27,11 @@ namespace ModularSystem.Clients.Wpf.Views
             await OpenLogin();
         }
 
+        private void UpdateContent()
+        {
+            ContentWrapper.Content = ClientResolver.GetUi().MainContent;
+        }
+
         private async Task OpenLogin()
         {
             LoginView v = new LoginView { DataContext = ViewModel.LoginViewModel };
@@ -34,6 +40,8 @@ namespace ModularSystem.Clients.Wpf.Views
             if (ViewModel.LoginViewModel.IsLoggedIn)
                 await ViewModel.DownloadModules();
             ViewModel.IsBusy = false;
+
+            UpdateContent();
         }
     }
 }
