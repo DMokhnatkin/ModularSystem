@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,6 +51,20 @@ namespace ModularSystem.Clients.Wpf.ViewModels
             set { SetProperty(ref _isBusy, value); }
         }
 
+        private string SecureStringToString(SecureString value)
+        {
+            IntPtr valuePtr = IntPtr.Zero;
+            try
+            {
+                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
+                return Marshal.PtrToStringUni(valuePtr);
+            }
+            finally
+            {
+                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
+            }
+        }
+
         public async Task LoginExecute()
         {
             IsBusy = true;
@@ -57,7 +72,7 @@ namespace ModularSystem.Clients.Wpf.ViewModels
             try
             {
                 var tokenResponse = await AuthorizationHelper.GetTokenAsync("http://localhost:5005", "wpfclient", "g6wCBw2",
-                    "alice", "password");
+                    UserName, SecureStringToString(UserPassword));
 
                 if (!tokenResponse.IsError)
                     Token = tokenResponse.AccessToken;
