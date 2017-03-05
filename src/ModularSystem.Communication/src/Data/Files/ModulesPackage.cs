@@ -12,12 +12,12 @@ namespace ModularSystem.Communication.Data.Files
 {
     public class ModulesPackage
     {
-        public ModulesPackage(IEnumerable<IPathModule> modules)
+        public ModulesPackage(IEnumerable<ZipPackagedModule> modules)
         {
             PackagedModules = modules.ToArray();
         }
 
-        public IPathModule[] PackagedModules { get; private set; }
+        public ZipPackagedModule[] PackagedModules { get; private set; }
 
         public static async Task<ModulesPackage> Decompress(Stream compressedPackage)
         {
@@ -27,7 +27,7 @@ namespace ModularSystem.Communication.Data.Files
                 modulePackage.ExtractToDirectory(tempPath);
             }
 
-            var modules = new List<IPathModule>();
+            var modules = new List<ZipPackagedModule>();
             foreach (var t in Directory.GetFiles(tempPath))
             {
                 var z = new ZipPackagedModule();

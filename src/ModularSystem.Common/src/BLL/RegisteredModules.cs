@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using ModularSystem.Common.Exceptions;
-using ModularSystem.Common.Modules;
 using ModularSystem.Common.Repositories;
 
 namespace ModularSystem.Common.BLL
 {
-    public class Modules
+    public class RegisteredModules
     {
-        private readonly IModulesRepository _modulesRepository;
+        private readonly IModulesRepository<ZipPackagedModule> _modulesRepository;
         private readonly IUserModulesRepository _userModulesRepository;
 
-        public Modules(IModulesRepository modulesRepository, IUserModulesRepository userModulesRepository)
+        public RegisteredModules(IModulesRepository<ZipPackagedModule> modulesRepository, IUserModulesRepository userModulesRepository)
         {
             _modulesRepository = modulesRepository;
             _userModulesRepository = userModulesRepository;
         }
 
         #region Modules
-        public virtual void RegisterModule(IPathModule packagedModule)
+        public virtual void RegisterModule(ZipPackagedModule packagedModule)
         {
             var t = CheckDependencies(packagedModule.ModuleInfo);
             if (!t.IsCheckSuccess)
@@ -31,9 +30,9 @@ namespace ModularSystem.Common.BLL
         /// Register list of modules.
         /// This method will try to register modules in right order.
         /// </summary>
-        public virtual void RegisterModules(IEnumerable<IPathModule> modules)
+        public virtual void RegisterModules(IEnumerable<ZipPackagedModule> modules)
         {
-            var enumerable = modules as IPathModule[] ?? modules.ToArray();
+            var enumerable = modules as ZipPackagedModule[] ?? modules.ToArray();
             var identityToModule = enumerable.ToDictionary(x => x.ModuleInfo.ModuleIdentity, x => x); // Just for get IModule by ModuleIdentity
             var orderedModules = ModulesHelper.OrderModules(enumerable.Select(x => x.ModuleInfo));
             foreach (var m in orderedModules)
@@ -69,7 +68,7 @@ namespace ModularSystem.Common.BLL
         /// <summary>
         /// Returns module by it's identity
         /// </summary>
-        public virtual IPathModule GetModule(ModuleIdentity moduleIdentity)
+        public virtual ZipPackagedModule GetModule(ModuleIdentity moduleIdentity)
         {
             return _modulesRepository.GetModule(moduleIdentity);
         }
@@ -78,7 +77,7 @@ namespace ModularSystem.Common.BLL
         /// Get all registered modules
         /// </summary>
         /// <returns></returns>
-        public virtual IEnumerable<IPathModule> GetRegisteredModules()
+        public virtual IEnumerable<ZipPackagedModule> GetRegisteredModules()
         {
             return _modulesRepository;
         }
@@ -179,7 +178,7 @@ namespace ModularSystem.Common.BLL
             return _userModulesRepository.GetModules(userId);
         }
 
-        public IEnumerable<IPathModule> GetModules(string userId)
+        public IEnumerable<ZipPackagedModule> GetModules(string userId)
         {
             return GetModuleIdentities(userId).Select(GetModule);
         }

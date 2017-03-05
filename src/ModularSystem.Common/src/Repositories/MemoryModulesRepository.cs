@@ -5,16 +5,16 @@ using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Repositories
 {
-    public class MemoryModulesRepository : IModulesRepository
+    public class MemoryModulesRepository<T> : IModulesRepository<T> where T : IModule
     {
-        private Dictionary<ModuleIdentity, IPathModule> _modules = new Dictionary<ModuleIdentity, IPathModule>();
+        private Dictionary<ModuleIdentity, T> _modules = new Dictionary<ModuleIdentity, T>();
 
         /// <inheritdoc />
-        public void AddModule(IPathModule packagedModule)
+        public void AddModule(T module)
         {
-            if (_modules.ContainsKey(packagedModule.ModuleInfo.ModuleIdentity))
-                throw new ArgumentException($"Module {packagedModule.ModuleInfo.ModuleIdentity} is already registered");
-            _modules.Add(packagedModule.ModuleInfo.ModuleIdentity, packagedModule);
+            if (_modules.ContainsKey(module.ModuleInfo.ModuleIdentity))
+                throw new ArgumentException($"Module {module.ModuleInfo.ModuleIdentity} is already registered");
+            _modules.Add(module.ModuleInfo.ModuleIdentity, module);
         }
 
         /// <inheritdoc />
@@ -26,9 +26,9 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public IPathModule GetModule(ModuleIdentity moduleIdentity)
+        public T GetModule(ModuleIdentity moduleIdentity)
         {
-            IPathModule res;
+            T res;
             _modules.TryGetValue(moduleIdentity, out res);
             return res;
         }
@@ -40,7 +40,7 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public IEnumerator<IPathModule> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             return _modules.Values.GetEnumerator();
         }

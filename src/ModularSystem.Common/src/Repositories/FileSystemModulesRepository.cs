@@ -2,11 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Repositories
 {
-    public class FileSystemModulesRepository : IModulesRepository
+    public class FileSystemModulesRepository : IModulesRepository<ZipPackagedModule>
     {
         public string BasePath { get; }
 
@@ -19,7 +18,7 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public IEnumerator<IPathModule> GetEnumerator()
+        public IEnumerator<ZipPackagedModule> GetEnumerator()
         {
             foreach (var f in Directory.GetFiles(BasePath))
             {
@@ -36,11 +35,11 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public void AddModule(IPathModule packagedModule)
+        public void AddModule(ZipPackagedModule module)
         {
-            if (IsModuleRegistered(packagedModule.ModuleInfo.ModuleIdentity))
-                throw new ArgumentException($"Module {packagedModule.ModuleInfo.ModuleIdentity} is already registered");
-            File.Copy(packagedModule.Path, Path.Combine(BasePath, packagedModule.ModuleInfo.ModuleIdentity.ToString()));
+            if (IsModuleRegistered(module.ModuleInfo.ModuleIdentity))
+                throw new ArgumentException($"Module {module.ModuleInfo.ModuleIdentity} is already registered");
+            File.Copy(module.Path, Path.Combine(BasePath, module.ModuleInfo.ModuleIdentity.ToString()));
         }
 
         /// <inheritdoc />
@@ -52,7 +51,7 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public IPathModule GetModule(ModuleIdentity moduleIdentity)
+        public ZipPackagedModule GetModule(ModuleIdentity moduleIdentity)
         {
             if (!IsModuleRegistered(moduleIdentity))
                 return null;

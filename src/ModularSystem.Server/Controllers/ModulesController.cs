@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using ModularSystem.Common;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Exceptions;
+using ModularSystem.Common.Modules;
 using ModularSystem.Communication.Data.Files;
 using ModularSystem.Server.Common;
 
@@ -17,11 +18,11 @@ namespace ModularSystem.Server.Controllers
     //[Authorize]
     public class ModulesController : Controller
     {
-        private readonly Modules _modules;
+        private readonly RegisteredModules _registeredModules;
 
-        public ModulesController(Modules modules)
+        public ModulesController(RegisteredModules registeredModules)
         {
-            _modules = modules;
+            _registeredModules = registeredModules;
         }
 
         #region Modules
@@ -32,7 +33,7 @@ namespace ModularSystem.Server.Controllers
         public async Task InstallModulePackageAsync()
         {
             var package = await ModulesPackage.Decompress(Request.Body);
-            _modules.RegisterModules(package.PackagedModules);
+            _registeredModules.RegisterModules(package.PackagedModules);
         }
 
         [HttpPut("remove")]
@@ -41,14 +42,14 @@ namespace ModularSystem.Server.Controllers
         [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
         public async Task RemoveModuleAsync([FromBody]string module)
         {
-            await Task.Factory.StartNew(() => _modules.UnregisterModule(ModuleIdentity.Parse(module)));
+            await Task.Factory.StartNew(() => _registeredModules.UnregisterModule(ModuleIdentity.Parse(module)));
         }
 
         [HttpGet]
         [Authorize(Policy = "ConfigModulesAllowed")]
         public async Task<string[]> GetModulesListAsync()
         {
-            var modules = await Task.Factory.StartNew(() => _modules.GetRegisteredModules());
+            var modules = await Task.Factory.StartNew(() => _registeredModules.GetRegisteredModules());
             var dtos = modules.Select(x => x.ModuleInfo.ModuleIdentity.ToString()).ToArray();
             return dtos;
         }
@@ -60,7 +61,7 @@ namespace ModularSystem.Server.Controllers
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
         public void AddUserModules(string userId, [FromBody]IEnumerable<string> moduleIdentities)
         {
-            _modules.AddModules(userId, moduleIdentities.Select(ModuleIdentity.Parse));
+            _registeredModules.AddModules(userId, moduleIdentities.Select(ModuleIdentity.Parse));
         }
 
         [HttpDelete("user/{userId}")]
@@ -68,7 +69,7 @@ namespace ModularSystem.Server.Controllers
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
         public void RemoveUserModules(string userId, IEnumerable<string> moduleIdentities)
         {
-            _modules.RemoveModules(userId, moduleIdentities.Select(ModuleIdentity.Parse));
+            _registeredModules.RemoveModules(userId, moduleIdentities.Select(ModuleIdentity.Parse));
         }
 
         [HttpGet("user/{userId}")]
@@ -76,10 +77,10 @@ namespace ModularSystem.Server.Controllers
         [Authorize(Policy = "ConfigModulesAllowed")]
         public IEnumerable<string> GetUserModules(string userId)
         {
-            var r = _modules.GetModuleIdentities(userId);
+            var r = _registeredModules.GetModuleIdentities(userId);
             if (r == null)
                 return new string[0];
-            return _modules.GetModuleIdentities(userId).Select(x => x.ToString());
+            return _registeredModules.GetModuleIdentities(userId).Select(x => x.ToString());
         }
 
         [HttpGet("download")]
@@ -90,7 +91,7 @@ namespace ModularSystem.Server.Controllers
             if (userId == null)
                 return Forbid();
 
-            var package = new ModulesPackage(_modules.GetModules(userId.Value));
+            var package = new ModulesPackage(_registeredModules.GetModules(userId.Value));
             return File(await package.Compress(), "application/zip");
         }
         #endregion

@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Windows;
 using ModularSystem.Clients.Wpf.Proxies;
+using ModularSystem.Common.Modules;
 using ModularSystem.Common.Repositories;
 using ModularSystem.Common.Wpf.Helpers;
 using ModularSystem.Communication.Data.Files;
@@ -18,7 +19,7 @@ namespace ModularSystem.Clients.Wpf.ViewModels
         /// <summary>
         /// Modules which was downloaded for cur user
         /// </summary>
-        private IModulesRepository _sessionModules = new MemoryModulesRepository();
+        private IModulesRepository<IPathModule> _sessionModules = new MemoryModulesRepository<IPathModule>();
 
         private FrameworkElement _content;
         public FrameworkElement Content

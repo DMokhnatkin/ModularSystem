@@ -114,6 +114,8 @@
   <ItemGroup>
     <Compile Include="Helpers\ModulesPackageClientHelper.cs" />
     <Compile Include="IWpfClientEntry.cs" />
+    <Compile Include="Modules\InstalledModule.cs" />
+    <Compile Include="Modules\InstalledModulesRepository.cs" />
     <Compile Include="WpfClientExitArgs.cs" />
     <Compile Include="WpfClientStartArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

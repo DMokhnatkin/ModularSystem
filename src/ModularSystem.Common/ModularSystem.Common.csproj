@@ -53,7 +53,7 @@
     <Compile Include="src\ZipPackagedModule.cs" />
     <Compile Include="src\ModuleIdentity.cs" />
     <Compile Include="src\ModuleInfo.cs" />
-    <Compile Include="src\BLL\Modules.cs" />
+    <Compile Include="src\BLL\RegisteredModules.cs" />
     <Compile Include="src\ModuleType.cs" />
     <Compile Include="src\BLL\CheckDependenciesResult.cs" />
     <Compile Include="src\Repositories\IUserModulesRepository.cs" />
