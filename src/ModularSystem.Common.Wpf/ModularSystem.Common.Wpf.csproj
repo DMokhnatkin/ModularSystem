@@ -119,8 +119,6 @@
     <Compile Include="IWpfClientEntry.cs" />
     <Compile Include="Modules\WpfClientInstalledModule.cs" />
     <Compile Include="Modules\InstalledModuleCollection.cs" />
-    <Compile Include="WpfClientExitArgs.cs" />
-    <Compile Include="WpfClientStartArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

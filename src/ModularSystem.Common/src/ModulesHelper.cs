@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Exceptions;
+using ModularSystem.Common.Modules;
 using ModularSystem.Common.Repositories;
 
 namespace ModularSystem.Common
@@ -33,6 +34,15 @@ namespace ModularSystem.Common
                 }
             }
             return moduleInfos.OrderBy(x => linkesCt[x.ModuleIdentity]);
+        }
+
+        /// <inheritdoc cref="OrderModules(System.Collections.Generic.IEnumerable{ModularSystem.Common.ModuleInfo})"/>
+        public static IEnumerable<IModule> OrderModules(IEnumerable<IModule> modules)
+        {
+            var enumerableModules = modules as IModule[] ?? modules.ToArray();
+            var t = enumerableModules.ToDictionary(x => x.ModuleInfo, y => y);
+            var ordered = OrderModules(enumerableModules.Select(x => x.ModuleInfo));
+            return ordered.Select(x => t[x]);
         }
 
         /// <summary>

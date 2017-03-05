@@ -4,7 +4,7 @@
     {
         void OnInstalled();
         void OnRemoved();
-        void OnStart(WpfClientStartArgs args);
-        void OnExit(WpfClientExitArgs args);
+        void OnStart();
+        void OnExit();
     }
 }

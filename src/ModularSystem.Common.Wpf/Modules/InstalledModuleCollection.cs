@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using ModularSystem.Common.Repositories;
 
 namespace ModularSystem.Common.Wpf.Modules
@@ -32,6 +33,15 @@ namespace ModularSystem.Common.Wpf.Modules
             var m = new WpfClientInstalledModule();
             m.InitializeFromPath(t);
             _repository.AddModule(m);
+        }
+
+        public void StartModules()
+        {
+            var modules = _repository.ToList();
+            foreach (var orderModule in ModulesHelper.OrderModules(modules).OfType<WpfClientInstalledModule>())
+            {
+                orderModule.WpfClientEntry?.OnStart();
+            }
         }
     }
 }
