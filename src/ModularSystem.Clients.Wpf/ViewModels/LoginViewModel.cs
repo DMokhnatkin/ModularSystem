@@ -4,6 +4,7 @@ using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel.Client;
+using ModularSystem.Common.Wpf.Context;
 using ModularSystem.Communication.Proxies;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -18,7 +19,6 @@ namespace ModularSystem.Clients.Wpf.ViewModels
 
         private string _userName;
         private SecureString _userPassword;
-        private string _token;
         private bool _isBusy;
 
         public string UserName
@@ -33,17 +33,7 @@ namespace ModularSystem.Clients.Wpf.ViewModels
             set { SetProperty(ref _userPassword, value); }
         }
 
-        public string Token
-        {
-            get { return _token; }
-            set
-            {
-                SetProperty(ref _token, value);
-                OnPropertyChanged(nameof(IsLoggedIn));
-            }
-        }
-
-        public bool IsLoggedIn => _token != null;
+        public bool IsLoggedIn => ClientAppContext.CurrentContext?.AuthenticationContext?.AccessToken != null;
 
         public bool IsBusy
         {
@@ -71,11 +61,16 @@ namespace ModularSystem.Clients.Wpf.ViewModels
 
             try
             {
-                var tokenResponse = await AuthorizationHelper.GetTokenAsync("http://localhost:5005", "wpfclient", "g6wCBw2",
+                var tokenResponse = await AuthorizationHelper.GetTokenAsync("http://localhost:5005", 
+                    ClientAppContext.CurrentContext.AuthenticationContext.ClientId, 
+                    ClientAppContext.CurrentContext.AuthenticationContext.ClientPassword,
                     UserName, SecureStringToString(UserPassword));
 
                 if (!tokenResponse.IsError)
-                    Token = tokenResponse.AccessToken;
+                {
+                    ClientAppContext.CurrentContext.AuthenticationContext.UserName = UserName;
+                    ClientAppContext.CurrentContext.AuthenticationContext.AccessToken = tokenResponse.AccessToken;
+                }
             }
             catch (Exception e)
             {

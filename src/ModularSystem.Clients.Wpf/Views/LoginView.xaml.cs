@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ModularSystem.Clients.Wpf.ViewModels;
+using ModularSystem.Common.Wpf.Context;
 
 namespace ModularSystem.Clients.Wpf.Views
 {
@@ -38,7 +39,7 @@ namespace ModularSystem.Clients.Wpf.Views
 
         private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.Token = null;
+            ClientAppContext.CurrentContext.AuthenticationContext.AccessToken = null;
             await ViewModel.LoginExecute();
             if (ViewModel.IsLoggedIn)
                 Close();

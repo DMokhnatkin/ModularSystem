@@ -132,7 +132,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientResolver.cs" />
+    <Compile Include="Context\AuthenticationContext.cs" />
+    <Compile Include="Context\ClientAppContext.cs" />
     <Compile Include="IWpfClientEntry.cs" />
     <Compile Include="Modules\WpfClientInstalledModule.cs" />
     <Compile Include="Modules\InstalledModuleCollection.cs" />
