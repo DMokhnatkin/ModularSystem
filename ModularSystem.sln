@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E91ECB31-B70C-4D52-8914-77C1BBE1841C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModularSystem.Communication", "src\ModularSystem.Communication\ModularSystem.Communication.csproj", "{3D149144-213D-4C07-A6A1-0A383ACA0784}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DB13F30D-58CD-4DD5-9478-2FE945D6F941}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModularSystem.Communication", "src\ModularSystem.Communication\ModularSystem.Communication.csproj", "{3D149144-213D-4C07-A6A1-0A383ACA0784}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModularSystem.Common", "src\ModularSystem.Common\ModularSystem.Common.csproj", "{146A831A-2AFF-4F04-91F2-3230576C3EE1}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ModularSystem.Server", "src\ModularSystem.Server\ModularSystem.Server.xproj", "{04C8805E-B511-4BAD-BF1C-420B906E6BAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularSystem.Server", "src\ModularSystem.Server\ModularSystem.Server.csproj", "{04C8805E-B511-4BAD-BF1C-420B906E6BAE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModularSystem.Сonfigurator", "src\ModularSystem.Сonfigurator\ModularSystem.Сonfigurator.csproj", "{0B91EF1D-C089-4E53-8AB7-C7774DE3D426}"
 EndProject
@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModularSystem.Clients.Wpf",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModularSystem.Common.Wpf", "src\ModularSystem.Common.Wpf\ModularSystem.Common.Wpf.csproj", "{BB30AA06-DFE9-4C97-AC8F-08BBE4FF8F37}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "PackPlugin", "src\PackPlugin\PackPlugin.xproj", "{326B44FA-52C6-4F1F-A936-CA33BCE98BD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PackPlugin", "src\PackPlugin\PackPlugin.csproj", "{326B44FA-52C6-4F1F-A936-CA33BCE98BD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
