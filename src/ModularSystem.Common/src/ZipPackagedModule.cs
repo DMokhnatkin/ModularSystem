@@ -33,5 +33,16 @@ namespace ModularSystem.Common
             }
             Path = path;
         }
+
+        /// <summary>
+        /// Pack all files in directory into zip and initialize ZipPackagedModule instance for it
+        /// </summary>
+        public static ZipPackagedModule PackFiles(string filesPath, string zipDestinationPath)
+        {
+            ZipFile.CreateFromDirectory(filesPath, zipDestinationPath);
+            ZipPackagedModule m = new ZipPackagedModule();
+            m.InitializeFromPath(zipDestinationPath);
+            return m;
+        }
     }
 }
