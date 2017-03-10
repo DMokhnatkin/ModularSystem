@@ -86,7 +86,7 @@ namespace ModularSystem.Сonfigurator
         {
             var moduleIdentities =
                 opts.ModuleIdentities.Select(ModuleIdentity.Parse);
-            var r = modules.AddUserModules(opts.UserId, moduleIdentities);
+            var r = modules.AddUserModules(opts.UserId, opts.ClientId, moduleIdentities);
             HandleResult(r);
         }
 
@@ -94,7 +94,7 @@ namespace ModularSystem.Сonfigurator
         {
             var moduleIdentities =
                 opts.ModuleIdentities.Select(ModuleIdentity.Parse);
-            var r = modules.RemoveUserModules(opts.UserId, moduleIdentities);
+            var r = modules.RemoveUserModules(opts.UserId, opts.ClientId, moduleIdentities);
             HandleResult(r);
         }
 

@@ -116,15 +116,15 @@ namespace ModularSystem.Common.BLL
         /// <summary>
         /// Add module as required for specifed user
         /// </summary>
-        public void AddModule(string userId, ModuleIdentity module)
+        public void AddModule(string userId, string clientId, ModuleIdentity module)
         {
             var t = _modulesRepository.GetModule(module)?.ModuleInfo;
             if (t == null)
                 throw new ModuleMissedException(module);
-            var depRes = ModulesHelper.CheckDependencies(t, GetModuleIdentities(userId) ?? new ModuleIdentity[0]);
+            var depRes = ModulesHelper.CheckDependencies(t, GetModuleIdentities(userId, clientId) ?? new ModuleIdentity[0]);
             if (depRes.IsCheckSuccess)
             {
-                _userModulesRepository.AddModule(userId, module);
+                _userModulesRepository.AddModule(userId, clientId, module);
             }
             else
             {
@@ -136,52 +136,52 @@ namespace ModularSystem.Common.BLL
         /// Add list of modules from user requirments. Order of modules is not important 
         /// (it will be sort automaticaly with considering of dependencies)
         /// </summary>
-        public void AddModules(string userId, IEnumerable<ModuleIdentity> modules)
+        public void AddModules(string userId, string clientId, IEnumerable<ModuleIdentity> modules)
         {
             var ordered = ModulesHelper.OrderModules(modules.Select(x => _modulesRepository.GetModule(x)?.ModuleInfo));
 
             foreach (var moduleInfo in ordered)
             {
-                AddModule(userId, moduleInfo.ModuleIdentity);
+                AddModule(userId, clientId, moduleInfo.ModuleIdentity);
             }
         }
 
         /// <summary>
         /// Remove module from required for specifed user
         /// </summary>
-        public void RemoveModule(string userId, ModuleIdentity module)
+        public void RemoveModule(string userId, string clientId, ModuleIdentity module)
         {
             var dependent = ModulesHelper.GetDependent(module,
-                _userModulesRepository.GetModules(userId).Select(x => _modulesRepository.GetModule(x).ModuleInfo))
+                _userModulesRepository.GetModules(userId, clientId).Select(x => _modulesRepository.GetModule(x).ModuleInfo))
                 .ToArray();
             if (dependent.Any())
                 throw new ModuleIsRequiredException(module, dependent);
-            _userModulesRepository.RemoveModule(userId, module);
+            _userModulesRepository.RemoveModule(userId, clientId, module);
         }
 
         /// <summary>
         /// Remove list of modules from user requirments. Order of modules is not important 
         /// (it will be sort automaticaly with considering of dependencies)
         /// </summary>
-        public void RemoveModules(string userId, IEnumerable<ModuleIdentity> modules)
+        public void RemoveModules(string userId, string clientId, IEnumerable<ModuleIdentity> modules)
         {
             var ordered = ModulesHelper.OrderModules(modules.Select(x => _modulesRepository.GetModule(x).ModuleInfo)).Reverse();
 
             foreach (var moduleInfo in ordered)
             {
-                RemoveModule(userId, moduleInfo.ModuleIdentity);
+                RemoveModule(userId, clientId, moduleInfo.ModuleIdentity);
             }
         }
 
-        public IEnumerable<ModuleIdentity> GetModuleIdentities(string userId)
+        public IEnumerable<ModuleIdentity> GetModuleIdentities(string userId, string clientId)
         {
-            return _userModulesRepository.GetModules(userId);
+            return _userModulesRepository.GetModules(userId, clientId);
         }
 
-        public IEnumerable<ZipPackagedModule> GetModules(string userId)
+        public IEnumerable<ZipPackagedModule> GetModules(string userId, string clientId)
         {
             var res = new List<ZipPackagedModule>();
-            foreach (var moduleIdentity in GetModuleIdentities(userId))
+            foreach (var moduleIdentity in GetModuleIdentities(userId, clientId))
             {
                 var t = GetModule(moduleIdentity);
                 if (t == null)

@@ -4,8 +4,8 @@ namespace ModularSystem.Common.Repositories
 {
     public interface IUserModulesRepository
     {
-        void AddModule(string userId, ModuleIdentity module);
-        void RemoveModule(string userId, ModuleIdentity module);
-        IEnumerable<ModuleIdentity> GetModules(string userId);
+        void AddModule(string userId, string clientId, ModuleIdentity module);
+        void RemoveModule(string userId, string clientId, ModuleIdentity module);
+        IEnumerable<ModuleIdentity> GetModules(string userId, string clientId);
     }
 }

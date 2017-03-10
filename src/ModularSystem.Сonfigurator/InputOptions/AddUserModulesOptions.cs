@@ -10,6 +10,9 @@ namespace ModularSystem.Сonfigurator.InputOptions
         public string UserId { get; set; }
 
         [Value(1, Required = true)]
+        public string ClientId { get; set; }
+
+        [Value(2, Required = true)]
         public IEnumerable<string> ModuleIdentities { get; set; }
     }
 }

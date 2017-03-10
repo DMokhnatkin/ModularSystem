@@ -56,20 +56,22 @@ namespace ModularSystem.Server.Controllers
         #endregion
 
         #region User modules
-        [HttpPost("user/{userId}")]
+        [HttpPost("user/{userId}/{clientId}")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
-        public void AddUserModules(string userId, [FromBody]IEnumerable<string> moduleIdentities)
+        public IActionResult AddUserModules(string userId, string clientId, [FromBody]IEnumerable<string> moduleIdentities)
         {
-            _registeredModules.AddModules(userId, moduleIdentities.Select(ModuleIdentity.Parse));
+            _registeredModules.AddModules(userId, clientId, moduleIdentities.Select(ModuleIdentity.Parse));
+            return Ok();
         }
 
-        [HttpDelete("user/{userId}")]
+        [HttpDelete("user/{userId}/{clientId}")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
-        public void RemoveUserModules(string userId, IEnumerable<string> moduleIdentities)
+        public IActionResult RemoveUserModules(string userId, string clientId, IEnumerable<string> moduleIdentities)
         {
-            _registeredModules.RemoveModules(userId, moduleIdentities.Select(ModuleIdentity.Parse));
+            _registeredModules.RemoveModules(userId, clientId, moduleIdentities.Select(ModuleIdentity.Parse));
+            return Ok();
         }
 
         [HttpGet("user/{userId}")]
@@ -77,10 +79,10 @@ namespace ModularSystem.Server.Controllers
         [Authorize(Policy = "ConfigModulesAllowed")]
         public IEnumerable<string> GetUserModules(string userId)
         {
-            var r = _registeredModules.GetModuleIdentities(userId);
+            var r = _registeredModules.GetModuleIdentities(userId, "wpfclient");
             if (r == null)
                 return new string[0];
-            return _registeredModules.GetModuleIdentities(userId).Select(x => x.ToString());
+            return _registeredModules.GetModuleIdentities(userId, "wpfclient").Select(x => x.ToString());
         }
 
         [HttpGet("download")]
@@ -92,7 +94,11 @@ namespace ModularSystem.Server.Controllers
             if (userId == null)
                 return Forbid();
 
-            var package = new ModulesPackage(_registeredModules.GetModules(userId.Value));
+            var clientId = User.FindFirst("client_id");
+            if (clientId == null)
+                return Forbid();
+
+            var package = new ModulesPackage(_registeredModules.GetModules(userId.Value, clientId.Value));
             return File(await package.Compress(), "application/zip");
         }
         #endregion

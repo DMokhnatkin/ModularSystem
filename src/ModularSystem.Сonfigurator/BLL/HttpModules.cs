@@ -34,14 +34,14 @@ namespace ModularSystem.Сonfigurator.BLL
             return _proxy.GetModulesListAsync().Result.Select(ModuleIdentity.Parse);
         }
 
-        public HttpResponseMessage AddUserModules(string userId, IEnumerable<ModuleIdentity> moduleIdentities)
+        public HttpResponseMessage AddUserModules(string userId, string clientId, IEnumerable<ModuleIdentity> moduleIdentities)
         {
-            return _proxy.AddUserModules(userId, moduleIdentities.Select(x => x.ToString()).ToArray()).Result;
+            return _proxy.AddUserModules(userId, clientId, moduleIdentities.Select(x => x.ToString()).ToArray()).Result;
         }
 
-        public HttpResponseMessage RemoveUserModules(string userId, IEnumerable<ModuleIdentity> moduleIdentities)
+        public HttpResponseMessage RemoveUserModules(string userId, string clientId, IEnumerable<ModuleIdentity> moduleIdentities)
         {
-            return _proxy.RemoveUserModules(userId, moduleIdentities.Select(x => x.ToString()).ToArray()).Result;
+            return _proxy.RemoveUserModules(userId, clientId, moduleIdentities.Select(x => x.ToString()).ToArray()).Result;
         }
 
         public IEnumerable<ModuleIdentity> GetUserModules(string userId)

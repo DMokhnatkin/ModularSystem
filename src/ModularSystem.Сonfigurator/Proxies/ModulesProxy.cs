@@ -33,14 +33,14 @@ namespace ModularSystem.Сonfigurator.Proxies
             return JsonConvert.DeserializeObject<string[]>(await res.Content.ReadAsStringAsync());
         }
 
-        public async Task<HttpResponseMessage> AddUserModules(string userId, string[] dtos)
+        public async Task<HttpResponseMessage> AddUserModules(string userId, string clientId, string[] dtos)
         {
-            return await Client.PostAsync($"{BaseUrl}/api/modules/user/{userId}", new ObjectContent(typeof(string[]), dtos, MediaTypeFormatter));
+            return await Client.PostAsync($"{BaseUrl}/api/modules/user/{userId}/{clientId}", new ObjectContent(typeof(string[]), dtos, MediaTypeFormatter));
         }
 
-        public async Task<HttpResponseMessage> RemoveUserModules(string userId, string[] dtos)
+        public async Task<HttpResponseMessage> RemoveUserModules(string userId, string clientId, string[] dtos)
         {
-            UriBuilder builder = new UriBuilder($"{BaseUrl}/api/modules/user/{userId}");
+            UriBuilder builder = new UriBuilder($"{BaseUrl}/api/modules/user/{userId}/{clientId}");
             // It looks terrible. I can't find any query builder.
             builder.Query = string.Concat(dtos.Select(x => $"moduleIdentities={x}&")).TrimEnd('&');
             return await Client.DeleteAsync(builder.ToString());
