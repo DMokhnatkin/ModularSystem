@@ -1,0 +1,1 @@
+../../../scripts/nuget.ps1 "../ModularSystem.Common.csproj" -push
