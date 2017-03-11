@@ -138,6 +138,7 @@
     <Compile Include="Modules\WpfClientInstalledModule.cs" />
     <Compile Include="Modules\InstalledModuleCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\IWorkSpace.cs" />
     <Compile Include="UI\MainUi.cs" />
   </ItemGroup>
   <ItemGroup>

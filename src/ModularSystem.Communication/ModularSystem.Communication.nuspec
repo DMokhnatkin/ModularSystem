@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>DMokhnatkin</authors>
+    <owners>DMokhnatkin</owners>
+    <licenseUrl>https://github.com/DMokhnatkin/ModularSystem/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/DMokhnatkin/ModularSystem</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Code for client-server interaction</description>
+    <copyright>Copyright 2017</copyright>
+  </metadata>
+</package>
