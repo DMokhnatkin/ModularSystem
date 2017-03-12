@@ -28,7 +28,8 @@ namespace ModularSystem.Сonfigurator
             // Authenticate
             while (true)
             {
-                var userName = ReadLine.Read("user name: ");
+                Console.Write("user name: ");
+                var userName = Console.ReadLine();
                 var userPassword = new StringBuilder();
                 Console.Write("user password: ");
                 while (true)
@@ -47,7 +48,8 @@ namespace ModularSystem.Сonfigurator
 
             while (true)
             {
-                var s = ReadLine.Read(">");
+                Console.Write("> ");
+                var s = Console.ReadLine();
                 var command = s.Split(' ');
 
                 Parser.Default

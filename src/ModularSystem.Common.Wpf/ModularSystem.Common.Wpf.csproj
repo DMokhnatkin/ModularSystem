@@ -61,7 +61,6 @@
       <HintPath>..\..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
       <Private>True</Private>
@@ -100,7 +99,6 @@
       <HintPath>..\..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
       <Private>True</Private>
@@ -121,11 +119,6 @@
       <HintPath>..\..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
       <Private>True</Private>
@@ -145,10 +138,6 @@
     <ProjectReference Include="..\ModularSystem.Common\ModularSystem.Common.csproj">
       <Project>{146a831a-2aff-4f04-91f2-3230576c3ee1}</Project>
       <Name>ModularSystem.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ModularSystem.Communication\ModularSystem.Communication.csproj">
-      <Project>{3d149144-213d-4c07-a6a1-0a383aca0784}</Project>
-      <Name>ModularSystem.Communication</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
