@@ -1,24 +1,28 @@
 param(
-	[Parameter(Mandatory=$True,Position=1)]
-	[string]$proj,
 	[string]$source = "Ivan",
 	[switch]$push
 )
 
-nuget pack $proj
-if ($push)
+function bldnuget([string]$dir, [string]$source, [switch]$push)
 {
-	# get last modifed nupkg file (this file we generate before)
-	$latest = Get-ChildItem *.nupkg | Sort-Object LastAccessTime -Descending | Select-Object -First 1
-	$package_name = [regex]::match($latest.Name, '(d+\.d+\.d+\.d+)\.nupkg$').Groups[2].Value
-	echo $package_name
-	
-	Try
-	{
-		nuget delete ModularSystem.Common 1.0.0 -Source $source
-	}
-	Catch [system.exception]
-	{
-	}
-	nuget push ./ModularSystem.Common.1.0.0.0.nupkg -Source $source
+    $tmp = Join-Path -Path $dir -ChildPath "*.csproj"
+    $proj = Get-ChildItem $tmp | Select-Object -First 1 | % {
+        $_.FullName
+    }
+    $outputPath = Join-Path -Path $dir -ChildPath "Deploy"
+    nuget pack $proj -outputdirectory $outputPath
+    if ($push)
+    {
+		$tmp = Join-Path -Path $outputPath -ChildPath *.nupkg
+		# get last modifed nupkg file (this file we generate before)
+		$package = Get-ChildItem $tmp | Sort-Object LastAccessTime -Descending | Select-Object -First 1 | % {
+			$_.FullName
+		}
+		echo $package
+	    nuget push $package -Source $source
+    }
 }
+
+bldnuget -dir "..\src\ModularSystem.Common" -source $source -push:$push
+bldnuget -dir "..\src\ModularSystem.Common.Wpf" -source $source -push:$push
+bldnuget -dir "..\src\ModularSystem.Connection" -source $source -push:$push

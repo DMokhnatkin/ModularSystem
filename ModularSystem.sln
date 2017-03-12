@@ -23,6 +23,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModularSystem.Common.Wpf", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PackPlugin", "src\PackPlugin\PackPlugin.csproj", "{326B44FA-52C6-4F1F-A936-CA33BCE98BD4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{7C189C68-00D8-46B8-88A5-B2215D384BD6}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\nuget.ps1 = scripts\nuget.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
