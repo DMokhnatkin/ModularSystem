@@ -25,4 +25,4 @@ function bldnuget([string]$dir, [string]$source, [switch]$push)
 
 bldnuget -dir "..\src\ModularSystem.Common" -source $source -push:$push
 bldnuget -dir "..\src\ModularSystem.Common.Wpf" -source $source -push:$push
-bldnuget -dir "..\src\ModularSystem.Connection" -source $source -push:$push
+bldnuget -dir "..\src\ModularSystem.Communication" -source $source -push:$push

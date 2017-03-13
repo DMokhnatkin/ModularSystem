@@ -1,5 +1,4 @@
 ﻿using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Newtonsoft.Json;
@@ -9,14 +8,6 @@ namespace ModularSystem.Communication.Proxies
     public abstract class BaseProxy
     {
         protected HttpClient Client;
-
-        public MediaTypeFormatter MediaTypeFormatter { get; set; } = new JsonMediaTypeFormatter()
-        {
-            SerializerSettings = new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            }
-        };
 
         public string BaseUrl { get; set; }
 

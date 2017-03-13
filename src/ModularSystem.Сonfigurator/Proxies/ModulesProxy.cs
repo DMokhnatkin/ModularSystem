@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Threading.Tasks;
@@ -12,6 +13,14 @@ namespace ModularSystem.Сonfigurator.Proxies
 {
     public class ModulesProxy : BaseProxy
     {
+        public MediaTypeFormatter MediaTypeFormatter { get; set; } = new JsonMediaTypeFormatter()
+        {
+            SerializerSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }
+        };
+
         public ModulesProxy(string baseUrl) : base(baseUrl)
         { }
 
