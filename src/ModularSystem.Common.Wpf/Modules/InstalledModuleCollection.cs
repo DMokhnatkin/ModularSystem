@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using ModularSystem.Common.Repositories;
@@ -20,18 +21,34 @@ namespace ModularSystem.Common.Wpf.Modules
 
         public void InstallZipPackagedModule(ZipPackagedModule module)
         {
-            var t = Path.Combine(BasePath, module.ModuleInfo.ModuleIdentity.ToString());
-            if (Directory.Exists(t))
-                Directory.Delete(t, true);
-            Directory.CreateDirectory(t);
+            var moduleDir = Path.Combine(BasePath, module.ModuleInfo.ModuleIdentity.ToString());
+            if (Directory.Exists(moduleDir))
+                Directory.Delete(moduleDir, true);
+            Directory.CreateDirectory(moduleDir);
 
             using (ZipArchive z = new ZipArchive(File.OpenRead(module.Path)))
             {
-                z.ExtractToDirectory(t);
+                z.ExtractToDirectory(moduleDir);
             }
 
+            // TODO: do smth with dependncy assemblies
+            var workingDir = Path.Combine(AppContext.BaseDirectory, "working");
+            if (Directory.Exists(workingDir))
+                Directory.Delete(workingDir, true);
+            Directory.CreateDirectory(workingDir);
+
+            //Now Create all of the directories
+            foreach (string dirPath in Directory.GetDirectories(moduleDir, "*",
+                SearchOption.AllDirectories))
+                Directory.CreateDirectory(dirPath.Replace(moduleDir, workingDir));
+
+            //Copy all the files & Replaces any files with the same name
+            foreach (string newPath in Directory.GetFiles(moduleDir, "*.*",
+                SearchOption.AllDirectories))
+                File.Copy(newPath, newPath.Replace(moduleDir, workingDir), true);
+
             var m = new WpfClientInstalledModule();
-            m.InitializeFromPath(t);
+            m.InitializeFromPath(moduleDir);
             _repository.AddModule(m);
         }
 

@@ -43,6 +43,7 @@ namespace ModularSystem.Common.Wpf.Modules
                 if (c != null)
                     return c;
             }
+            //currentDomain.AssemblyResolve -= CurrentDomainAssemblyResolve;
             return null;
         }
     }
