@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ModularSystem.Common.Modules
 {
     /// <summary>
@@ -5,7 +7,9 @@ namespace ModularSystem.Common.Modules
     /// </summary>
     public interface IModule
     {
-        /// <see cref="ModuleInfo"/>
-        ModuleInfo ModuleInfo { get; }
+        /// <see cref="ModuleIdentity"/>
+        ModuleIdentity ModuleIdentity { get; }
+
+        IEnumerable<ModuleIdentity> Dependencies { get; }
     }
 }

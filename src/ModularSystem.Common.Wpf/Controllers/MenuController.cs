@@ -63,6 +63,9 @@ namespace ModularSystem.Common.Wpf.Controllers
 
                 ItemsControl parentItem = GetMenuItem(prevPath)?.menuItem ?? (ItemsControl) _menu;
 
+                int i = 0;
+                for (; i < parentItem.Items.Count; i++)
+                { }
                 parentItem.Items.Add(item);
                 _addedItems.Add(curPath.ToString(), (description, new WeakReference<MenuItem>(item)));
             }

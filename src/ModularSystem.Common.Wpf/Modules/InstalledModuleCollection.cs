@@ -17,7 +17,7 @@ namespace ModularSystem.Common.Wpf.Modules
                 Directory.Delete(BasePath, true);
         }
 
-        private MemoryModulesRepository<WpfClientInstalledModule> _repository = new MemoryModulesRepository<WpfClientInstalledModule>();
+        private MemoryModulesRepository<WpfClientInstalledStoredModule> _repository = new MemoryModulesRepository<WpfClientInstalledStoredModule>();
 
         public void InstallZipPackagedModule(ZipPackagedModule module)
         {
@@ -47,7 +47,7 @@ namespace ModularSystem.Common.Wpf.Modules
                 SearchOption.AllDirectories))
                 File.Copy(newPath, newPath.Replace(moduleDir, workingDir), true);
 
-            var m = new WpfClientInstalledModule();
+            var m = new WpfClientInstalledStoredModule();
             m.InitializeFromPath(moduleDir);
             _repository.AddModule(m);
         }
@@ -55,7 +55,7 @@ namespace ModularSystem.Common.Wpf.Modules
         public void StartModules()
         {
             var modules = _repository.ToList();
-            foreach (var orderModule in ModulesHelper.OrderModules(modules).OfType<WpfClientInstalledModule>())
+            foreach (var orderModule in ModulesHelper.OrderModules(modules).OfType<WpfClientInstalledStoredModule>())
             {
                 orderModule.WpfClientEntry?.OnStart();
             }

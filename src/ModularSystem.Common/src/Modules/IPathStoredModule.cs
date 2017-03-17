@@ -5,16 +5,11 @@
     /// F.e. it can be module packaged in zip archive.
     /// Another example is module which was unzipped in some directory and now this directory contains this module.
     /// </summary>
-    public interface IPathModule : IModule
+    public interface IPathStoredModule : IModule
     {
         /// <summary>
         /// Path to file or directory which contains module.
         /// </summary>
         string Path { get; }
-
-        /// <summary>
-        /// Initialize IPathModule instance using file or directory.
-        /// </summary>
-        void InitializeFromPath(string path);
     }
 }

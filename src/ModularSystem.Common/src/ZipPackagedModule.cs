@@ -1,29 +1,38 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.IO.Compression;
 using ModularSystem.Common.Modules;
 using ModularSystem.Common.Transfer.Dto;
 using ModularSystem.Common.Transfer.Mappers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ModularSystem.Common
 {
-    public class ZipPackagedModule : IPathModule
+    public class ZipPackagedModule : IPathStoredModule
     {
         /// <inheritdoc />
-        public ModuleInfo ModuleInfo { get; set; }
+        public string Path { get; set; }
 
         /// <inheritdoc />
-        public string Path { get; set; }
+        public ModuleIdentity ModuleIdentity { get; }
+
+        /// <inheritdoc />
+        public IEnumerable<ModuleIdentity> Dependencies { get; }
 
         /// <summary>
         /// Initialize ZipPackagedModule from zip archive
         /// </summary>
-        public void InitializeFromPath(string path)
+        public void InitializeFromZip(string path)
         {
             using (ZipArchive z = new ZipArchive(File.OpenRead(path)))
             {
-                using (JsonReader sr = new JsonTextReader(new StreamReader(z.GetEntry(ModuleSettings.ConfFileName).Open())))
+                var s = new StreamReader(z.GetEntry(ModuleSettings.ConfFileName).Open()).ReadToEnd();
+                JObject j = JObject.Parse(s);
+                ModuleIdentity = j.GetValue("")
+                using (JsonReader sr = new JsonTextReader())
                 {
+                    var o = new JObject()
                     var t = new JsonSerializer
                     {
                         Formatting = Formatting.Indented
@@ -37,11 +46,11 @@ namespace ModularSystem.Common
         /// <summary>
         /// Pack all files in directory into zip and initialize ZipPackagedModule instance for it
         /// </summary>
-        public static ZipPackagedModule PackFiles(string filesPath, string zipDestinationPath)
+        public static ZipPackagedModule Pack(string filesPath, string zipDestinationPath)
         {
             ZipFile.CreateFromDirectory(filesPath, zipDestinationPath);
             ZipPackagedModule m = new ZipPackagedModule();
-            m.InitializeFromPath(zipDestinationPath);
+            m.InitializeFromZip(zipDestinationPath);
             return m;
         }
     }

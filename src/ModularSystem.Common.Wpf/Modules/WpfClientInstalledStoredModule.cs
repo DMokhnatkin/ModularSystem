@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace ModularSystem.Common.Wpf.Modules
 {
-    public class WpfClientInstalledModule : IPathModule
+    public class WpfClientInstalledStoredModule : IPathStoredModule
     {
         /// <inheritdoc />
         public ModuleInfo ModuleInfo { get; set; }
