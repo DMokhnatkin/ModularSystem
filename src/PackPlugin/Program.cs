@@ -34,7 +34,7 @@ namespace PackPlugin
             {
                 var modulePath = module.Value<string>();
                 var tmpPath = Path.Combine(o.OutputDir, Path.GetRandomFileName());
-                var t = ZipPackagedModule.PackFiles(modulePath, tmpPath);
+                var t = ZipPackagedModule.PackFolder(modulePath, tmpPath);
                 // Rename temp zip package to ModuleIdentity.ToString()
                 File.Move(tmpPath, Path.Combine(o.OutputDir, $"{t.ModuleInfo.ModuleIdentity}.zip"));
             }

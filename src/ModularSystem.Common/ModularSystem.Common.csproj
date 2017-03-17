@@ -40,15 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\ModuleConf.cs" />
     <Compile Include="src\Modules\ModuleSettings.cs" />
     <Compile Include="src\Repositories\FileSystemModulesRepository.cs" />
     <Compile Include="src\Repositories\FileUserModulesRepository.cs" />
-    <Compile Include="src\Transfer\Mappers\ModuleInfoMapper.cs" />
-    <Compile Include="src\Transfer\Dto\ModuleInfoDto.cs" />
     <Compile Include="src\Exceptions\ModuleIsRequiredException.cs" />
     <Compile Include="src\Exceptions\ModuleMissedException.cs" />
     <Compile Include="src\Exceptions\WrongModuleTypeException.cs" />
-    <Compile Include="src\Modules\IPathModule.cs" />
+    <Compile Include="src\Modules\IPathStoredModule.cs" />
     <Compile Include="src\Modules\IModule.cs" />
     <Compile Include="src\ICheckDependenciesResult.cs" />
     <Compile Include="src\ZipPackagedModule.cs" />

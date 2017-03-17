@@ -136,7 +136,7 @@
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\MenuItemDescription.cs" />
     <Compile Include="IWpfClientEntry.cs" />
-    <Compile Include="Modules\WpfClientInstalledModule.cs" />
+    <Compile Include="Modules\WpfClientInstalledStoredModule.cs" />
     <Compile Include="Modules\InstalledModuleCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\IWorkSpace.cs" />

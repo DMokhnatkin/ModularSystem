@@ -23,7 +23,7 @@ namespace ModularSystem.Common.Repositories
             foreach (var f in Directory.GetFiles(BasePath))
             {
                 var z = new ZipPackagedModule();
-                z.InitializeFromPath(f);
+                z.InitializeFromZip(f);
                 yield return z;
             }
         }
@@ -56,7 +56,7 @@ namespace ModularSystem.Common.Repositories
             if (!IsModuleRegistered(moduleIdentity))
                 return null;
             var z = new ZipPackagedModule();
-            z.InitializeFromPath(Path.Combine(BasePath, $"{moduleIdentity}.zip"));
+            z.InitializeFromZip(Path.Combine(BasePath, $"{moduleIdentity}.zip"));
             return z;
         }
 
