@@ -44,8 +44,6 @@
     <Compile Include="src\Modules\ModuleSettings.cs" />
     <Compile Include="src\Repositories\FileSystemModulesRepository.cs" />
     <Compile Include="src\Repositories\FileUserModulesRepository.cs" />
-    <Compile Include="src\Transfer\Mappers\ModuleInfoMapper.cs" />
-    <Compile Include="src\Transfer\Dto\ModuleInfoDto.cs" />
     <Compile Include="src\Exceptions\ModuleIsRequiredException.cs" />
     <Compile Include="src\Exceptions\ModuleMissedException.cs" />
     <Compile Include="src\Exceptions\WrongModuleTypeException.cs" />

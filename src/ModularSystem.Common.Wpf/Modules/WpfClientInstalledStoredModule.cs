@@ -3,8 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using ModularSystem.Common.Modules;
-using ModularSystem.Common.Transfer.Dto;
-using ModularSystem.Common.Transfer.Mappers;
 using Newtonsoft.Json;
 
 namespace ModularSystem.Common.Wpf.Modules
@@ -27,7 +25,8 @@ namespace ModularSystem.Common.Wpf.Modules
             if (t != null)
                 WpfClientEntry = (IWpfClientEntry)Activator.CreateInstance(t);
             string confPath = System.IO.Path.Combine(Path, ModuleSettings.ConfFileName);
-            ModuleInfo = JsonConvert.DeserializeObject<ModuleInfoDto>(File.ReadAllText(confPath)).Unwrap();
+            var conf = ModuleConf.LoadFromString(File.ReadAllText(confPath));
+            ModuleInfo = new ModuleInfo(ModuleIdentity.Parse(conf.ModuleIdentity), conf.Dependencies.Select(ModuleIdentity.Parse).ToArray());
         }
 
         /// <summary>
