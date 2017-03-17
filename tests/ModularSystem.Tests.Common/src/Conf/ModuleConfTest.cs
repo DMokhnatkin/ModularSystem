@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using ModularSystem.Common;
 using NUnit.Framework;
 
@@ -10,7 +11,7 @@ namespace ModularSystem.Tests.Common.Conf
         [Test]
         public void TestLoad()
         {
-            var t = ModuleConf.LoadFromFile(File.OpenRead("TestData/conf1.json"));
+            var t = ModuleConf.LoadFromFile(File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestData/ConfFiles/conf1.json")));
             Assert.AreEqual(t.ModuleIdentity, "test-server-1.0");
 
             Assert.Contains("test-client-1.1", t.Dependencies);
@@ -27,7 +28,7 @@ namespace ModularSystem.Tests.Common.Conf
                 Dependencies = new [] { "test-client-1.1", "test2-server-1.5", "test4-client-1.7"}
             };
             var s = Path.GetTempFileName();
-            using (var fs = File.OpenWrite(s))
+            using (var fs = File.CreateText(s))
             {
                 t.WriteToFile(fs);
             }

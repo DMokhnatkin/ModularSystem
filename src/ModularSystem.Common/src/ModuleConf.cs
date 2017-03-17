@@ -13,9 +13,18 @@ namespace ModularSystem.Common
             return JsonConvert.DeserializeObject<ModuleConf>(new StreamReader(str).ReadToEnd());
         }
 
-        public void WriteToFile(FileStream str)
+        public static ModuleConf LoadFromString(string str)
         {
-            new StreamWriter(str).Write(JsonConvert.SerializeObject(this, Formatting.Indented));
+            return JsonConvert.DeserializeObject<ModuleConf>(str);
+        }
+
+        public void WriteToFile(StreamWriter str)
+        {
+            JsonSerializer j = new JsonSerializer()
+            {
+                Formatting = Formatting.Indented
+            };
+            j.Serialize(str, this);
         }
     }
 }
