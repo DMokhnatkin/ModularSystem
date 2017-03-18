@@ -72,7 +72,7 @@ namespace ModularSystem.Clients.Wpf.ViewModels
                     ClientAppContext.CurrentContext.AuthenticationContext.AccessToken = tokenResponse.AccessToken;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignored
             }

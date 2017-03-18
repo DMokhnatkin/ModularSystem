@@ -26,10 +26,7 @@ namespace ModularSystem.Common.Wpf.Modules
                 Directory.Delete(moduleDir, true);
             Directory.CreateDirectory(moduleDir);
 
-            using (ZipArchive z = new ZipArchive(File.OpenRead(module.Path)))
-            {
-                z.ExtractToDirectory(moduleDir);
-            }
+            module.UnpackToFolder(moduleDir);
 
             // TODO: do smth with dependncy assemblies
             var workingDir = Path.Combine(AppContext.BaseDirectory, "working");
@@ -57,7 +54,7 @@ namespace ModularSystem.Common.Wpf.Modules
             var modules = _repository.ToList();
             foreach (var orderModule in ModulesHelper.OrderModules(modules).OfType<WpfClientInstalledStoredModule>())
             {
-                orderModule.WpfClientEntry?.OnStart();
+                orderModule.Start();
             }
         }
     }

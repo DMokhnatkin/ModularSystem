@@ -5,7 +5,7 @@
     /// F.e. it can be module packaged in zip archive.
     /// Another example is module which was unzipped in some directory and now this directory contains this module.
     /// </summary>
-    public interface IPathStoredModule : IModule
+    public interface IPathStoredModule
     {
         /// <summary>
         /// Path to file or directory which contains module.

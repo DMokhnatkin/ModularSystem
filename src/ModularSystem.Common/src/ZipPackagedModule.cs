@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common
 {
-    public class ZipPackagedModule : IPathStoredModule
+    public class ZipPackagedModule : IModule, IPathStoredModule
     {
         /// <inheritdoc />
         public string Path { get; set; }
@@ -37,6 +36,17 @@ namespace ModularSystem.Common
             ZipPackagedModule m = new ZipPackagedModule();
             m.InitializeFromZip(zipDestinationPath);
             return m;
+        }
+
+        /// <summary>
+        /// Unpack zip packaged module to destination directory.
+        /// </summary>
+        public void UnpackToFolder(string destFolder)
+        {
+            using (ZipArchive z = new ZipArchive(File.OpenRead(Path)))
+            {
+                z.ExtractToDirectory(destFolder);
+            }
         }
     }
 }

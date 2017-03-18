@@ -7,7 +7,7 @@
       <Entity type="Interface">
         <Name>IPathStoredModule</Name>
         <Access>Public</Access>
-        <Location left="370" top="169" />
+        <Location left="153" top="24" />
         <Size width="162" height="83" />
         <Collapsed>False</Collapsed>
         <Member type="Property">string Path { get; }</Member>
@@ -15,7 +15,7 @@
       <Entity type="Class">
         <Name>ZipPackagedModule</Name>
         <Access>Public</Access>
-        <Location left="183" top="339" />
+        <Location left="17" top="290" />
         <Size width="162" height="111" />
         <Collapsed>False</Collapsed>
         <Member type="Method">public void Unpack(string dest)</Member>
@@ -25,7 +25,7 @@
       <Entity type="Class">
         <Name>WpfClientInstalledModule</Name>
         <Access>Public</Access>
-        <Location left="334" top="577" />
+        <Location left="209" top="471" />
         <Size width="162" height="111" />
         <Collapsed>False</Collapsed>
         <Modifier>None</Modifier>
@@ -33,15 +33,15 @@
       <Entity type="Class">
         <Name>AspServerInstalledModule</Name>
         <Access>Public</Access>
-        <Location left="604" top="654" />
+        <Location left="420" top="471" />
         <Size width="162" height="115" />
         <Collapsed>False</Collapsed>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Interface">
-        <Name>IInstalledModule</Name>
+        <Name>IStartableModule</Name>
         <Access>Public</Access>
-        <Location left="604" top="339" />
+        <Location left="701" top="24" />
         <Size width="162" height="95" />
         <Collapsed>False</Collapsed>
         <Member type="Method">void Start()</Member>
@@ -50,7 +50,7 @@
       <Entity type="Interface">
         <Name>IModule</Name>
         <Access>Public</Access>
-        <Location left="334" top="24" />
+        <Location left="334" top="35" />
         <Size width="299" height="95" />
         <Collapsed>False</Collapsed>
         <Member type="Property">ModuleIdentity ModuleIdentity { get; }</Member>
@@ -59,7 +59,7 @@
       <Entity type="Class">
         <Name>CustomServerInstalledModule</Name>
         <Access>Public</Access>
-        <Location left="801" top="504" />
+        <Location left="631" top="471" />
         <Size width="162" height="113" />
         <Collapsed>False</Collapsed>
         <Modifier>None</Modifier>
@@ -74,19 +74,39 @@
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
       </Relationship>
-      <Relationship type="Generalization" first="0" second="5">
-        <StartOrientation>Vertical</StartOrientation>
-        <EndOrientation>Vertical</EndOrientation>
-      </Relationship>
       <Relationship type="Realization" first="1" second="0">
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
       </Relationship>
-      <Relationship type="Generalization" first="4" second="0">
+      <Relationship type="Realization" first="6" second="4">
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
       </Relationship>
-      <Relationship type="Realization" first="6" second="4">
+      <Relationship type="Realization" first="2" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="1" second="5">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="2" second="5">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="3" second="5">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="3" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="6" second="5">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="6" second="0">
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
       </Relationship>

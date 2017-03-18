@@ -3,11 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using ModularSystem.Common.Modules;
-using Newtonsoft.Json;
 
 namespace ModularSystem.Common.Wpf.Modules
 {
-    public class WpfClientInstalledStoredModule : IPathStoredModule
+    public class WpfClientInstalledStoredModule : IModule, IPathStoredModule, IStartableModule
     {
         /// <inheritdoc />
         public ModuleInfo ModuleInfo { get; set; }
@@ -44,6 +43,18 @@ namespace ModularSystem.Common.Wpf.Modules
             }
             //currentDomain.AssemblyResolve -= CurrentDomainAssemblyResolve;
             return null;
+        }
+
+        /// <inheritdoc />
+        public void Start()
+        {
+            WpfClientEntry?.OnStart();
+        }
+
+        /// <inheritdoc />
+        public void Stop()
+        {
+            throw new NotImplementedException();
         }
     }
 }
