@@ -13,18 +13,23 @@ namespace ModularSystem.Common
         /// <inheritdoc />
         public ModuleInfo ModuleInfo { get; set; }
 
+        internal ZipPackagedModule()
+        { }
+
         /// <summary>
         /// Initialize ZipPackagedModule from zip archive
         /// </summary>
-        public void InitializeFromZip(string path)
+        public static ZipPackagedModule InitializeFromZip(string path)
         {
+            ZipPackagedModule r = new ZipPackagedModule();
             using (ZipArchive z = new ZipArchive(File.OpenRead(path)))
             {
                 var s = new StreamReader(z.GetEntry(ModuleSettings.ConfFileName).Open());
                 var t = ModuleConf.LoadFromString(s.ReadToEnd());
-                ModuleInfo = new ModuleInfo(ModuleIdentity.Parse(t.ModuleIdentity), t.Dependencies.Select(ModuleIdentity.Parse).ToArray());
+                r.ModuleInfo = new ModuleInfo(ModuleIdentity.Parse(t.ModuleIdentity), t.Dependencies.Select(ModuleIdentity.Parse).ToArray());
             }
-            Path = path;
+            r.Path = path;
+            return r;
         }
 
         /// <summary>
@@ -33,9 +38,7 @@ namespace ModularSystem.Common
         public static ZipPackagedModule PackFolder(string filesPath, string zipDestinationPath)
         {
             ZipFile.CreateFromDirectory(filesPath, zipDestinationPath);
-            ZipPackagedModule m = new ZipPackagedModule();
-            m.InitializeFromZip(zipDestinationPath);
-            return m;
+            return InitializeFromZip(zipDestinationPath);
         }
 
         /// <summary>
