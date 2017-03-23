@@ -11,7 +11,7 @@ namespace ModularSystem.Tests.Common.Conf
         [Test]
         public void TestLoad()
         {
-            var t = ModuleConf.LoadFromFile(File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestData/ConfFiles/conf1.json")));
+            var t = ModuleMeta.LoadFromFile(File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestData/ConfFiles/conf1.json")));
             Assert.AreEqual(t.ModuleIdentity, "test-server-1.0");
 
             Assert.Contains("test-client-1.1", t.Dependencies);
@@ -22,7 +22,7 @@ namespace ModularSystem.Tests.Common.Conf
         [Test]
         public void TestWrite()
         {
-            var t = new ModuleConf()
+            var t = new ModuleMeta()
             {
                 ModuleIdentity = "test-server-1.0",
                 Dependencies = new [] { "test-client-1.1", "test2-server-1.5", "test4-client-1.7"}
@@ -35,7 +35,7 @@ namespace ModularSystem.Tests.Common.Conf
 
             using (var fs = File.OpenRead(s))
             {
-                var y = ModuleConf.LoadFromFile(File.OpenRead(s));
+                var y = ModuleMeta.LoadFromFile(File.OpenRead(s));
                 Assert.AreEqual(y.ModuleIdentity, "test-server-1.0");
                 Assert.Contains("test-client-1.1", y.Dependencies);
                 Assert.Contains("test2-server-1.5", y.Dependencies);

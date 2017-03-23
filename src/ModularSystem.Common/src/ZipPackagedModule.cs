@@ -25,7 +25,7 @@ namespace ModularSystem.Common
             using (ZipArchive z = new ZipArchive(File.OpenRead(path)))
             {
                 var s = new StreamReader(z.GetEntry(ModuleSettings.ConfFileName).Open());
-                var t = ModuleConf.LoadFromString(s.ReadToEnd());
+                var t = ModuleMeta.LoadFromString(s.ReadToEnd());
                 r.ModuleInfo = new ModuleInfo(ModuleIdentity.Parse(t.ModuleIdentity), t.Dependencies.Select(ModuleIdentity.Parse).ToArray());
             }
             r.Path = path;
