@@ -21,12 +21,14 @@ namespace ModularSystem.Common
         /// </summary>
         public static ZipPackagedModule InitializeFromZip(string path)
         {
+            ModuleIdentity mi = ModuleIdentity.Parse(System.IO.Path.GetDirectoryName(path));
+
             ZipPackagedModule r = new ZipPackagedModule();
             using (ZipArchive z = new ZipArchive(File.OpenRead(path)))
             {
                 var s = new StreamReader(z.GetEntry(ModuleSettings.ConfFileName).Open());
                 var t = ModuleMeta.LoadFromString(s.ReadToEnd());
-                r.ModuleInfo = new ModuleInfo(ModuleIdentity.Parse(t.ModuleIdentity), t.Dependencies.Select(ModuleIdentity.Parse).ToArray());
+                r.ModuleInfo = new ModuleInfo(mi, t.Dependencies.Select(ModuleIdentity.Parse).ToArray());
             }
             r.Path = path;
             return r;

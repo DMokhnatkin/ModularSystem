@@ -12,11 +12,11 @@ namespace ModularSystem.Tests.Common.Repositories
 
         protected ModuleIdentity[] SampleModules =
         {
-            new ModuleIdentity("test", ModuleType.Server, "1.0"),
-            new ModuleIdentity("test2", ModuleType.Server, "1.0"),
-            new ModuleIdentity("test2", ModuleType.Server, "1.1"),
-            new ModuleIdentity("test2", ModuleType.Client, "1.0"),
-            new ModuleIdentity("test2", ModuleType.Client, "1.1"),
+            new ModuleIdentity("test.server", "1.0"),
+            new ModuleIdentity("test2.server", "1.0"),
+            new ModuleIdentity("test2.server", "1.1"),
+            new ModuleIdentity("test2.client", "1.0"),
+            new ModuleIdentity("test2.client", "1.1")
         };
 
         [SetUp]

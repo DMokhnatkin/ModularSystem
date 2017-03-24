@@ -25,7 +25,7 @@ namespace ModularSystem.Common.Wpf.Modules
                 WpfClientEntry = (IWpfClientEntry)Activator.CreateInstance(t);
             string confPath = System.IO.Path.Combine(Path, ModuleSettings.ConfFileName);
             var conf = ModuleMeta.LoadFromString(File.ReadAllText(confPath));
-            ModuleInfo = new ModuleInfo(ModuleIdentity.Parse(conf.ModuleIdentity), conf.Dependencies.Select(ModuleIdentity.Parse).ToArray());
+            ModuleInfo = new ModuleInfo(ModuleIdentity.Parse(System.IO.Path.GetDirectoryName(path)), conf.Dependencies.Select(ModuleIdentity.Parse).ToArray());
         }
 
         /// <summary>

@@ -19,11 +19,11 @@ namespace ModularSystem.Tests.Common.BLL
         {
             _registeredModules = new RegisteredModules(new MemoryModulesRepository<ZipPackagedModule>(), new MemoryUserModulesRepository());
             _samplePackagedModules = new ZipPackagedModule[5];
-            _samplePackagedModules[0] = new ZipPackagedModule { ModuleInfo = new ModuleInfo(new ModuleIdentity("test", ModuleType.Server, "1.0"), new ModuleIdentity[0]) };
-            _samplePackagedModules[1] = new ZipPackagedModule { ModuleInfo = new ModuleInfo(new ModuleIdentity("test", ModuleType.Client, "1.0"), new[] { _samplePackagedModules[0].ModuleInfo.ModuleIdentity }) };
-            _samplePackagedModules[2] = new ZipPackagedModule { ModuleInfo = new ModuleInfo(new ModuleIdentity("test", ModuleType.Server, "2.0"), new[] { _samplePackagedModules[0].ModuleInfo.ModuleIdentity }) };
-            _samplePackagedModules[3] = new ZipPackagedModule { ModuleInfo = new ModuleInfo(new ModuleIdentity("test", ModuleType.Client, "2.0"), new[] { _samplePackagedModules[1].ModuleInfo.ModuleIdentity, _samplePackagedModules[2].ModuleInfo.ModuleIdentity }) };
-            _samplePackagedModules[4] = new ZipPackagedModule { ModuleInfo = new ModuleInfo(new ModuleIdentity("test2", ModuleType.Client, "1.0"), new ModuleIdentity[0])};
+            _samplePackagedModules[0] = new ZipPackagedModule { ModuleInfo = new ModuleInfo(new ModuleIdentity("test.server", "1.0"), new ModuleIdentity[0]) };
+            _samplePackagedModules[1] = new ZipPackagedModule { ModuleInfo = new ModuleInfo(new ModuleIdentity("test.client", "1.0"), new[] { _samplePackagedModules[0].ModuleInfo.ModuleIdentity }) };
+            _samplePackagedModules[2] = new ZipPackagedModule { ModuleInfo = new ModuleInfo(new ModuleIdentity("test.server", "2.0"), new[] { _samplePackagedModules[0].ModuleInfo.ModuleIdentity }) };
+            _samplePackagedModules[3] = new ZipPackagedModule { ModuleInfo = new ModuleInfo(new ModuleIdentity("test.client", "2.0"), new[] { _samplePackagedModules[1].ModuleInfo.ModuleIdentity, _samplePackagedModules[2].ModuleInfo.ModuleIdentity }) };
+            _samplePackagedModules[4] = new ZipPackagedModule { ModuleInfo = new ModuleInfo(new ModuleIdentity("test2.client", "1.0"), new ModuleIdentity[0])};
         }
 
         [Test]

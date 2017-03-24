@@ -47,7 +47,6 @@
     <Compile Include="src\Repositories\FileUserModulesRepository.cs" />
     <Compile Include="src\Exceptions\ModuleIsRequiredException.cs" />
     <Compile Include="src\Exceptions\ModuleMissedException.cs" />
-    <Compile Include="src\Exceptions\WrongModuleTypeException.cs" />
     <Compile Include="src\Modules\IPathStoredModule.cs" />
     <Compile Include="src\Modules\IModule.cs" />
     <Compile Include="src\ICheckDependenciesResult.cs" />
@@ -55,7 +54,6 @@
     <Compile Include="src\ModuleIdentity.cs" />
     <Compile Include="src\ModuleInfo.cs" />
     <Compile Include="src\BLL\RegisteredModules.cs" />
-    <Compile Include="src\ModuleType.cs" />
     <Compile Include="src\BLL\CheckDependenciesResult.cs" />
     <Compile Include="src\Repositories\IUserModulesRepository.cs" />
     <Compile Include="src\Repositories\IModulesRepository.cs" />
