@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ModularSystem.Common;
+using ModularSystem.Common.MetaFiles;
 using NUnit.Framework;
 
 namespace ModularSystem.Tests.Common.Conf
@@ -11,7 +12,7 @@ namespace ModularSystem.Tests.Common.Conf
         [Test]
         public void TestLoad()
         {
-            var t = ModuleMeta.LoadFromFile(File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestData/ModuleMetaFiles/meta.json")));
+            var t = new MetaFileWrapper(File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestData/ModuleMetaFiles/meta.json")));
 
             Assert.Contains("test.client.wpf-1.1", t.Dependencies);
             Assert.Contains("test2.server-1.5", t.Dependencies);
@@ -21,19 +22,18 @@ namespace ModularSystem.Tests.Common.Conf
         [Test]
         public void TestWrite()
         {
-            var t = new ModuleMeta()
+            var t = new MetaFileWrapper
             {
+                Type = "test",
                 Dependencies = new [] { "test-client-1.1", "test2-server-1.5", "test4-client-1.7"}
             };
             var s = Path.GetTempFileName();
-            using (var fs = File.CreateText(s))
-            {
-                t.WriteToFile(fs);
-            }
+            t.Write(s);
 
             using (var fs = File.OpenRead(s))
             {
-                var y = ModuleMeta.LoadFromFile(File.OpenRead(s));
+                var y = new MetaFileWrapper(File.OpenRead(s));
+                Assert.AreEqual(y.Type, "test");
                 Assert.Contains("test-client-1.1", y.Dependencies);
                 Assert.Contains("test2-server-1.5", y.Dependencies);
                 Assert.Contains("test4-client-1.7", y.Dependencies);

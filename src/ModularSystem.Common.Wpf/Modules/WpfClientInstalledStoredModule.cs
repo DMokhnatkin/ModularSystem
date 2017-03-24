@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ModularSystem.Common.MetaFiles;
 using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Wpf.Modules
@@ -23,8 +24,7 @@ namespace ModularSystem.Common.Wpf.Modules
             var t = FindEntryClass();
             if (t != null)
                 WpfClientEntry = (IWpfClientEntry)Activator.CreateInstance(t);
-            string confPath = System.IO.Path.Combine(Path, ModuleSettings.ConfFileName);
-            var conf = ModuleMeta.LoadFromString(File.ReadAllText(confPath));
+            var conf = new MetaFileWrapper(Path);
             ModuleInfo = new ModuleInfo(ModuleIdentity.Parse(System.IO.Path.GetDirectoryName(path)), conf.Dependencies.Select(ModuleIdentity.Parse).ToArray());
         }
 

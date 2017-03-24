@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using ModularSystem.Common.MetaFiles;
 using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common
@@ -26,8 +27,7 @@ namespace ModularSystem.Common
             ZipPackagedModule r = new ZipPackagedModule();
             using (ZipArchive z = new ZipArchive(File.OpenRead(path)))
             {
-                var s = new StreamReader(z.GetEntry(ModuleSettings.ConfFileName).Open());
-                var t = ModuleMeta.LoadFromString(s.ReadToEnd());
+                var t = new MetaFileWrapper(z.GetEntry(ModuleSettings.ConfFileName).Open());
                 r.ModuleInfo = new ModuleInfo(mi, t.Dependencies.Select(ModuleIdentity.Parse).ToArray());
             }
             r.Path = path;
