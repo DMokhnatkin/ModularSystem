@@ -11,11 +11,11 @@ namespace ModularSystem.Tests.Common.Conf
         [Test]
         public void TestLoad()
         {
-            var t = ModuleMeta.LoadFromFile(File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestData/ConfFiles/meta.json")));
+            var t = ModuleMeta.LoadFromFile(File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestData/ModuleMetaFiles/meta.json")));
 
-            Assert.Contains("test-client-1.1", t.Dependencies);
-            Assert.Contains("test2-server-1.5", t.Dependencies);
-            Assert.Contains("test4-client-1.7", t.Dependencies);
+            Assert.Contains("test.client.wpf-1.1", t.Dependencies);
+            Assert.Contains("test2.server-1.5", t.Dependencies);
+            Assert.Contains("test4.client.wpf-1.7", t.Dependencies);
         }
 
         [Test]
