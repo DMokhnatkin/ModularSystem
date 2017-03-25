@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -9,7 +12,7 @@ namespace ModularSystem.Common.MetaFiles
     {
         public const string FileName = "meta.json";
 
-        private readonly JToken _file;
+        private readonly JObject _file;
 
         public MetaFileWrapper()
         {
@@ -18,12 +21,12 @@ namespace ModularSystem.Common.MetaFiles
 
         public MetaFileWrapper(Stream s)
         {
-            _file = JToken.ReadFrom(new JsonTextReader(new StreamReader(s)));
+            _file = JObject.Load(new JsonTextReader(new StreamReader(s)));
         }
 
         public MetaFileWrapper(string file)
         {
-            _file = JToken.ReadFrom(new JsonTextReader(new StreamReader(File.OpenRead(file))));
+            _file = JObject.Load(new JsonTextReader(new StreamReader(File.OpenRead(file))));
         }
 
         /// <summary>
@@ -32,23 +35,47 @@ namespace ModularSystem.Common.MetaFiles
         public MetaFileWrapper(string path, bool recurrently = false)
         {
             var t = Directory.GetFiles(path, FileName, recurrently ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).First();
-            _file = JToken.ReadFrom(new JsonTextReader(new StreamReader(File.OpenRead(t))));
+            _file = JObject.Load(new JsonTextReader(new StreamReader(File.OpenRead(t))));
         }
+
+        #region Properties
 
         public const string DependenciesKey = "dependencies";
         public const string TypeKey = "type";
 
         public string[] Dependencies
         {
-            get { return _file[DependenciesKey]?.Values<string>().ToArray(); }
-            set { _file[DependenciesKey] = new JArray(value); }
+            get { return GetValues<string>(DependenciesKey); }
+            set { SetValues(DependenciesKey, value); }
         }
 
         public string Type
         {
-            get { return _file[TypeKey]?.Value<string>(); }
-            set { _file[TypeKey] = value; }
+            get { return GetValue<string>(TypeKey); }
+            set { SetValue(TypeKey, value); }
         }
+
+        public T GetValue<T>(string key)
+        {
+            return _file[key].Value<T>();
+        }
+
+        public T[] GetValues<T>(string key)
+        {
+            return _file[key].Values<T>().ToArray();
+        }
+
+        public void SetValue<T>(string key, T value)
+        {
+            _file.Add(key, new JValue(value));
+        }
+
+        public void SetValues<T>(string key, IEnumerable<T> value)
+        {
+            _file.Add(key, new JArray(value));
+        }
+        #endregion
+
 
         public void Write(Stream s)
         {
