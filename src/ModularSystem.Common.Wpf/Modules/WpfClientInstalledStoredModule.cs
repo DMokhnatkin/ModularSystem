@@ -10,7 +10,10 @@ namespace ModularSystem.Common.Wpf.Modules
     public class WpfClientInstalledStoredModule : IModule, IPathStoredModule, IStartableModule
     {
         /// <inheritdoc />
-        public ModuleInfo ModuleInfo { get; set; }
+        public ModuleIdentity ModuleIdentity { get; private set; }
+
+        /// <inheritdoc />
+        public ModuleIdentity[] Dependencies { get; private set; }
 
         /// <inheritdoc />
         public string Path { get; set; }
@@ -25,7 +28,8 @@ namespace ModularSystem.Common.Wpf.Modules
             if (t != null)
                 WpfClientEntry = (IWpfClientEntry)Activator.CreateInstance(t);
             var conf = new MetaFileWrapper(Path);
-            ModuleInfo = new ModuleInfo(ModuleIdentity.Parse(System.IO.Path.GetDirectoryName(path)), conf.Dependencies.Select(ModuleIdentity.Parse).ToArray());
+            ModuleIdentity = ModuleIdentity.Parse(System.IO.Path.GetDirectoryName(path));
+            Dependencies = conf.Dependencies.Select(ModuleIdentity.Parse).ToArray();
         }
 
         /// <summary>

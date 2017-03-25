@@ -21,7 +21,7 @@ namespace ModularSystem.Common.Wpf.Modules
 
         public void InstallZipPackagedModule(ZipPackagedModule module)
         {
-            var moduleDir = Path.Combine(BasePath, module.ModuleInfo.ModuleIdentity.ToString());
+            var moduleDir = Path.Combine(BasePath, module.ModuleIdentity.ToString());
             if (Directory.Exists(moduleDir))
                 Directory.Delete(moduleDir, true);
             Directory.CreateDirectory(moduleDir);

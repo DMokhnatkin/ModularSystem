@@ -35,9 +35,9 @@ namespace ModularSystem.Common.Repositories
         /// <inheritdoc />
         public void AddModule(ZipPackagedModule module)
         {
-            if (IsModuleRegistered(module.ModuleInfo.ModuleIdentity))
-                throw new ArgumentException($"Module {module.ModuleInfo.ModuleIdentity} is already registered");
-            File.Copy(module.Path, Path.Combine(BasePath, $"{module.ModuleInfo.ModuleIdentity}.zip"));
+            if (IsModuleRegistered(module.ModuleIdentity))
+                throw new ArgumentException($"Module {module.ModuleIdentity} is already registered");
+            File.Copy(module.Path, Path.Combine(BasePath, $"{module.ModuleIdentity}.zip"));
         }
 
         /// <inheritdoc />

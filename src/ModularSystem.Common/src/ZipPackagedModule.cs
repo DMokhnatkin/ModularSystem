@@ -12,10 +12,37 @@ namespace ModularSystem.Common
         public string Path { get; set; }
 
         /// <inheritdoc />
-        public ModuleInfo ModuleInfo { get; set; }
+        public ModuleIdentity ModuleIdentity { get; internal set; }
+
+        /// <inheritdoc />
+        public ModuleIdentity[] Dependencies { get; internal set; }
 
         internal ZipPackagedModule()
         { }
+
+        /// <summary>
+        /// Open meta files from archive. 
+        /// </summary>
+        public MetaFileWrapper ExtractMetaFile()
+        {
+            using (var z = new ZipArchive(File.OpenRead(Path)))
+            using (var metaFileStream = z.GetEntry(ModuleSettings.ConfFileName).Open())
+            {
+                return new MetaFileWrapper(metaFileStream);
+            }
+        }
+
+        /// <summary>
+        /// Update meta file in archive.
+        /// </summary>
+        public void UpdateMetaFile(MetaFileWrapper metaFile)
+        {
+            using (var z = new ZipArchive(File.OpenRead(Path)))
+            using (var metaFileStream = z.GetEntry(ModuleSettings.ConfFileName).Open())
+            {
+                metaFile.Write(metaFileStream);
+            }
+        }
 
         /// <summary>
         /// Initialize ZipPackagedModule from zip archive
@@ -28,7 +55,8 @@ namespace ModularSystem.Common
             using (ZipArchive z = new ZipArchive(File.OpenRead(path)))
             {
                 var t = new MetaFileWrapper(z.GetEntry(ModuleSettings.ConfFileName).Open());
-                r.ModuleInfo = new ModuleInfo(mi, t.Dependencies.Select(ModuleIdentity.Parse).ToArray());
+                r.ModuleIdentity = mi;
+                r.Dependencies = t.Dependencies.Select(ModuleIdentity.Parse).ToArray();
             }
             r.Path = path;
             return r;

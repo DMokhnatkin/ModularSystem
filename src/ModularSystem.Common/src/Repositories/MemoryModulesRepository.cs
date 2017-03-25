@@ -12,9 +12,9 @@ namespace ModularSystem.Common.Repositories
         /// <inheritdoc />
         public void AddModule(T module)
         {
-            if (_modules.ContainsKey(module.ModuleInfo.ModuleIdentity))
-                throw new ArgumentException($"Module {module.ModuleInfo.ModuleIdentity} is already registered");
-            _modules.Add(module.ModuleInfo.ModuleIdentity, module);
+            if (_modules.ContainsKey(module.ModuleIdentity))
+                throw new ArgumentException($"Module {module.ModuleIdentity} is already registered");
+            _modules.Add(module.ModuleIdentity, module);
         }
 
         /// <inheritdoc />

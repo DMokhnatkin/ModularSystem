@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ModularSystem.Common.Exceptions;
+using ModularSystem.Common.Modules;
 using ModularSystem.Common.Repositories;
 
 namespace ModularSystem.Common.BLL
@@ -20,7 +21,7 @@ namespace ModularSystem.Common.BLL
         #region Modules
         public virtual void RegisterModule(ZipPackagedModule packagedModule)
         {
-            var t = CheckDependencies(packagedModule.ModuleInfo);
+            var t = CheckDependencies(packagedModule);
             if (!t.IsCheckSuccess)
                 throw t.ToOneException();
             _modulesRepository.AddModule(packagedModule);
@@ -33,8 +34,8 @@ namespace ModularSystem.Common.BLL
         public virtual void RegisterModules(IEnumerable<ZipPackagedModule> modules)
         {
             var enumerable = modules as ZipPackagedModule[] ?? modules.ToArray();
-            var identityToModule = enumerable.ToDictionary(x => x.ModuleInfo.ModuleIdentity, x => x); // Just for get IModule by ModuleIdentity
-            var orderedModules = ModulesHelper.OrderModules(enumerable.Select(x => x.ModuleInfo));
+            var identityToModule = enumerable.ToDictionary(x => x.ModuleIdentity, x => x); // Just for get IModule by ModuleIdentity
+            var orderedModules = ModulesHelper.OrderModules(enumerable);
             foreach (var m in orderedModules)
             {
                 RegisterModule(identityToModule[m.ModuleIdentity]);
@@ -57,7 +58,7 @@ namespace ModularSystem.Common.BLL
         public virtual void UnregisterModules(IEnumerable<ModuleIdentity> moduleIdentities)
         {
             var identities = moduleIdentities as ModuleIdentity[] ?? moduleIdentities.ToArray();
-            var infos = identities.Select(x => GetModule(x).ModuleInfo);
+            var infos = identities.Select(GetModule);
             var orderedModules = ModulesHelper.OrderModules(infos).Reverse();
             foreach (var m in orderedModules)
             {
@@ -85,7 +86,7 @@ namespace ModularSystem.Common.BLL
         /// <summary>
         /// Check if module can be registered. (check all module dependencies)
         /// </summary>
-        public virtual ICheckDependenciesResult CheckDependencies(ModuleInfo moduleInfo)
+        public virtual ICheckDependenciesResult CheckDependencies(IModule moduleInfo)
         {
             Dictionary<ModuleIdentity, Exception> failed = new Dictionary<ModuleIdentity, Exception>();
             foreach (var dependency in moduleInfo.Dependencies)
@@ -105,8 +106,8 @@ namespace ModularSystem.Common.BLL
             List<ModuleIdentity> res = new List<ModuleIdentity>();
             foreach (var module in _modulesRepository)
             {
-                if (module.ModuleInfo.Dependencies.Contains(moduleInfo))
-                    res.Add(module.ModuleInfo.ModuleIdentity);
+                if (module.Dependencies.Contains(moduleInfo))
+                    res.Add(module.ModuleIdentity);
             }
             return res;
         }
@@ -118,7 +119,7 @@ namespace ModularSystem.Common.BLL
         /// </summary>
         public void AddModule(string userId, string clientId, ModuleIdentity module)
         {
-            var t = _modulesRepository.GetModule(module)?.ModuleInfo;
+            var t = _modulesRepository.GetModule(module);
             if (t == null)
                 throw new ModuleMissedException(module);
             var depRes = ModulesHelper.CheckDependencies(t, GetModuleIdentities(userId, clientId) ?? new ModuleIdentity[0]);
@@ -138,7 +139,7 @@ namespace ModularSystem.Common.BLL
         /// </summary>
         public void AddModules(string userId, string clientId, IEnumerable<ModuleIdentity> modules)
         {
-            var ordered = ModulesHelper.OrderModules(modules.Select(x => _modulesRepository.GetModule(x)?.ModuleInfo));
+            var ordered = ModulesHelper.OrderModules(modules.Select(x => _modulesRepository.GetModule(x)));
 
             foreach (var moduleInfo in ordered)
             {
@@ -152,7 +153,7 @@ namespace ModularSystem.Common.BLL
         public void RemoveModule(string userId, string clientId, ModuleIdentity module)
         {
             var dependent = ModulesHelper.GetDependent(module,
-                _userModulesRepository.GetModules(userId, clientId).Select(x => _modulesRepository.GetModule(x).ModuleInfo))
+                _userModulesRepository.GetModules(userId, clientId).Select(x => _modulesRepository.GetModule(x)))
                 .ToArray();
             if (dependent.Any())
                 throw new ModuleIsRequiredException(module, dependent);
@@ -165,7 +166,7 @@ namespace ModularSystem.Common.BLL
         /// </summary>
         public void RemoveModules(string userId, string clientId, IEnumerable<ModuleIdentity> modules)
         {
-            var ordered = ModulesHelper.OrderModules(modules.Select(x => _modulesRepository.GetModule(x).ModuleInfo)).Reverse();
+            var ordered = ModulesHelper.OrderModules(modules.Select(x => _modulesRepository.GetModule(x))).Reverse();
 
             foreach (var moduleInfo in ordered)
             {

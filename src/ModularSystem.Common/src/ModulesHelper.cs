@@ -18,11 +18,11 @@ namespace ModularSystem.Common
         /// { module1, module2 }. Module1 requires module2 as dependency. 
         /// In this case { module2, module1 } will be returned. 
         /// </example>
-        public static IEnumerable<ModuleInfo> OrderModules(IEnumerable<ModuleInfo> modules)
+        public static IEnumerable<IModule> OrderModules(IEnumerable<IModule> modules)
         {
             // We will count number of links of module to other modules in list.
             // Right order - ascending order of this values
-            var moduleInfos = modules as ModuleInfo[] ?? modules.ToArray();
+            var moduleInfos = modules as IModule[] ?? modules.ToArray();
             Dictionary<ModuleIdentity, int> linkesCt = moduleInfos.ToDictionary(x => x.ModuleIdentity, x => 0);
             foreach (var moduleInfo in moduleInfos)
             {
@@ -36,20 +36,11 @@ namespace ModularSystem.Common
             return moduleInfos.OrderBy(x => linkesCt[x.ModuleIdentity]);
         }
 
-        /// <inheritdoc cref="OrderModules(System.Collections.Generic.IEnumerable{ModularSystem.Common.ModuleInfo})"/>
-        public static IEnumerable<IModule> OrderModules(IEnumerable<IModule> modules)
-        {
-            var enumerableModules = modules as IModule[] ?? modules.ToArray();
-            var t = enumerableModules.ToDictionary(x => x.ModuleInfo, y => y);
-            var ordered = OrderModules(enumerableModules.Select(x => x.ModuleInfo));
-            return ordered.Select(x => t[x]);
-        }
-
         /// <summary>
         /// Check dependencies of module in given list.
         /// I.e. is given modules list is enough to install module.
         /// </summary>
-        public static ICheckDependenciesResult CheckDependencies(ModuleInfo module, IEnumerable<ModuleIdentity> modules)
+        public static ICheckDependenciesResult CheckDependencies(IModule module, IEnumerable<ModuleIdentity> modules)
         {
             HashSet<ModuleIdentity> modulesSet = modules as HashSet<ModuleIdentity> ?? new HashSet<ModuleIdentity>(modules);
             Dictionary<ModuleIdentity, Exception> missedModules = new Dictionary<ModuleIdentity, Exception>();
@@ -65,7 +56,7 @@ namespace ModularSystem.Common
         /// Get all modules dependent on specifed module in collection.
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<ModuleIdentity> GetDependent(ModuleIdentity module, IEnumerable<ModuleInfo> modules)
+        public static IEnumerable<ModuleIdentity> GetDependent(ModuleIdentity module, IEnumerable<IModule> modules)
         {
             var res = new List<ModuleIdentity>();
             foreach (var moduleInfo in modules)
