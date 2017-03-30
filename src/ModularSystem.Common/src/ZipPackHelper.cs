@@ -31,7 +31,20 @@ namespace ModularSystem.Common
             var destFilePath = Path.Combine(destDirectoryPath, $"{meta.Identity}.zip");
             if (File.Exists(destFilePath))
                 File.Delete(destFilePath);
-            return ZipPackagedModule.PackFolder(sourceDirectoryPath, destFilePath);
+            ZipFile.CreateFromDirectory(sourceDirectoryPath, destFilePath);
+
+            return new ZipPackagedModule(destFilePath);
+        }
+
+        /// <summary>
+        /// Unpack zip packaged module to destination directory.
+        /// </summary>
+        public static void UnpackModule(this ZipPackagedModule module, string destDirectoryPath)
+        {
+            using (ZipArchive z = new ZipArchive(File.OpenRead(module.Path)))
+            {
+                z.ExtractToDirectory(destDirectoryPath);
+            }
         }
 
         /// <summary>

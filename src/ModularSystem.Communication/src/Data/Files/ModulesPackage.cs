@@ -30,7 +30,7 @@ namespace ModularSystem.Communication.Data.Files
             var modules = new List<ZipPackagedModule>();
             foreach (var t in Directory.GetFiles(tempPath))
             {
-                modules.Add(ZipPackagedModule.InitializeFromZip(t));
+                modules.Add(new ZipPackagedModule(t));
             }
 
             return new ModulesPackage(modules.ToArray());
