@@ -26,7 +26,7 @@ namespace ModularSystem.Common
         public MetaFileWrapper ExtractMetaFile()
         {
             using (var z = new ZipArchive(File.OpenRead(Path)))
-            using (var metaFileStream = z.GetEntry(ModuleSettings.ConfFileName).Open())
+            using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
             {
                 return new MetaFileWrapper(metaFileStream);
             }
@@ -38,7 +38,7 @@ namespace ModularSystem.Common
         public void UpdateMetaFile(MetaFileWrapper metaFile)
         {
             using (var z = new ZipArchive(File.OpenRead(Path)))
-            using (var metaFileStream = z.GetEntry(ModuleSettings.ConfFileName).Open())
+            using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
             {
                 metaFile.Write(metaFileStream);
             }
@@ -49,13 +49,11 @@ namespace ModularSystem.Common
         /// </summary>
         public static ZipPackagedModule InitializeFromZip(string path)
         {
-            ModuleIdentity mi = ModuleIdentity.Parse(System.IO.Path.GetDirectoryName(path));
-
             ZipPackagedModule r = new ZipPackagedModule();
             using (ZipArchive z = new ZipArchive(File.OpenRead(path)))
             {
-                var t = new MetaFileWrapper(z.GetEntry(ModuleSettings.ConfFileName).Open());
-                r.ModuleIdentity = mi;
+                var t = new MetaFileWrapper(z.GetEntry(MetaFileWrapper.DefaultFileName).Open());
+                r.ModuleIdentity = ModuleIdentity.Parse(t.Identity);
                 r.Dependencies = t.Dependencies.Select(ModuleIdentity.Parse).ToArray();
             }
             r.Path = path;

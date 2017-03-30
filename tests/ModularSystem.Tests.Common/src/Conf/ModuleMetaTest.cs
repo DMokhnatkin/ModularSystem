@@ -39,5 +39,13 @@ namespace ModularSystem.Tests.Common.Conf
                 Assert.Contains("test4-client-1.7", y.Dependencies);
             }
         }
+
+        [Test]
+        public void TestNullProps()
+        {
+            var t = new MetaFileWrapper();
+            Assert.AreEqual(null, t.Dependencies);
+            Assert.AreEqual(null, t.Type);
+        }
     }
 }

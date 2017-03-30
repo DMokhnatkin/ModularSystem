@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace ModularSystem.Common.MetaFiles
 {
     public class MetaFileWrapper
     {
-        public const string FileName = "meta.json";
+        public const string DefaultFileName = "meta.json";
 
         private readonly JObject _file;
 
@@ -32,27 +33,37 @@ namespace ModularSystem.Common.MetaFiles
         /// <summary>
         /// Find meta file in dir, and use it
         /// </summary>
-        public MetaFileWrapper(string path, bool recurrently = false)
+        public MetaFileWrapper(string path, string fileName = DefaultFileName, bool recurrently = false)
         {
-            var t = Directory.GetFiles(path, FileName, recurrently ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).First();
+            var t = Directory.GetFiles(path, fileName, recurrently ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).FirstOrDefault();
+            if (t == null)
+                throw new ArgumentException($"meta file '{fileName}' was not found in '{path}'");
+
             _file = JObject.Load(new JsonTextReader(new StreamReader(File.OpenRead(t))));
         }
 
         #region Properties
 
+        public const string IdentityKey = "identity";
         public const string DependenciesKey = "dependencies";
         public const string TypeKey = "type";
 
-        public string[] Dependencies
+        public string Identity
         {
-            get { return GetValues<string>(DependenciesKey); }
-            set { SetValues(DependenciesKey, value); }
+            get { return ContainsKey(IdentityKey) ? GetValue<string>(IdentityKey) : null; }
+            set { SetValue(IdentityKey, value);}
         }
 
         public string Type
         {
-            get { return GetValue<string>(TypeKey); }
+            get { return ContainsKey(TypeKey) ? GetValue<string>(TypeKey) : null; }
             set { SetValue(TypeKey, value); }
+        }
+
+        public string[] Dependencies
+        {
+            get { return ContainsKey(DependenciesKey) ? GetValues<string>(DependenciesKey) : null; }
+            set { SetValues(DependenciesKey, value); }
         }
 
         public T GetValue<T>(string key)
@@ -73,6 +84,11 @@ namespace ModularSystem.Common.MetaFiles
         public void SetValues<T>(string key, IEnumerable<T> value)
         {
             _file.Add(key, new JArray(value));
+        }
+
+        public bool ContainsKey(string key)
+        {
+            return ((IDictionary<string, JToken>)_file).ContainsKey(key);
         }
         #endregion
 
@@ -97,9 +113,11 @@ namespace ModularSystem.Common.MetaFiles
         /// <summary>
         /// Create meta file and write to it
         /// </summary>
-        public void CreateAndWrite(string path)
+        /// <param name="path">Path of directory</param>
+        /// <param name="fileName">Name of file</param>
+        public void CreateAndWrite(string path, string fileName = DefaultFileName)
         {
-            var t = Path.Combine(path, FileName);
+            var t = Path.Combine(path, fileName ?? DefaultFileName);
             Write(t);
         }
     }

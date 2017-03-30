@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
+using System.Linq;
 using CommandLine;
 using ModularSystem.Common;
 using Newtonsoft.Json.Linq;
@@ -11,6 +11,7 @@ namespace PackPlugin
     {
         public static void Main(string[] args)
         {
+            Console.Read();
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(PackWithConfigFile);
         }
@@ -30,20 +31,23 @@ namespace PackPlugin
                 Directory.CreateDirectory(o.OutputDir);
             }
 
-            foreach (var module in conf["Modules"])
-            {
-                var modulePath = module.Value<string>();
-                var tmpPath = Path.Combine(o.OutputDir, Path.GetRandomFileName());
-                var t = ZipPackagedModule.PackFolder(modulePath, tmpPath);
-                // Rename temp zip package to ModuleIdentity.ToString()
-                File.Move(tmpPath, Path.Combine(o.OutputDir, $"{t.ModuleIdentity}.zip"));
-            }
+            var packedModules =
+                conf["Modules"]
+                .Select(x => x.Value<string>())
+                .Select(x => ZipPackHelper.PackModule(x, o.OutputDir))
+                .ToArray();
 
-            var tmp = $"{Path.Combine(Path.GetTempPath(), conf["PackageName"].Value<string>())}.zip";
-            ZipFile.CreateFromDirectory(o.OutputDir, tmp);
-            Directory.Delete(o.OutputDir, true);
-            Directory.CreateDirectory(o.OutputDir);
-            File.Move(tmp, $"{Path.Combine(o.OutputDir, conf["PackageName"].Value<string>())}.zip");
+            var batchPath = Path.Combine(o.OutputDir, $"{conf["BatchName"].Value<string>()}.zip");
+            ZipPackHelper.BatchModules(batchPath, packedModules);
+
+            // Remove all single module packages (we have batched them in one file)
+            foreach (var file in Directory.GetFiles(o.OutputDir))
+            {
+                if (file != batchPath)
+                    File.Delete(file);
+            }
         }
+
+
     }
 }

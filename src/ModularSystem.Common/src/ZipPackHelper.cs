@@ -12,18 +12,23 @@ namespace ModularSystem.Common
         /// Pack one module
         /// </summary>
         /// <param name="sourceDirectoryPath">Directory with module files</param>
-        /// <param name="destFilePath">Path to packaged module file (zip archive by default) which will be created</param>
+        /// <param name="destDirectoryPath">Path to directory where packaged module file (zip archive by default) will be created</param>
         /// <param name="metaFileName">Name of module meta file</param>
-        public static ZipPackagedModule PackModule(string sourceDirectoryPath, string destFilePath, string metaFileName = MetaFileWrapper.DefaultFileName)
+        public static ZipPackagedModule PackModule(string sourceDirectoryPath, string destDirectoryPath, string metaFileName = MetaFileWrapper.DefaultFileName)
         {
             MetaFileWrapper meta = new MetaFileWrapper(sourceDirectoryPath, metaFileName);
             if (!meta.ContainsKey(MetaFileWrapper.TypeKey))
             {
                 throw new ArgumentException($"Invalid meta file: '{MetaFileWrapper.TypeKey}' key was not found in file");
             }
+            if (!meta.ContainsKey(MetaFileWrapper.IdentityKey))
+            {
+                throw new ArgumentException($"Invalid meta file: '{MetaFileWrapper.IdentityKey}' key was not found in file");
+            }
 
             // In this place you can do some extra actions depend on module type
 
+            var destFilePath = Path.Combine(destDirectoryPath, $"{meta.Identity}.zip");
             if (File.Exists(destFilePath))
                 File.Delete(destFilePath);
             return ZipPackagedModule.PackFolder(sourceDirectoryPath, destFilePath);
