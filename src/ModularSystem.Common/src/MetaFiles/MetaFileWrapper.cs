@@ -33,13 +33,13 @@ namespace ModularSystem.Common.MetaFiles
         /// <summary>
         /// Find meta file in dir, and use it
         /// </summary>
-        public MetaFileWrapper(string path, string fileName = DefaultFileName, bool recurrently = false)
+        public static MetaFileWrapper FindInDirectory(string path, string fileName = DefaultFileName, bool recurrently = false)
         {
             var t = Directory.GetFiles(path, fileName, recurrently ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).FirstOrDefault();
             if (t == null)
                 throw new ArgumentException($"meta file '{fileName}' was not found in '{path}'");
 
-            _file = JObject.Load(new JsonTextReader(new StreamReader(File.OpenRead(t))));
+            return new MetaFileWrapper(t);
         }
 
         #region Properties

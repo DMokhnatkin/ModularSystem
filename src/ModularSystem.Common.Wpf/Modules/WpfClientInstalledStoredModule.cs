@@ -27,8 +27,8 @@ namespace ModularSystem.Common.Wpf.Modules
             var t = FindEntryClass();
             if (t != null)
                 WpfClientEntry = (IWpfClientEntry)Activator.CreateInstance(t);
-            var conf = new MetaFileWrapper(Path);
-            ModuleIdentity = ModuleIdentity.Parse(System.IO.Path.GetDirectoryName(path));
+            var conf = MetaFileWrapper.FindInDirectory(Path);
+            ModuleIdentity = ModuleIdentity.Parse(conf.Identity);
             Dependencies = conf.Dependencies.Select(ModuleIdentity.Parse).ToArray();
         }
 

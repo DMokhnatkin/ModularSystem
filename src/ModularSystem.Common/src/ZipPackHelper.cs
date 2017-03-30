@@ -16,7 +16,7 @@ namespace ModularSystem.Common
         /// <param name="metaFileName">Name of module meta file</param>
         public static ZipPackagedModule PackModule(string sourceDirectoryPath, string destDirectoryPath, string metaFileName = MetaFileWrapper.DefaultFileName)
         {
-            MetaFileWrapper meta = new MetaFileWrapper(sourceDirectoryPath, metaFileName);
+            MetaFileWrapper meta = MetaFileWrapper.FindInDirectory(sourceDirectoryPath, metaFileName);
             if (!meta.ContainsKey(MetaFileWrapper.TypeKey))
             {
                 throw new ArgumentException($"Invalid meta file: '{MetaFileWrapper.TypeKey}' key was not found in file");
