@@ -5,7 +5,14 @@ namespace ModularSystem.Common.Modules
     /// </summary>
     public interface IModule
     {
-        /// <see cref="ModuleInfo"/>
-        ModuleInfo ModuleInfo { get; }
+        /// <summary>
+        /// Identifier for module
+        /// </summary>
+        ModuleIdentity ModuleIdentity { get; }
+
+        /// <summary>
+        /// List of modules which are required to be installed for this module.
+        /// </summary>
+        ModuleIdentity[] Dependencies { get; }
     }
 }

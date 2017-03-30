@@ -46,11 +46,15 @@ namespace ModularSystem.Clients.Wpf.ViewModels
             ModulesProxy proxy = new ModulesProxy("http://localhost:5005");
             proxy.SetToken(ClientAppContext.CurrentContext.AuthenticationContext.AccessToken);
             var t = await proxy.DownloadModules();
-            var p = await ModulesPackage.Decompress(await t.Content.ReadAsStreamAsync());
 
-            foreach (var packageModule in p.PackagedModules)
+            using (var s = await t.Content.ReadAsStreamAsync())
             {
-                _sessionModules.InstallZipPackagedModule(packageModule);
+                var p = await ModulesPackage.Decompress(s);
+
+                foreach (var packageModule in p.PackagedModules)
+                {
+                    _sessionModules.InstallZipPackagedModule(packageModule);
+                }
             }
             ClientAppContext.CurrentContext.InstalledModules = _sessionModules;
 

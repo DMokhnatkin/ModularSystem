@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using ModularSystem.Common.MetaFiles;
 using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common
@@ -11,7 +12,10 @@ namespace ModularSystem.Common
         public string Path { get; set; }
 
         /// <inheritdoc />
-        public ModuleInfo ModuleInfo { get; set; }
+        public ModuleIdentity ModuleIdentity { get; internal set; }
+
+        /// <inheritdoc />
+        public ModuleIdentity[] Dependencies { get; internal set; }
 
         internal ZipPackagedModule()
         { }
@@ -19,36 +23,38 @@ namespace ModularSystem.Common
         /// <summary>
         /// Initialize ZipPackagedModule from zip archive
         /// </summary>
-        public static ZipPackagedModule InitializeFromZip(string path)
+        public ZipPackagedModule(string path)
         {
-            ZipPackagedModule r = new ZipPackagedModule();
             using (ZipArchive z = new ZipArchive(File.OpenRead(path)))
             {
-                var s = new StreamReader(z.GetEntry(ModuleSettings.ConfFileName).Open());
-                var t = ModuleConf.LoadFromString(s.ReadToEnd());
-                r.ModuleInfo = new ModuleInfo(ModuleIdentity.Parse(t.ModuleIdentity), t.Dependencies.Select(ModuleIdentity.Parse).ToArray());
+                var t = new MetaFileWrapper(z.GetEntry(MetaFileWrapper.DefaultFileName).Open());
+                ModuleIdentity = ModuleIdentity.Parse(t.Identity);
+                Dependencies = t.Dependencies.Select(ModuleIdentity.Parse).ToArray();
             }
-            r.Path = path;
-            return r;
+            Path = path;
         }
 
         /// <summary>
-        /// Pack all files in directory into zip and initialize ZipPackagedModule instance for it
+        /// Open meta files from archive. 
         /// </summary>
-        public static ZipPackagedModule PackFolder(string filesPath, string zipDestinationPath)
+        public MetaFileWrapper ExtractMetaFile()
         {
-            ZipFile.CreateFromDirectory(filesPath, zipDestinationPath);
-            return InitializeFromZip(zipDestinationPath);
-        }
-
-        /// <summary>
-        /// Unpack zip packaged module to destination directory.
-        /// </summary>
-        public void UnpackToFolder(string destFolder)
-        {
-            using (ZipArchive z = new ZipArchive(File.OpenRead(Path)))
+            using (var z = new ZipArchive(File.OpenRead(Path)))
+            using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
             {
-                z.ExtractToDirectory(destFolder);
+                return new MetaFileWrapper(metaFileStream);
+            }
+        }
+
+        /// <summary>
+        /// Update meta file in archive.
+        /// </summary>
+        public void UpdateMetaFile(MetaFileWrapper metaFile)
+        {
+            using (var z = new ZipArchive(File.OpenRead(Path)))
+            using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
+            {
+                metaFile.Write(metaFileStream);
             }
         }
     }

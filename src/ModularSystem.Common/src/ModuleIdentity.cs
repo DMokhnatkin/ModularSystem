@@ -18,40 +18,32 @@ namespace ModularSystem.Common
         /// </summary>
         public Version Version { get; }
 
-        /// <summary>
-        /// Type of module. F.e. server or client.
-        /// </summary>
-        /// <see cref="ModuleType"/>
-        public ModuleType ModuleType { get; }
-
-        public ModuleIdentity(string name, ModuleType moduleType, Version version)
+        public ModuleIdentity(string name, Version version)
         {
-            if (name.Contains(" "))
-                throw new ArgumentException("Module identity name can't contain spaces");
+            if (name.Contains("-"))
+                throw new ArgumentException("Module identity name can't contain -");
             Name = name;
             Version = version;
-            ModuleType = moduleType;
         }
 
-        public ModuleIdentity(string name, ModuleType moduleType, string version)
+        public ModuleIdentity(string name, string version)
         {
-            if (name.Contains(" "))
-                throw new ArgumentException("Module identity name can't contain spaces");
+            if (name.Contains("-"))
+                throw new ArgumentException("Module identity name can't contain -");
             Name = name;
             Version = new Version(version);
-            ModuleType = moduleType;
         }
 
         /// <inheritdoc />
         public override string ToString()
         {
-            return $"{Name}-{ModuleType}-{Version}";
+            return $"{Name}-{Version}";
         }
 
         /// <inheritdoc />
         public override int GetHashCode()
         {
-            return Name.GetHashCode() ^ Version.GetHashCode() ^ ModuleType.GetHashCode();
+            return Name.GetHashCode() ^ Version.GetHashCode();
         }
 
         /// <summary>
@@ -60,7 +52,7 @@ namespace ModularSystem.Common
         public static ModuleIdentity Parse(string str)
         {
             var r = str.Split('-');
-            return new ModuleIdentity(r[0], (ModuleType)Enum.Parse(typeof(ModuleType), r[1], true), r[2]);
+            return new ModuleIdentity(r[0], r[1]);
         }
     }
 }

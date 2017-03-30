@@ -22,7 +22,7 @@ namespace ModularSystem.Common.Repositories
         {
             foreach (var f in Directory.GetFiles(BasePath))
             {
-                yield return ZipPackagedModule.InitializeFromZip(f);
+                yield return new ZipPackagedModule(f);
             }
         }
 
@@ -35,9 +35,9 @@ namespace ModularSystem.Common.Repositories
         /// <inheritdoc />
         public void AddModule(ZipPackagedModule module)
         {
-            if (IsModuleRegistered(module.ModuleInfo.ModuleIdentity))
-                throw new ArgumentException($"Module {module.ModuleInfo.ModuleIdentity} is already registered");
-            File.Copy(module.Path, Path.Combine(BasePath, $"{module.ModuleInfo.ModuleIdentity}.zip"));
+            if (IsModuleRegistered(module.ModuleIdentity))
+                throw new ArgumentException($"Module {module.ModuleIdentity} is already registered");
+            File.Copy(module.Path, Path.Combine(BasePath, $"{module.ModuleIdentity}.zip"));
         }
 
         /// <inheritdoc />
@@ -53,7 +53,7 @@ namespace ModularSystem.Common.Repositories
         {
             if (!IsModuleRegistered(moduleIdentity))
                 return null;
-            return ZipPackagedModule.InitializeFromZip(Path.Combine(BasePath, $"{moduleIdentity}.zip"));
+            return new ZipPackagedModule(Path.Combine(BasePath, $"{moduleIdentity}.zip"));
         }
 
         private bool IsModuleRegistered(ModuleIdentity moduleIdentity)

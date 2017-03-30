@@ -40,28 +40,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\ModuleConf.cs" />
+    <Compile Include="src\MetaFiles\MetaFileWrapper.cs" />
     <Compile Include="src\Modules\IStartableModule.cs" />
-    <Compile Include="src\Modules\ModuleSettings.cs" />
     <Compile Include="src\Repositories\FileSystemModulesRepository.cs" />
     <Compile Include="src\Repositories\FileUserModulesRepository.cs" />
     <Compile Include="src\Exceptions\ModuleIsRequiredException.cs" />
     <Compile Include="src\Exceptions\ModuleMissedException.cs" />
-    <Compile Include="src\Exceptions\WrongModuleTypeException.cs" />
     <Compile Include="src\Modules\IPathStoredModule.cs" />
     <Compile Include="src\Modules\IModule.cs" />
     <Compile Include="src\ICheckDependenciesResult.cs" />
     <Compile Include="src\ZipPackagedModule.cs" />
     <Compile Include="src\ModuleIdentity.cs" />
-    <Compile Include="src\ModuleInfo.cs" />
     <Compile Include="src\BLL\RegisteredModules.cs" />
-    <Compile Include="src\ModuleType.cs" />
     <Compile Include="src\BLL\CheckDependenciesResult.cs" />
     <Compile Include="src\Repositories\IUserModulesRepository.cs" />
     <Compile Include="src\Repositories\IModulesRepository.cs" />
     <Compile Include="src\ModulesHelper.cs" />
     <Compile Include="src\Repositories\MemoryModulesRepository.cs" />
     <Compile Include="src\Repositories\MemoryUserModulesRepository.cs" />
+    <Compile Include="src\ZipPackHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

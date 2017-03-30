@@ -50,7 +50,7 @@ namespace ModularSystem.Server.Controllers
         public async Task<string[]> GetModulesListAsync()
         {
             var modules = await Task.Factory.StartNew(() => _registeredModules.GetRegisteredModules());
-            var dtos = modules.Select(x => x.ModuleInfo.ModuleIdentity.ToString()).ToArray();
+            var dtos = modules.Select(x => x.ModuleIdentity.ToString()).ToArray();
             return dtos;
         }
         #endregion

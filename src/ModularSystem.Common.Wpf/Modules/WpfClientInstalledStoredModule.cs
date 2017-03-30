@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ModularSystem.Common.MetaFiles;
 using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Wpf.Modules
@@ -9,7 +10,10 @@ namespace ModularSystem.Common.Wpf.Modules
     public class WpfClientInstalledStoredModule : IModule, IPathStoredModule, IStartableModule
     {
         /// <inheritdoc />
-        public ModuleInfo ModuleInfo { get; set; }
+        public ModuleIdentity ModuleIdentity { get; private set; }
+
+        /// <inheritdoc />
+        public ModuleIdentity[] Dependencies { get; private set; }
 
         /// <inheritdoc />
         public string Path { get; set; }
@@ -23,9 +27,9 @@ namespace ModularSystem.Common.Wpf.Modules
             var t = FindEntryClass();
             if (t != null)
                 WpfClientEntry = (IWpfClientEntry)Activator.CreateInstance(t);
-            string confPath = System.IO.Path.Combine(Path, ModuleSettings.ConfFileName);
-            var conf = ModuleConf.LoadFromString(File.ReadAllText(confPath));
-            ModuleInfo = new ModuleInfo(ModuleIdentity.Parse(conf.ModuleIdentity), conf.Dependencies.Select(ModuleIdentity.Parse).ToArray());
+            var conf = MetaFileWrapper.FindInDirectory(Path);
+            ModuleIdentity = ModuleIdentity.Parse(conf.Identity);
+            Dependencies = conf.Dependencies.Select(ModuleIdentity.Parse).ToArray();
         }
 
         /// <summary>
