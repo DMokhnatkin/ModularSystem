@@ -77,18 +77,19 @@ namespace ModularSystem.Common.PackedModules.Zip
             {
                 foreach (var zipPackagedModule in packagedModules)
                 {
-                    switch (zipPackagedModule)
+                    if (zipPackagedModule is MemoryPackedModule)
                     {
-                        case MemoryPackedModule memoryPacked:
-                            var entry = zip.CreateEntry(zipPackagedModule.ModuleIdentity.ToString());
-                            using (var z = entry.Open())
-                            {
-                                z.Write(memoryPacked.Data, 0, memoryPacked.Data.Length);
-                            }
-                            break;
-                        case FilePackedModule filePacked:
-                            zip.CreateEntryFromFile(filePacked.Path, Path.GetFileName(filePacked.Path));
-                            break;
+                        MemoryPackedModule memoryPacked = (MemoryPackedModule) zipPackagedModule;
+                        var entry = zip.CreateEntry(zipPackagedModule.ModuleIdentity.ToString());
+                        using (var z = entry.Open())
+                        {
+                            z.Write(memoryPacked.Data, 0, memoryPacked.Data.Length);
+                        }
+                    }
+                    if (zipPackagedModule is FilePackedModule)
+                    {
+                        FilePackedModule filePacked = (FilePackedModule)zipPackagedModule;
+                        zip.CreateEntryFromFile(filePacked.Path, Path.GetFileName(filePacked.Path));
                     }
                 }
                 return new MemoryBatchedModules(fs.ToArray());
