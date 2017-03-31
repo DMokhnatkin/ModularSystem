@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using ModularSystem.Common;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Exceptions;
-using ModularSystem.Communication.Data.Files;
+using ModularSystem.Common.PackedModules.Zip;
 using ModularSystem.Server.Common;
 
 namespace ModularSystem.Server.Controllers
@@ -30,8 +31,12 @@ namespace ModularSystem.Server.Controllers
         [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
         public async Task InstallModulePackageAsync()
         {
-            var package = await ModulesPackage.Decompress(Request.Body);
-            _registeredModules.RegisterModules(package.PackagedModules);
+            using (var t = Request.Body)
+            using (var br = new BinaryReader(t))
+            {
+                var batchedModules = new MemoryBatchedModules(br.ReadBytes((int)t.Length));
+                _registeredModules.RegisterModules(batchedModules.UnbatchModulesToMemory());
+            }
         }
 
         [HttpPut("remove")]

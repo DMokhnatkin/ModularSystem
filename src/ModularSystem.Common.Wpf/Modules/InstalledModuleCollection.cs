@@ -2,6 +2,8 @@
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using ModularSystem.Common.PackedModules;
+using ModularSystem.Common.PackedModules.Zip;
 using ModularSystem.Common.Repositories;
 
 namespace ModularSystem.Common.Wpf.Modules
@@ -19,7 +21,7 @@ namespace ModularSystem.Common.Wpf.Modules
 
         private MemoryModulesRepository<WpfClientInstalledStoredModule> _repository = new MemoryModulesRepository<WpfClientInstalledStoredModule>();
 
-        public void InstallZipPackagedModule(ZipPackagedModule module)
+        public void InstallZipPackagedModule(IPackedModule module)
         {
             var moduleDir = Path.Combine(BasePath, module.ModuleIdentity.ToString());
             if (Directory.Exists(moduleDir))

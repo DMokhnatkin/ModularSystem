@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using ModularSystem.Common.PackedModules;
+using ModularSystem.Common.PackedModules.Zip;
 
 namespace ModularSystem.Common.Repositories
 {
-    public class FileSystemModulesRepository : IModulesRepository<ZipPackagedModule>
+    public class FileSystemModulesRepository : IModulesRepository<IPackedModule>
     {
         public string BasePath { get; }
 
@@ -18,11 +20,11 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public IEnumerator<ZipPackagedModule> GetEnumerator()
+        public IEnumerator<IPackedModule> GetEnumerator()
         {
             foreach (var f in Directory.GetFiles(BasePath))
             {
-                yield return new ZipPackagedModule(f);
+                yield return new FilePackedModule(f);
             }
         }
 
@@ -33,11 +35,17 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public void AddModule(ZipPackagedModule module)
+        public void AddModule(IPackedModule module)
         {
             if (IsModuleRegistered(module.ModuleIdentity))
                 throw new ArgumentException($"Module {module.ModuleIdentity} is already registered");
-            File.Copy(module.Path, Path.Combine(BasePath, $"{module.ModuleIdentity}.zip"));
+            using (var f = File.OpenWrite(Path.Combine(BasePath, $"{module.ModuleIdentity}.zip")))
+            using (var ms = module.OpenStream())
+            using (var msr = new BinaryReader(ms))
+            {
+                var data = msr.ReadBytes((int) ms.Length);
+                f.Write(data, 0, data.Length);
+            }
         }
 
         /// <inheritdoc />
@@ -49,11 +57,11 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public ZipPackagedModule GetModule(ModuleIdentity moduleIdentity)
+        public IPackedModule GetModule(ModuleIdentity moduleIdentity)
         {
             if (!IsModuleRegistered(moduleIdentity))
                 return null;
-            return new ZipPackagedModule(Path.Combine(BasePath, $"{moduleIdentity}.zip"));
+            return new FilePackedModule(Path.Combine(BasePath, $"{moduleIdentity}.zip"));
         }
 
         private bool IsModuleRegistered(ModuleIdentity moduleIdentity)

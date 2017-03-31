@@ -5,9 +5,10 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ModularSystem.Common;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Exceptions;
-using ModularSystem.Communication.Data.Files;
+using ModularSystem.Common.PackedModules.Zip;
 using ModularSystem.Server.Common;
 
 namespace ModularSystem.Server.Controllers
@@ -36,8 +37,8 @@ namespace ModularSystem.Server.Controllers
             if (clientId == null)
                 return Forbid();
 
-            var package = new ModulesPackage(_registeredModules.GetModules(userId.Value, clientId.Value));
-            return File(await package.Compress(), "application/zip");
+            var res = PackHelper.BatchMemoryModules(_registeredModules.GetModules(userId.Value, clientId.Value));
+            return File(res.Data, "application/zip");
         }
     }
 }

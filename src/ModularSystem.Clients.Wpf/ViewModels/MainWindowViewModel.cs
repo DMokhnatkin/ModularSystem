@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Practices.Unity;
 using ModularSystem.Clients.Wpf.Proxies;
+using ModularSystem.Common;
 using ModularSystem.Common.Modules;
+using ModularSystem.Common.PackedModules.Zip;
 using ModularSystem.Common.Repositories;
 using ModularSystem.Common.Wpf.Context;
 using ModularSystem.Common.Wpf.Modules;
 using ModularSystem.Common.Wpf.UI;
-using ModularSystem.Communication.Data.Files;
 using Prism.Mvvm;
 
 namespace ModularSystem.Clients.Wpf.ViewModels
@@ -48,10 +49,12 @@ namespace ModularSystem.Clients.Wpf.ViewModels
             var t = await proxy.DownloadModules();
 
             using (var s = await t.Content.ReadAsStreamAsync())
+            using (var ss = new BinaryReader(s))
             {
-                var p = await ModulesPackage.Decompress(s);
+                var b = new MemoryBatchedModules(ss.ReadBytes((int)s.Length));
+                var p = b.UnbatchModulesToMemory();
 
-                foreach (var packageModule in p.PackagedModules)
+                foreach (var packageModule in p)
                 {
                     _sessionModules.InstallZipPackagedModule(packageModule);
                 }

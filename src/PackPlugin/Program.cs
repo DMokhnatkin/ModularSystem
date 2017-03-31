@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using CommandLine;
 using ModularSystem.Common;
+using ModularSystem.Common.PackedModules.Zip;
 using Newtonsoft.Json.Linq;
 
 namespace PackPlugin
@@ -34,11 +35,11 @@ namespace PackPlugin
             var packedModules =
                 conf["Modules"]
                 .Select(x => x.Value<string>())
-                .Select(x => ZipPackHelper.PackModule(x, o.OutputDir))
+                .Select(x => PackHelper.PackModule(x, o.OutputDir))
                 .ToArray();
 
             var batchPath = Path.Combine(o.OutputDir, $"{conf["BatchName"].Value<string>()}.zip");
-            ZipPackHelper.BatchModules(batchPath, packedModules);
+            PackHelper.BatchModules(batchPath, packedModules);
 
             // Remove all single module packages (we have batched them in one file)
             foreach (var file in Directory.GetFiles(o.OutputDir))

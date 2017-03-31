@@ -4,9 +4,9 @@ using System.Linq;
 using ModularSystem.Common.MetaFiles;
 using ModularSystem.Common.Modules;
 
-namespace ModularSystem.Common
+namespace ModularSystem.Common.PackedModules.Zip
 {
-    public class ZipPackagedModule : IModule, IPathStoredModule
+    public class FilePackedModule : IModule, IPathStoredModule, IPackedModule
     {
         /// <inheritdoc />
         public string Path { get; set; }
@@ -17,13 +17,13 @@ namespace ModularSystem.Common
         /// <inheritdoc />
         public ModuleIdentity[] Dependencies { get; internal set; }
 
-        internal ZipPackagedModule()
+        internal FilePackedModule()
         { }
 
         /// <summary>
-        /// Initialize ZipPackagedModule from zip archive
+        /// Initialize FilePackedModule from zip archive
         /// </summary>
-        public ZipPackagedModule(string path)
+        public FilePackedModule(string path)
         {
             using (ZipArchive z = new ZipArchive(File.OpenRead(path)))
             {
@@ -34,24 +34,27 @@ namespace ModularSystem.Common
             Path = path;
         }
 
-        /// <summary>
-        /// Open meta files from archive. 
-        /// </summary>
+        public Stream OpenStream()
+        {
+            return File.OpenRead(Path);
+        }
+
+        /// <inheritdoc />
         public MetaFileWrapper ExtractMetaFile()
         {
-            using (var z = new ZipArchive(File.OpenRead(Path)))
+            using (var str = OpenStream())
+            using (var z = new ZipArchive(str))
             using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
             {
                 return new MetaFileWrapper(metaFileStream);
             }
         }
 
-        /// <summary>
-        /// Update meta file in archive.
-        /// </summary>
+        /// <inheritdoc />
         public void UpdateMetaFile(MetaFileWrapper metaFile)
         {
-            using (var z = new ZipArchive(File.OpenRead(Path)))
+            using (var str = OpenStream())
+            using (var z = new ZipArchive(str))
             using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
             {
                 metaFile.Write(metaFileStream);
