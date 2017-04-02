@@ -35,7 +35,7 @@ namespace PackPlugin
             var packedModules =
                 conf["Modules"]
                 .Select(x => x.Value<string>())
-                .Select(x => PackHelper.PackModule(x, o.OutputDir))
+                .Select(x => PackHelper.PackModuleToFile(x, o.OutputDir))
                 .ToArray();
 
             var batchPath = Path.Combine(o.OutputDir, $"{conf["BatchName"].Value<string>()}.zip");

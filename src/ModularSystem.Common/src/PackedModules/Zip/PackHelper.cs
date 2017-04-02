@@ -12,9 +12,8 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// Pack one module
         /// </summary>
         /// <param name="sourceDirectoryPath">Directory with module files</param>
-        /// <param name="destDirectoryPath">Path to directory where packaged module file (zip archive by default) will be created</param>
         /// <param name="metaFileName">Name of module meta file</param>
-        public static FilePackedModule PackModule(string sourceDirectoryPath, string destDirectoryPath, string metaFileName = MetaFileWrapper.DefaultFileName)
+        public static MemoryPackedModule PackModuleToMemory(string sourceDirectoryPath, string metaFileName = MetaFileWrapper.DefaultFileName)
         {
             MetaFileWrapper meta = MetaFileWrapper.FindInDirectory(sourceDirectoryPath, metaFileName);
             if (!meta.ContainsKey(MetaFileWrapper.TypeKey))
@@ -27,11 +26,33 @@ namespace ModularSystem.Common.PackedModules.Zip
             }
 
             // In this place you can do some extra actions depend on module type
+            // **
 
-            var destFilePath = Path.Combine(destDirectoryPath, $"{meta.Identity}.zip");
-            if (File.Exists(destFilePath))
-                File.Delete(destFilePath);
-            ZipFile.CreateFromDirectory(sourceDirectoryPath, destFilePath);
+            // TODO: can be done without temp archive on disk. (default api doen't provide easy way).
+            // using (var t = new ZipArchive(s, ZipArchiveMode.Create)) { ...CreateEntitiesManually... }
+            var tmp = Path.GetTempFileName();
+            ZipFile.CreateFromDirectory(sourceDirectoryPath, tmp);
+
+            return new MemoryPackedModule(File.ReadAllBytes(tmp));
+        }
+
+        /// <summary>
+        /// Pack one module
+        /// </summary>
+        /// <param name="sourceDirectoryPath">Directory with module files</param>
+        /// <param name="destDirectoryPath">Path to directory where packaged module file (zip archive by default) will be created</param>
+        /// <param name="metaFileName">Name of module meta file</param>
+        public static FilePackedModule PackModuleToFile(string sourceDirectoryPath, string destDirectoryPath, string metaFileName = MetaFileWrapper.DefaultFileName)
+        {
+            var memoryModule = PackModuleToMemory(sourceDirectoryPath);
+
+            var destFilePath = Path.Combine(destDirectoryPath, $"{memoryModule.ModuleIdentity}.zip");
+
+            using (var s = memoryModule.OpenStream())
+            using (var fs = File.Create(destFilePath))
+            {
+                s.CopyTo(fs);
+            }
 
             return new FilePackedModule(destFilePath);
         }
