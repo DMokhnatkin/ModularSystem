@@ -145,6 +145,7 @@
     <Compile Include="src\BLL\ModulesTest.cs" />
     <Compile Include="src\BLL\UserModulesTest.cs" />
     <Compile Include="src\Conf\ModuleMetaTest.cs" />
+    <Compile Include="src\PackedModules\Zip\PackHelperTest.cs" />
     <Compile Include="src\Repositories\BaseIUserModulesRepositoryTest.cs" />
     <Compile Include="src\Repositories\Concrete\FileUserModulesRepositoryTest.cs" />
   </ItemGroup>
