@@ -1,0 +1,5 @@
+﻿{
+  "identity": "module1-1.0.0",
+  "type": "wpfclient", 
+  "dependencies": [ "test.client.wpf-1.1", "test2.server-1.5", "test4.client.wpf-1.7" ]
+}
