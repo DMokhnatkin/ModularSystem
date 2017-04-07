@@ -28,28 +28,28 @@ namespace ModularSystem.Сonfigurator.Proxies
         {
             var content = new StreamContent(modulePackage);
             content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Zip);
-            return await Client.PostAsync($"{BaseUrl}/api/modules/install", content);
+            return await Client.PostAsync($"{BaseUrl}/api/modulesconfig/install", content);
         }
 
         public async Task<HttpResponseMessage> RemoveModuleAsync(string identity)
         {
-            return await Client.PutAsync($"{BaseUrl}/api/modules/remove", new ObjectContent(typeof(string), identity, MediaTypeFormatter));
+            return await Client.PutAsync($"{BaseUrl}/api/modulesconfig/remove", new ObjectContent(typeof(string), identity, MediaTypeFormatter));
         }
 
         public async Task<string[]> GetModulesListAsync()
         {
-            var res = await Client.GetAsync($"{BaseUrl}/api/modules");
+            var res = await Client.GetAsync($"{BaseUrl}/api/modulesconfig");
             return JsonConvert.DeserializeObject<string[]>(await res.Content.ReadAsStringAsync());
         }
 
         public async Task<HttpResponseMessage> AddUserModules(string userId, string clientId, string[] dtos)
         {
-            return await Client.PostAsync($"{BaseUrl}/api/modules/user/{userId}/{clientId}", new ObjectContent(typeof(string[]), dtos, MediaTypeFormatter));
+            return await Client.PostAsync($"{BaseUrl}/api/modulesconfig/user/{userId}/{clientId}", new ObjectContent(typeof(string[]), dtos, MediaTypeFormatter));
         }
 
         public async Task<HttpResponseMessage> RemoveUserModules(string userId, string clientId, string[] dtos)
         {
-            UriBuilder builder = new UriBuilder($"{BaseUrl}/api/modules/user/{userId}/{clientId}");
+            UriBuilder builder = new UriBuilder($"{BaseUrl}/api/modulesconfig/user/{userId}/{clientId}");
             // It looks terrible. I can't find any query builder.
             builder.Query = string.Concat(dtos.Select(x => $"moduleIdentities={x}&")).TrimEnd('&');
             return await Client.DeleteAsync(builder.ToString());
@@ -57,7 +57,7 @@ namespace ModularSystem.Сonfigurator.Proxies
 
         public async Task<string[]> GetUserModules(string userId)
         {
-            var res = await Client.GetAsync($"{BaseUrl}/api/modules/user/{userId}");
+            var res = await Client.GetAsync($"{BaseUrl}/api/modulesconfig/user/{userId}");
             return JsonConvert.DeserializeObject<string[]>(await res.Content.ReadAsStringAsync());
         }
     }
