@@ -31,6 +31,7 @@ namespace ModularSystem.Common.PackedModules.Zip
             // TODO: can be done without temp archive on disk. (default api doen't provide easy way).
             // using (var t = new ZipArchive(s, ZipArchiveMode.Create)) { ...CreateEntitiesManually... }
             var tmp = Path.GetTempFileName();
+            File.Delete(tmp);
             ZipFile.CreateFromDirectory(sourceDirectoryPath, tmp);
 
             return new MemoryPackedModule(File.ReadAllBytes(tmp));
