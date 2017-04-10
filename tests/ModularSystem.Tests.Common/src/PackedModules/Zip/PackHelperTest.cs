@@ -26,7 +26,13 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
         [Test]
         public void PackModuleToFileTest()
         {
-            throw new NotImplementedException();
+            var tmp = Path.GetTempPath();
+            var r = PackHelper.PackModuleToFile(TestModule1Path, tmp);
+            Assert.AreEqual(r.ModuleIdentity.Name, "module1");
+            Assert.AreEqual(r.ModuleIdentity.Version, new Version(1, 0, 0));
+            Assert.Contains(new ModuleIdentity("test.client.wpf", "1.1"), r.Dependencies);
+            Assert.Contains(new ModuleIdentity("test2.server", "1.5"), r.Dependencies);
+            Assert.Contains(new ModuleIdentity("test4.client.wpf", "1.7"), r.Dependencies);
         }
 
         [Test]
