@@ -2,6 +2,7 @@
 using System.Linq;
 using ModularSystem.Common.PackedModules;
 using ModularSystem.Common.PackedModules.IO;
+using ModularSystem.Common.PackedModules.Zip;
 using ModularSystem.Tests.Common.HelpersForTests;
 using NUnit.Framework;
 

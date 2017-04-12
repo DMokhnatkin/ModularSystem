@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using ModularSystem.Common.PackedModules.Zip;
 
 namespace ModularSystem.Common.PackedModules.IO
 {

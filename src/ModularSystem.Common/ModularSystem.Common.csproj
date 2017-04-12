@@ -41,13 +41,17 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\MetaFiles\MetaFileWrapper.cs" />
-    <Compile Include="src\PackedModules\FilePackedModuleV2.cs" />
+    <Compile Include="src\PackedModules\Zip\BatchHelper.cs" />
+    <Compile Include="src\PackedModules\Zip\FileBatchedModulesV2.cs" />
+    <Compile Include="src\PackedModules\Zip\FilePackedModuleV2.cs" />
+    <Compile Include="src\PackedModules\IBatchedModulesV2.cs" />
     <Compile Include="src\PackedModules\IO\PackedModuleIO.cs" />
     <Compile Include="src\PackedModules\IPackedModule.cs" />
     <Compile Include="src\Modules\IStartableModule.cs" />
     <Compile Include="src\PackedModules\IBatchedModules.cs" />
     <Compile Include="src\PackedModules\IPackedModuleV2.cs" />
-    <Compile Include="src\PackedModules\MemoryPackedModuleV2.cs" />
+    <Compile Include="src\PackedModules\Zip\MemoryBatchedModulesV2.cs" />
+    <Compile Include="src\PackedModules\Zip\MemoryPackedModuleV2.cs" />
     <Compile Include="src\PackedModules\Zip\IOHelpers.cs" />
     <Compile Include="src\PackedModules\Zip\MemoryBatchedModules.cs" />
     <Compile Include="src\PackedModules\Zip\MemoryPackedModule.cs" />

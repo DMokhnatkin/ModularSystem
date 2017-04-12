@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace ModularSystem.Common.PackedModules
+namespace ModularSystem.Common.PackedModules.Zip
 {
     public class MemoryPackedModuleV2 : IPackedModuleV2
     {
