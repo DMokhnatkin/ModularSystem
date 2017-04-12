@@ -78,8 +78,8 @@
     <Reference Include="System.IO.FileSystem, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.IO.FileSystem.4.0.1\lib\net46\System.IO.FileSystem.dll</HintPath>
     </Reference>
-    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Net.Http.4.3.0\lib\net46\System.Net.Http.dll</HintPath>
@@ -138,7 +138,10 @@
     <Compile Include="src\BLL\ModulesTest.cs" />
     <Compile Include="src\BLL\UserModulesTest.cs" />
     <Compile Include="src\Conf\ModuleMetaTest.cs" />
+    <Compile Include="src\HelpersForTests\TestingIOHelpers.cs" />
+    <Compile Include="src\PackedModules\IO\PackedModuleIOTest.cs" />
     <Compile Include="src\PackedModules\Zip\PackHelperTest.cs" />
+    <Compile Include="src\PackedModules\Zip\PackHelperV2Test.cs" />
     <Compile Include="src\Repositories\BaseIUserModulesRepositoryTest.cs" />
     <Compile Include="src\Repositories\Concrete\FileUserModulesRepositoryTest.cs" />
   </ItemGroup>
@@ -148,7 +151,7 @@
     <None Include="TestData\ModuleMetaFiles\meta.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestData\Modules\module1-1.0.0\meta.json">
+    <None Include="TestData\Modules\module1-1.3.0\meta.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -163,9 +166,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestData\Modules\module1-1.0.0\test.html" />
-    <Content Include="TestData\Modules\module1-1.0.0\test.txt" />
+    <Content Include="TestData\Modules\module1-1.3.0\test.html" />
+    <Content Include="TestData\Modules\module1-1.3.0\test.txt" />
+    <Content Include="TestData\Modules\module2-1.1.2\test.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
