@@ -142,7 +142,6 @@
     <Compile Include="src\PackedModules\IO\PackedModuleIOTest.cs" />
     <Compile Include="src\PackedModules\Zip\BatchHelperTest.cs" />
     <Compile Include="src\PackedModules\Zip\PackHelperTest.cs" />
-    <Compile Include="src\PackedModules\Zip\PackHelperV2Test.cs" />
     <Compile Include="src\Repositories\BaseIUserModulesRepositoryTest.cs" />
     <Compile Include="src\Repositories\Concrete\FileUserModulesRepositoryTest.cs" />
   </ItemGroup>
