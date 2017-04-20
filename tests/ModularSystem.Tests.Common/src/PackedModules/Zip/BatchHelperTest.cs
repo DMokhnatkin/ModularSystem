@@ -1,11 +1,14 @@
 ﻿using System;
 using NUnit.Framework;
+using ModularSystem.Common.PackedModules;
 
 namespace ModularSystem.Tests.Common.PackedModules.Zip
 {
     [TestFixture]
     public class BatchHelperTest
     {
+        private IPackedModuleV2 _modules; 
+
         [Test]
         public void BatchModules_MemoryTest()
         {
