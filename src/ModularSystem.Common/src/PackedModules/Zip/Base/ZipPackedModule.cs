@@ -30,7 +30,7 @@ namespace ModularSystem.Common.PackedModules.Zip
         #region IZipPacked inherited
 
         /// <inheritdoc />
-        public virtual ZipArchive OpeReadZipArchive()
+        public virtual ZipArchive OpenReadZipArchive()
         {
             using (var readStream = OpenReadStream())
             {

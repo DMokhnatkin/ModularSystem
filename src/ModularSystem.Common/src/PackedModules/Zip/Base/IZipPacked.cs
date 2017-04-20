@@ -7,7 +7,7 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <summary>
         /// Open packed data as zip archive. Only read is permitted.
         /// </summary>
-        ZipArchive OpeReadZipArchive();
+        ZipArchive OpenReadZipArchive();
 
         /// <summary>
         /// Open packed data as zip archive. Only write is permitted.

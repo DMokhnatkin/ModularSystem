@@ -101,10 +101,9 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// </summary>
         /// <param name="module"></param>
         /// <param name="destination">Directory path where to unpack</param>
-        public static void UnpackToDirectory(this IPackedModule module, string destination)
+        public static void UnpackToDirectory(this ZipPackedModule module, string destination)
         {
-            using (var moduleStream = module.OpenReadStream())
-            using (var z = new ZipArchive(moduleStream))
+            using (var z = module.OpenReadZipArchive())
             {
                 z.ExtractToDirectory(destination);
             }
@@ -116,10 +115,9 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <summary>
         /// Open meta files from packed module. This is valid only for zip packed modules.
         /// </summary>
-        public static MetaFileWrapper ExtractMetaFile(this IPacked module)
+        public static MetaFileWrapper ExtractMetaFile(this ZipPackedModule module)
         {
-            using (var str = module.OpenReadStream())
-            using (var z = new ZipArchive(str))
+            using (var z = module.OpenReadZipArchive())
             using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
             {
                 return new MetaFileWrapper(metaFileStream);
@@ -129,10 +127,9 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <summary>
         /// Update meta file in packed module. This is valid only for zip packed modules.
         /// </summary>
-        public static void UpdateMetaFile(this IPacked module, MetaFileWrapper metaFile)
+        public static void UpdateMetaFile(this ZipPackedModule module, MetaFileWrapper metaFile)
         {
-            using (var str = module.OpenEditStream())
-            using (var z = new ZipArchive(str, ZipArchiveMode.Update))
+            using (var z = module.OpenEditZipArchive())
             using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
             {
                 metaFile.Write(metaFileStream);

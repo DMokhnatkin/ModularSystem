@@ -75,11 +75,10 @@ namespace ModularSystem.Common.PackedModules.Zip
         #region Unbatch
 
         // Unbatch each inner module and return array of byte arrays.
-        private static byte[][] UnbatchModulesToByteArray(IBatchedModules batch)
+        private static byte[][] UnbatchModulesToByteArray(ZipBatchedModules batch)
         {
             List<byte[]> res = new List<byte[]>();
-            using (var fs = batch.OpenReadStream())
-            using (var bs = new ZipArchive(fs))
+            using (var bs = batch.OpenReadZipArchive())
             {
                 foreach (var zipArchiveEntry in bs.Entries)
                 {
@@ -108,7 +107,7 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// Unpack (unbatch) collection of module to memory.
         /// Inner modules will not be unpacked.
         /// </summary>
-        public static void UnbatchModules(this IBatchedModules batch, out MemoryPackedModule[] result)
+        public static void UnbatchModules(this ZipBatchedModules batch, out MemoryPackedModule[] result)
         {
             result = UnbatchModulesToByteArray(batch)
                 .Select(x => new MemoryPackedModule(x))

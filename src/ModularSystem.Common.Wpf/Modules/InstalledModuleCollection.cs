@@ -21,7 +21,7 @@ namespace ModularSystem.Common.Wpf.Modules
 
         private MemoryModulesRepository<WpfClientInstalledStoredModule> _repository = new MemoryModulesRepository<WpfClientInstalledStoredModule>();
 
-        public void InstallZipPackagedModule(IPackedModule module)
+        public void InstallZipPackagedModule(ZipPackedModule module)
         {
             var moduleDir = Path.Combine(BasePath, module.ModuleIdentity.ToString());
             if (Directory.Exists(moduleDir))
