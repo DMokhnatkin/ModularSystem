@@ -2,19 +2,31 @@
 
 namespace ModularSystem.Common.PackedModules.Zip
 {
-    public class MemoryBatchedModules : IBatchedModules
+    public class MemoryBatchedModules : ZipBatchedModules
     {
-        public byte[] Data { get; }
+        private readonly byte[] _data;
 
         public MemoryBatchedModules(byte[] data)
         {
-            Data = data;
+            _data = data;
         }
 
         /// <inheritdoc />
-        public Stream OpenStream()
+        public override Stream OpenWriteStream()
         {
-            return new MemoryStream(Data);
+            return new MemoryStream(_data, true);
+        }
+
+        /// <inheritdoc />
+        public override Stream OpenReadStream()
+        {
+            return new MemoryStream(_data, false);
+        }
+
+        /// <inheritdoc />
+        public override Stream OpenEditStream()
+        {
+            return new MemoryStream(_data, true);
         }
     }
 }

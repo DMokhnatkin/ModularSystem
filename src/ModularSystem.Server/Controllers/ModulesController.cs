@@ -37,8 +37,9 @@ namespace ModularSystem.Server.Controllers
             if (clientId == null)
                 return Forbid();
 
-            var res = PackHelper.BatchMemoryModules(_registeredModules.GetModules(userId.Value, clientId.Value));
-            return File(res.Data, "application/zip");
+            MemoryBatchedModules batch;
+            BatchHelper.BatchModules(_registeredModules.GetModules(userId.Value, clientId.Value), out batch);
+            return File(batch.ExtractData(), "application/zip");
         }
     }
 }

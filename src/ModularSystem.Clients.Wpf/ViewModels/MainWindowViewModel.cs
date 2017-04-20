@@ -52,9 +52,10 @@ namespace ModularSystem.Clients.Wpf.ViewModels
             using (var ss = new BinaryReader(s))
             {
                 var b = new MemoryBatchedModules(ss.ReadBytes((int)s.Length));
-                var p = b.UnbatchModulesToMemory();
+                MemoryPackedModule[] innerModules;
+                b.UnbatchModules(out innerModules);
 
-                foreach (var packageModule in p)
+                foreach (var packageModule in innerModules)
                 {
                     _sessionModules.InstallZipPackagedModule(packageModule);
                 }

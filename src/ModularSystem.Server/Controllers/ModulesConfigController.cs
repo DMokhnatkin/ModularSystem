@@ -35,7 +35,9 @@ namespace ModularSystem.Server.Controllers
             using (var br = new BinaryReader(t))
             {
                 var batchedModules = new MemoryBatchedModules(br.ReadBytes((int)t.Length));
-                _registeredModules.RegisterModules(batchedModules.UnbatchModulesToMemory());
+                MemoryPackedModule[] innerModules;
+                batchedModules.UnbatchModules(out innerModules);
+                _registeredModules.RegisterModules(innerModules);
             }
         }
 

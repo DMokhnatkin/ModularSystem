@@ -37,7 +37,7 @@ namespace ModularSystem.Common.MetaFiles
         {
             var t = Directory.GetFiles(path, fileName, recurrently ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).FirstOrDefault();
             if (t == null)
-                throw new ArgumentException($"meta file '{fileName}' was not found in '{path}'");
+                throw new FileNotFoundException($"meta file '{fileName}' was not found in '{path}'");
 
             return new MetaFileWrapper(t);
         }

@@ -40,7 +40,7 @@ namespace ModularSystem.Common.Repositories
             if (IsModuleRegistered(module.ModuleIdentity))
                 throw new ArgumentException($"Module {module.ModuleIdentity} is already registered");
             using (var f = File.OpenWrite(Path.Combine(BasePath, $"{module.ModuleIdentity}.zip")))
-            using (var ms = module.OpenStream())
+            using (var ms = module.OpenReadStream())
             using (var msr = new BinaryReader(ms))
             {
                 var data = msr.ReadBytes((int) ms.Length);

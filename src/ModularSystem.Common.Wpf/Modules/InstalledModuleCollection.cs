@@ -21,14 +21,14 @@ namespace ModularSystem.Common.Wpf.Modules
 
         private MemoryModulesRepository<WpfClientInstalledStoredModule> _repository = new MemoryModulesRepository<WpfClientInstalledStoredModule>();
 
-        public void InstallZipPackagedModule(IPackedModule module)
+        public void InstallZipPackagedModule(ZipPackedModule module)
         {
             var moduleDir = Path.Combine(BasePath, module.ModuleIdentity.ToString());
             if (Directory.Exists(moduleDir))
                 Directory.Delete(moduleDir, true);
             Directory.CreateDirectory(moduleDir);
 
-            module.UnpackModule(moduleDir);
+            module.UnpackToDirectory(moduleDir);
 
             // TODO: do smth with dependncy assemblies
             var workingDir = Path.Combine(AppContext.BaseDirectory, "working");
