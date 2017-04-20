@@ -2,7 +2,7 @@
 
 namespace ModularSystem.Common.PackedModules.Zip
 {
-    public class FileBatchedModules : IZipBatchedModules
+    public class FileBatchedModules : ZipBatchedModules
     {
         public string FilePath { get; }
 
@@ -12,19 +12,19 @@ namespace ModularSystem.Common.PackedModules.Zip
         }
 
         /// <inheritdoc />
-        public Stream OpenWriteStream()
+        public override Stream OpenWriteStream()
         {
             return File.OpenWrite(FilePath);
         }
 
         /// <inheritdoc />
-        public Stream OpenReadStream()
+        public override Stream OpenReadStream()
         {
             return File.OpenRead(FilePath);
         }
 
         /// <inheritdoc />
-        public Stream OpenEditStream()
+        public override Stream OpenEditStream()
         {
             return File.Open(FilePath, FileMode.OpenOrCreate);
         }

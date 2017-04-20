@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ModularSystem.Common.PackedModules.Zip
 {
-    public class FilePackedModule : IZipPackedModule
+    public class FilePackedModule : ZipPackedModule
     {
         public string FilePath { get; }
 
@@ -13,29 +13,29 @@ namespace ModularSystem.Common.PackedModules.Zip
         }
 
         /// <inheritdoc />
-        public Stream OpenWriteStream()
+        public override Stream OpenWriteStream()
         {
             return File.OpenWrite(FilePath);
         }
 
         /// <inheritdoc />
-        public Stream OpenReadStream()
+        public override Stream OpenReadStream()
         {
             return File.OpenRead(FilePath);
         }
 
         /// <inheritdoc />
-        public Stream OpenEditStream()
+        public override Stream OpenEditStream()
         {
             return File.Open(FilePath, FileMode.OpenOrCreate);
         }
 
         /// <inheritdoc />
         // Perfomance can be improved by cache
-        public ModuleIdentity ModuleIdentity => ModuleIdentity.Parse(this.ExtractMetaFile().Identity);
+        public override ModuleIdentity ModuleIdentity => ModuleIdentity.Parse(this.ExtractMetaFile().Identity);
 
         /// <inheritdoc />
         // Perfomance can be improved by cache
-        public ModuleIdentity[] Dependencies => this.ExtractMetaFile().Dependencies.Select(ModuleIdentity.Parse).ToArray();
+        public override ModuleIdentity[] Dependencies => this.ExtractMetaFile().Dependencies.Select(ModuleIdentity.Parse).ToArray();
     }
 }

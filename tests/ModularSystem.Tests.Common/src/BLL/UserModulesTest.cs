@@ -3,7 +3,7 @@ using ModularSystem.Common;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Exceptions;
 using ModularSystem.Common.PackedModules;
-using ModularSystem.Common.PackedModules.Testing;
+using ModularSystem.Common.PackedModules.Zip;
 using ModularSystem.Common.Repositories;
 using NUnit.Framework;
 
@@ -21,15 +21,15 @@ namespace ModularSystem.Tests.Common.BLL
             _registeredModules = new RegisteredModules(new MemoryModulesRepository<IPackedModule>(), new MemoryUserModulesRepository()); // Mock should be used
             _samplePackedModules = new IPackedModule[5];
             _samplePackedModules[0] =
-                PackedModulesTestHelpers.CreateMemoryPackedModule("type", new ModuleIdentity("test.server", "1.0"), new ModuleIdentity[0]);
+                TestHelpers.CreateMemoryPackedModule("type", new ModuleIdentity("test.server", "1.0"), new ModuleIdentity[0]);
             _samplePackedModules[1] =
-                PackedModulesTestHelpers.CreateMemoryPackedModule("type", new ModuleIdentity("test.client", "1.0"), new[] { _samplePackedModules[0].ModuleIdentity });
+                TestHelpers.CreateMemoryPackedModule("type", new ModuleIdentity("test.client", "1.0"), new[] { _samplePackedModules[0].ModuleIdentity });
             _samplePackedModules[2] =
-                PackedModulesTestHelpers.CreateMemoryPackedModule("type", new ModuleIdentity("test.server", "2.0"), new[] {_samplePackedModules[0].ModuleIdentity });
+                TestHelpers.CreateMemoryPackedModule("type", new ModuleIdentity("test.server", "2.0"), new[] {_samplePackedModules[0].ModuleIdentity });
             _samplePackedModules[3] =
-                PackedModulesTestHelpers.CreateMemoryPackedModule("type", new ModuleIdentity("test.client", "2.0"), new[] { _samplePackedModules[1].ModuleIdentity, _samplePackedModules[2].ModuleIdentity });
+                TestHelpers.CreateMemoryPackedModule("type", new ModuleIdentity("test.client", "2.0"), new[] { _samplePackedModules[1].ModuleIdentity, _samplePackedModules[2].ModuleIdentity });
             _samplePackedModules[4] =
-                PackedModulesTestHelpers.CreateMemoryPackedModule("type", new ModuleIdentity("test2.client", "1.0"), new ModuleIdentity[0] );
+                TestHelpers.CreateMemoryPackedModule("type", new ModuleIdentity("test2.client", "1.0"), new ModuleIdentity[0] );
 
             _registeredModules.RegisterModules(_samplePackedModules);
         }

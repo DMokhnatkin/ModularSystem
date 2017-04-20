@@ -2,14 +2,13 @@
 using System.IO.Compression;
 using System.Linq;
 using ModularSystem.Common.MetaFiles;
-using ModularSystem.Common.PackedModules.Zip;
 
-namespace ModularSystem.Common.PackedModules.Testing
+namespace ModularSystem.Common.PackedModules.Zip
 {
     /// <summary>
     /// Just some code to help testing.
     /// </summary>
-    public class PackedModulesTestHelpers
+    public class TestHelpers
     {
         public static MemoryPackedModule CreateMemoryPackedModule(string type, ModuleIdentity identity, ModuleIdentity[] dependencies, string metaFileName = MetaFileWrapper.DefaultFileName)
         {
