@@ -2,7 +2,7 @@
 
 namespace ModularSystem.Common.PackedModules
 {
-    public interface IPackedModuleV2
+    public interface IPacked
     {
         Stream OpenWriteStream();
 

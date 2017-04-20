@@ -1,62 +1,41 @@
 ﻿using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using ModularSystem.Common.MetaFiles;
-using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.PackedModules.Zip
 {
-    public class MemoryPackedModule : IModule, IPackedModule
+    public class MemoryPackedModule : IZipPackedModule
     {
-        public byte[] Data { get; }
+        private readonly byte[] _data;
 
-        /// <inheritdoc />
-        public ModuleIdentity ModuleIdentity { get; }
-
-        /// <inheritdoc />
-        public ModuleIdentity[] Dependencies { get; }
-
-        /// <summary>
-        /// Initialize FilePackedModule from byte array
-        /// </summary>
         public MemoryPackedModule(byte[] data)
         {
-            using (var ms = new MemoryStream(data))
-            using (ZipArchive z = new ZipArchive(ms))
-            {
-                var t = new MetaFileWrapper(z.GetEntry(MetaFileWrapper.DefaultFileName).Open());
-                ModuleIdentity = ModuleIdentity.Parse(t.Identity);
-                Dependencies = t.Dependencies.Select(ModuleIdentity.Parse).ToArray();
-            }
-            Data = data;
+            _data = data;
         }
 
         /// <inheritdoc />
-        public Stream OpenStream()
+        public Stream OpenWriteStream()
         {
-            return new MemoryStream(Data);
+            return new MemoryStream(_data, true);
         }
 
         /// <inheritdoc />
-        public MetaFileWrapper ExtractMetaFile()
+        public Stream OpenReadStream()
         {
-            using (var str = OpenStream())
-            using (var z = new ZipArchive(str))
-            using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
-            {
-                return new MetaFileWrapper(metaFileStream);
-            }
+            return new MemoryStream(_data, false);
         }
 
         /// <inheritdoc />
-        public void UpdateMetaFile(MetaFileWrapper metaFile)
+        public Stream OpenEditStream()
         {
-            using (var str = OpenStream())
-            using (var z = new ZipArchive(str))
-            using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
-            {
-                metaFile.Write(metaFileStream);
-            }
+            return new MemoryStream(_data, true);
         }
+
+        /// <inheritdoc />
+        // Perfomance can be improved by cache
+        public ModuleIdentity ModuleIdentity => ModuleIdentity.Parse(this.ExtractMetaFile().Identity);
+
+        /// <inheritdoc />
+        // Perfomance can be improved by cache
+        public ModuleIdentity[] Dependencies => this.ExtractMetaFile().Dependencies.Select(ModuleIdentity.Parse).ToArray();
     }
 }

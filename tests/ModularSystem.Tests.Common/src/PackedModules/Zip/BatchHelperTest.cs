@@ -7,7 +7,7 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
     [TestFixture]
     public class BatchHelperTest
     {
-        private IPackedModuleV2 _modules; 
+        private IPacked _modules; 
 
         [Test]
         public void BatchModules_MemoryTest()

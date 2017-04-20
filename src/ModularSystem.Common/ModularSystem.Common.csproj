@@ -41,21 +41,21 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\MetaFiles\MetaFileWrapper.cs" />
-    <Compile Include="src\PackedModules\Zip\BatchHelper.cs" />
-    <Compile Include="src\PackedModules\Zip\FileBatchedModulesV2.cs" />
-    <Compile Include="src\PackedModules\Zip\FilePackedModuleV2.cs" />
-    <Compile Include="src\PackedModules\IBatchedModulesV2.cs" />
-    <Compile Include="src\PackedModules\IO\PackedModuleIO.cs" />
     <Compile Include="src\PackedModules\IPackedModule.cs" />
-    <Compile Include="src\Modules\IStartableModule.cs" />
+    <Compile Include="src\PackedModules\Testing\PackedModulesTestHelpers.cs" />
+    <Compile Include="src\PackedModules\Zip\BatchHelper.cs" />
+    <Compile Include="src\PackedModules\Zip\FileBatchedModules.cs" />
+    <Compile Include="src\PackedModules\Zip\FilePackedModule.cs" />
     <Compile Include="src\PackedModules\IBatchedModules.cs" />
-    <Compile Include="src\PackedModules\IPackedModuleV2.cs" />
-    <Compile Include="src\PackedModules\Zip\MemoryBatchedModulesV2.cs" />
-    <Compile Include="src\PackedModules\Zip\MemoryPackedModuleV2.cs" />
-    <Compile Include="src\PackedModules\Zip\IOHelpers.cs" />
+    <Compile Include="src\PackedModules\IO\PackedModuleIO.cs" />
+    <Compile Include="src\Modules\IStartableModule.cs" />
+    <Compile Include="src\PackedModules\IPacked.cs" />
+    <Compile Include="src\PackedModules\Zip\IZipBatchedModules.cs" />
+    <Compile Include="src\PackedModules\Zip\IZipPackedModule.cs" />
     <Compile Include="src\PackedModules\Zip\MemoryBatchedModules.cs" />
     <Compile Include="src\PackedModules\Zip\MemoryPackedModule.cs" />
-    <Compile Include="src\PackedModules\Zip\PackHelperV2.cs" />
+    <Compile Include="src\PackedModules\Zip\IOHelpers.cs" />
+    <Compile Include="src\PackedModules\Zip\PackHelper.cs" />
     <Compile Include="src\Repositories\FileSystemModulesRepository.cs" />
     <Compile Include="src\Repositories\FileUserModulesRepository.cs" />
     <Compile Include="src\Exceptions\ModuleIsRequiredException.cs" />
@@ -63,8 +63,6 @@
     <Compile Include="src\Modules\IPathStoredModule.cs" />
     <Compile Include="src\Modules\IModule.cs" />
     <Compile Include="src\ICheckDependenciesResult.cs" />
-    <Compile Include="src\PackedModules\Zip\FileBatchedModules.cs" />
-    <Compile Include="src\PackedModules\Zip\FilePackedModule.cs" />
     <Compile Include="src\ModuleIdentity.cs" />
     <Compile Include="src\BLL\RegisteredModules.cs" />
     <Compile Include="src\BLL\CheckDependenciesResult.cs" />
@@ -73,8 +71,8 @@
     <Compile Include="src\ModulesHelper.cs" />
     <Compile Include="src\Repositories\MemoryModulesRepository.cs" />
     <Compile Include="src\Repositories\MemoryUserModulesRepository.cs" />
-    <Compile Include="src\PackedModules\Zip\PackHelper.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

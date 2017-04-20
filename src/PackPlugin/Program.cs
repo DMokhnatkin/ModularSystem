@@ -39,7 +39,7 @@ namespace PackPlugin
                 .ToArray();
 
             var batchPath = Path.Combine(o.OutputDir, $"{conf["BatchName"].Value<string>()}.zip");
-            PackHelper.BatchModules(batchPath, packedModules);
+            BatchHelper.BatchModulesToFile(packedModules, batchPath);
 
             // Remove all single module packages (we have batched them in one file)
             foreach (var file in Directory.GetFiles(o.OutputDir))

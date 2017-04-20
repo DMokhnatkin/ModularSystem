@@ -2,9 +2,9 @@
 {
     public static class IOHelpers
     {
-        public static string GenerateFileName(this IPackedModuleV2 module)
+        public static string GenerateFileName(this IZipPackedModule module)
         {
-            var meta =PackHelperV2.ExtractMetaFile(module);
+            var meta =PackHelper.ExtractMetaFile(module);
             return $"{meta.Identity}.zip";
         }
     }

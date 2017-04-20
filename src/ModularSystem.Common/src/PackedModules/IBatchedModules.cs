@@ -1,9 +1,10 @@
-﻿using System.IO;
-
-namespace ModularSystem.Common.PackedModules
+﻿namespace ModularSystem.Common.PackedModules
 {
-    public interface IBatchedModules
+    /// <summary>
+    /// Represents collection of zip packed modules packed (batched) in one zip archive.
+    /// </summary>
+    public interface IBatchedModules : IPacked
     {
-        Stream OpenStream();
+
     }
 }

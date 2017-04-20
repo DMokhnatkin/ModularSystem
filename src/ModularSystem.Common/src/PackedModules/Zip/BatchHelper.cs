@@ -10,7 +10,7 @@ namespace ModularSystem.Common.PackedModules.Zip
     {
         #region Batch
         // Get list of modules and batch them in one zip archive, then return byte array of this archive.
-        private static byte[] BatchModulesToByteArray(IEnumerable<IPackedModuleV2> packedModules)
+        private static byte[] BatchModulesToByteArray(IEnumerable<IPackedModule> packedModules)
         {
             using (var fs = new MemoryStream())
             using (var zip = new ZipArchive(fs, ZipArchiveMode.Create))
@@ -34,10 +34,20 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <param name="destPath">Path of destination zip archive</param>
         /// <param name="packedModules">List of modules to pack</param>
         /// <param name="batch">Result</param>
-        public static void BatchModules(IEnumerable<IPackedModuleV2> packedModules, string destPath, out FileBatchedModulesV2 batch)
+        public static void BatchModules(IEnumerable<IPackedModule> packedModules, string destPath, out FileBatchedModules batch)
         {
             File.WriteAllBytes(destPath, BatchModulesToByteArray(packedModules));
-            batch = new FileBatchedModulesV2(destPath);
+            batch = new FileBatchedModules(destPath);
+        }
+
+        /// <summary>
+        /// Alias <see cref="BatchModules(IEnumerable{IPackedModule}, string, out FileBatchedModules)"/>
+        /// </summary>
+        public static FileBatchedModules BatchModulesToFile(IEnumerable<IPackedModule> packedModules, string destPath)
+        {
+            FileBatchedModules res;
+            BatchModules(packedModules, destPath, out res);
+            return res;
         }
 
         /// <summary>
@@ -45,9 +55,19 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// </summary>
         /// <param name="packedModules">List of modules to pack</param>
         /// <param name="batch">Result</param>
-        public static void BatchModules(IEnumerable<IPackedModuleV2> packedModules, out MemoryBatchedModulesV2 batch)
+        public static void BatchModules(IEnumerable<IPackedModule> packedModules, out MemoryBatchedModules batch)
         {
-            batch = new MemoryBatchedModulesV2(BatchModulesToByteArray(packedModules));
+            batch = new MemoryBatchedModules(BatchModulesToByteArray(packedModules));
+        }
+
+        /// <summary>
+        /// Alias <see cref="BatchModules(IEnumerable{IPackedModule}, out MemoryBatchedModules)"/>
+        /// </summary>
+        public static MemoryBatchedModules BatchModulesToMemory(IEnumerable<IPackedModule> packedModules)
+        {
+            MemoryBatchedModules res;
+            BatchModules(packedModules, out res);
+            return res;
         }
 
         #endregion
@@ -55,7 +75,7 @@ namespace ModularSystem.Common.PackedModules.Zip
         #region Unbatch
 
         // Unbatch each inner module and return array of byte arrays.
-        private static byte[][] UnbatchModulesToByteArray(IBatchedModulesV2 batch)
+        private static byte[][] UnbatchModulesToByteArray(IBatchedModules batch)
         {
             List<byte[]> res = new List<byte[]>();
             using (var fs = batch.OpenReadStream())
@@ -79,7 +99,7 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// </summary>
         /// <param name="batch"></param>
         /// <param name="directoryPath">This directory will contains result (collection of zip archives i.e. packed modules)</param>
-        public static void UnbatchModules(this IBatchedModulesV2 batch, string directoryPath)
+        public static void UnbatchModules(this IBatchedModules batch, string directoryPath)
         {
             throw new NotImplementedException();
         }
@@ -88,13 +108,30 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// Unpack (unbatch) collection of module to memory.
         /// Inner modules will not be unpacked.
         /// </summary>
-        public static void UnbatchModules(this IBatchedModulesV2 batch, out MemoryPackedModuleV2[] result)
+        public static void UnbatchModules(this IBatchedModules batch, out MemoryPackedModule[] result)
         {
             result = UnbatchModulesToByteArray(batch)
-                .Select(x => new MemoryPackedModuleV2(x))
+                .Select(x => new MemoryPackedModule(x))
                 .ToArray();
         }
 
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Extract data as byte array
+        /// </summary>
+        /// <param name="batch"></param>
+        /// <returns></returns>
+        public static byte[] ExtractData(this IBatchedModules batch)
+        {
+            using (var s = batch.OpenReadStream())
+            using (var br = new BinaryReader(s))
+            {
+                return br.ReadBytes((int) s.Length);
+            }
+        }
         #endregion
     }
 }

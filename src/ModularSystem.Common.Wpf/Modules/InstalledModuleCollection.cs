@@ -28,7 +28,7 @@ namespace ModularSystem.Common.Wpf.Modules
                 Directory.Delete(moduleDir, true);
             Directory.CreateDirectory(moduleDir);
 
-            module.UnpackModule(moduleDir);
+            module.UnpackToDirectory(moduleDir);
 
             // TODO: do smth with dependncy assemblies
             var workingDir = Path.Combine(AppContext.BaseDirectory, "working");

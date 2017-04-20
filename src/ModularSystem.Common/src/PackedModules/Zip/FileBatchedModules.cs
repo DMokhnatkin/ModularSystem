@@ -1,28 +1,32 @@
-using System.IO;
-using ModularSystem.Common.Modules;
+﻿using System.IO;
 
 namespace ModularSystem.Common.PackedModules.Zip
 {
-    /// <summary>
-    /// Represents collection of zip packed modules packed (batched) in one zip archive.
-    /// </summary>
-    public class FileBatchedModules : IPathStoredModule, IBatchedModules
+    public class FileBatchedModules : IZipBatchedModules
     {
-        /// <inheritdoc />
-        public string Path { get; }
+        public string FilePath { get; }
 
-        /// <summary>
-        /// Initialize FileBatchedModules from zip archive
-        /// </summary>
-        public FileBatchedModules(string path)
+        public FileBatchedModules(string filePath)
         {
-            Path = path;
+            FilePath = filePath;
         }
 
         /// <inheritdoc />
-        public Stream OpenStream()
+        public Stream OpenWriteStream()
         {
-            return File.OpenRead(Path);
+            return File.OpenWrite(FilePath);
+        }
+
+        /// <inheritdoc />
+        public Stream OpenReadStream()
+        {
+            return File.OpenRead(FilePath);
+        }
+
+        /// <inheritdoc />
+        public Stream OpenEditStream()
+        {
+            return File.Open(FilePath, FileMode.OpenOrCreate);
         }
     }
 }
