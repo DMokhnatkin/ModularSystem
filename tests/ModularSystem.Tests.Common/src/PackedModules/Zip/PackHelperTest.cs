@@ -47,7 +47,8 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
             var r = m.ExtractMetaFile();
             Assert.AreEqual(r.Identity, "module1-1.3.0");
             Assert.AreEqual(r.Type, "wpfclient");
-            Assert.IsTrue(r.Dependencies.SequenceEqual(new[] {"test.client.wpf-1.1", "test2.server-1.5", "test4.client.wpf-1.7"}));
+            Assert.IsTrue(r.ClientDependencies.SequenceEqual(new[] {"test.client.wpf-1.1", "test4.client.wpf-1.7"}));
+            Assert.IsTrue(r.ServerDependencies.SequenceEqual(new[] { "test2.server-1.5" }));
 
             // FilePackedModule
             TestingIOHelpers.DeleteFiles("test");
@@ -57,7 +58,8 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
             var r2 = PackHelper.ExtractMetaFile(m2);
             Assert.AreEqual(r2.Identity, "module1-1.3.0");
             Assert.AreEqual(r2.Type, "wpfclient");
-            Assert.IsTrue(r2.Dependencies.SequenceEqual(new[] { "test.client.wpf-1.1", "test2.server-1.5", "test4.client.wpf-1.7" }));
+            Assert.IsTrue(r2.ClientDependencies.SequenceEqual(new[] { "test.client.wpf-1.1", "test4.client.wpf-1.7" }));
+            Assert.IsTrue(r2.ServerDependencies.SequenceEqual(new[] { "test2.server-1.5" }));
         }
 
         [Test]
@@ -66,7 +68,7 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
             var newMetaFile = new MetaFileWrapper
             {
                 Identity = "test0",
-                Dependencies = new[] {"test1", "test2"},
+                ClientDependencies = new[] {"test1", "test2"},
                 Type = "test3"
             };
 
@@ -78,7 +80,7 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
             var r = PackHelper.ExtractMetaFile(m);
             Assert.AreEqual(r.Identity, newMetaFile.Identity);
             Assert.AreEqual(r.Type, newMetaFile.Type);
-            Assert.IsTrue(r.Dependencies.SequenceEqual(newMetaFile.Dependencies));
+            Assert.IsTrue(r.ClientDependencies.SequenceEqual(newMetaFile.ClientDependencies));
 
             // FilePackedModule
             TestingIOHelpers.DeleteFiles("test");
@@ -89,7 +91,7 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
             var r2 = PackHelper.ExtractMetaFile(m2);
             Assert.AreEqual(r2.Identity, newMetaFile.Identity);
             Assert.AreEqual(r2.Type, newMetaFile.Type);
-            Assert.IsTrue(r2.Dependencies.SequenceEqual(newMetaFile.Dependencies));
+            Assert.IsTrue(r2.ClientDependencies.SequenceEqual(newMetaFile.ClientDependencies));
         }
     }
 }

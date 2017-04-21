@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -45,7 +42,8 @@ namespace ModularSystem.Common.MetaFiles
         #region Properties
 
         public const string IdentityKey = "identity";
-        public const string DependenciesKey = "dependencies";
+        public const string ClientDependenciesKey = "clientdep";
+        public const string ServertDependenciesKey = "serverdep";
         public const string TypeKey = "type";
 
         public string Identity
@@ -60,10 +58,16 @@ namespace ModularSystem.Common.MetaFiles
             set { SetValue(TypeKey, value); }
         }
 
-        public string[] Dependencies
+        public string[] ClientDependencies
         {
-            get { return ContainsKey(DependenciesKey) ? GetValues<string>(DependenciesKey) : null; }
-            set { SetValues(DependenciesKey, value); }
+            get { return ContainsKey(ClientDependenciesKey) ? GetValues<string>(ClientDependenciesKey) : null; }
+            set { SetValues(ClientDependenciesKey, value); }
+        }
+
+        public string[] ServerDependencies
+        {
+            get { return ContainsKey(ClientDependenciesKey) ? GetValues<string>(ServertDependenciesKey) : null; }
+            set { SetValues(ServertDependenciesKey, value); }
         }
 
         public T GetValue<T>(string key)

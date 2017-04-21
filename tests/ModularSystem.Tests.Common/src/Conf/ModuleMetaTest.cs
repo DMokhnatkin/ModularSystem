@@ -14,9 +14,14 @@ namespace ModularSystem.Tests.Common.Conf
         {
             var t = new MetaFileWrapper(File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestData/ModuleMetaFiles/meta.json")));
 
-            Assert.Contains("test.client.wpf-1.1", t.Dependencies);
-            Assert.Contains("test2.server-1.5", t.Dependencies);
-            Assert.Contains("test4.client.wpf-1.7", t.Dependencies);
+            Assert.AreEqual("my.test-1.0", t.Identity);
+            Assert.AreEqual("client", t.Type);
+
+            Assert.Contains("test.client.wpf-1.1", t.ClientDependencies);
+            Assert.Contains("test4.client.wpf-1.7", t.ClientDependencies);
+
+            Assert.Contains("test2.server-1.5", t.ServerDependencies);
+            Assert.Contains("test3.server-2.5", t.ServerDependencies);
         }
 
         [Test]
@@ -24,8 +29,10 @@ namespace ModularSystem.Tests.Common.Conf
         {
             var t = new MetaFileWrapper
             {
+                Identity = "my.test-1.0",
                 Type = "test",
-                Dependencies = new [] { "test-client-1.1", "test2-server-1.5", "test4-client-1.7"}
+                ClientDependencies = new [] { "test-client-1.1", "test4-client-1.7" },
+                ServerDependencies = new [] { "test2-server-1.5", "test3-server-1.6" }
             };
             var s = Path.GetTempFileName();
             t.Write(s);
@@ -33,10 +40,15 @@ namespace ModularSystem.Tests.Common.Conf
             using (var fs = File.OpenRead(s))
             {
                 var y = new MetaFileWrapper(File.OpenRead(s));
-                Assert.AreEqual(y.Type, "test");
-                Assert.Contains("test-client-1.1", y.Dependencies);
-                Assert.Contains("test2-server-1.5", y.Dependencies);
-                Assert.Contains("test4-client-1.7", y.Dependencies);
+
+                Assert.AreEqual("my.test-1.0", y.Identity);
+                Assert.AreEqual("test", y.Type);
+
+                Assert.Contains("test-client-1.1", y.ClientDependencies);
+                Assert.Contains("test4-client-1.7", y.ClientDependencies);
+
+                Assert.Contains("test2-server-1.5", y.ServerDependencies);
+                Assert.Contains("test3-server-1.6", y.ServerDependencies);
             }
         }
 
@@ -44,8 +56,10 @@ namespace ModularSystem.Tests.Common.Conf
         public void TestNullProps()
         {
             var t = new MetaFileWrapper();
-            Assert.AreEqual(null, t.Dependencies);
+            Assert.AreEqual(null, t.Identity);
             Assert.AreEqual(null, t.Type);
+            Assert.AreEqual(null, t.ClientDependencies);
+            Assert.AreEqual(null, t.ServerDependencies);
         }
     }
 }

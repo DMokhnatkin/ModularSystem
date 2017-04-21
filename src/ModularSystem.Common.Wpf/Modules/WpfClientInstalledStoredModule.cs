@@ -29,7 +29,7 @@ namespace ModularSystem.Common.Wpf.Modules
                 WpfClientEntry = (IWpfClientEntry)Activator.CreateInstance(t);
             var conf = MetaFileWrapper.FindInDirectory(Path);
             ModuleIdentity = ModuleIdentity.Parse(conf.Identity);
-            Dependencies = conf.Dependencies.Select(ModuleIdentity.Parse).ToArray();
+            Dependencies = conf.ClientDependencies.Select(ModuleIdentity.Parse).ToArray();
         }
 
         /// <summary>

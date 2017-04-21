@@ -36,6 +36,6 @@ namespace ModularSystem.Common.PackedModules.Zip
 
         /// <inheritdoc />
         // Perfomance can be improved by cache
-        public override ModuleIdentity[] Dependencies => this.ExtractMetaFile().Dependencies.Select(ModuleIdentity.Parse).ToArray();
+        public override ModuleIdentity[] Dependencies => this.ExtractMetaFile().ClientDependencies.Select(ModuleIdentity.Parse).ToArray();
     }
 }

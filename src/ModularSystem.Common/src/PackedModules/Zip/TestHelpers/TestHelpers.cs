@@ -20,7 +20,7 @@ namespace ModularSystem.Common.PackedModules.Zip
                     {
                         Type = type,
                         Identity = identity.ToString(),
-                        Dependencies = dependencies.Select(x => x.ToString()).ToArray()
+                        ClientDependencies = dependencies.Select(x => x.ToString()).ToArray()
                     };
                     var entry = z.CreateEntry(metaFileName);
                     using (var entryStream = entry.Open())
