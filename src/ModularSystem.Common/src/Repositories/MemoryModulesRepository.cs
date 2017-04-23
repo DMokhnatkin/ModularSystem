@@ -34,6 +34,12 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
+        public bool ContainsModule(ModuleIdentity moduleIdentity)
+        {
+            return GetModule(moduleIdentity) != null;
+        }
+
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _modules.Values.GetEnumerator();

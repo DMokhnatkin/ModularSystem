@@ -64,6 +64,12 @@ namespace ModularSystem.Common.Repositories
             return new FilePackedModule(Path.Combine(BasePath, $"{moduleIdentity}.zip"));
         }
 
+        /// <inheritdoc />
+        public bool ContainsModule(ModuleIdentity moduleIdentity)
+        {
+            return IsModuleRegistered(moduleIdentity);
+        }
+
         private bool IsModuleRegistered(ModuleIdentity moduleIdentity)
         {
             return File.Exists(Path.Combine(BasePath, $"{moduleIdentity}.zip"));

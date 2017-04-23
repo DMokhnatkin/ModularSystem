@@ -12,5 +12,7 @@ namespace ModularSystem.Common.Repositories
         /// Returns module by it's identity
         /// </summary>
         T GetModule(ModuleIdentity moduleIdentity);
+
+        bool ContainsModule(ModuleIdentity moduleIdentity);
     }
 }
