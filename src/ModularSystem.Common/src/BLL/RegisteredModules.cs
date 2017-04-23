@@ -11,12 +11,13 @@ namespace ModularSystem.Common.BLL
 {
     public class RegisteredModules
     {
-        private readonly IModulesRepository<IPackedModule> _modulesRepository;
+        private readonly IModulesRepository<IPackedModule> _clientModulesRepository;
+
         private readonly IUserModulesRepository _userModulesRepository;
 
-        public RegisteredModules(IModulesRepository<IPackedModule> modulesRepository, IUserModulesRepository userModulesRepository)
+        public RegisteredModules(IModulesRepository<IPackedModule> clientModulesRepository, IUserModulesRepository userModulesRepository)
         {
-            _modulesRepository = modulesRepository;
+            _clientModulesRepository = clientModulesRepository;
             _userModulesRepository = userModulesRepository;
         }
 
@@ -26,7 +27,7 @@ namespace ModularSystem.Common.BLL
             var t = CheckDependencies(packedModule);
             if (!t.IsCheckSuccess)
                 throw t.ToOneException();
-            _modulesRepository.AddModule(packedModule);
+            _clientModulesRepository.AddModule(packedModule);
         }
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace ModularSystem.Common.BLL
             var moduleIdentities = t as ModuleIdentity[] ?? t.ToArray();
             if (moduleIdentities.Any())
                 throw new ModuleIsRequiredException(moduleIdentity, moduleIdentities);
-            _modulesRepository.RemoveModule(moduleIdentity);
+            _clientModulesRepository.RemoveModule(moduleIdentity);
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace ModularSystem.Common.BLL
         /// </summary>
         public virtual IPackedModule GetModule(ModuleIdentity moduleIdentity)
         {
-            return _modulesRepository.GetModule(moduleIdentity);
+            return _clientModulesRepository.GetModule(moduleIdentity);
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace ModularSystem.Common.BLL
         /// <returns></returns>
         public virtual IEnumerable<IPackedModule> GetRegisteredModules()
         {
-            return _modulesRepository;
+            return _clientModulesRepository;
         }
 
         /// <summary>
@@ -106,7 +107,7 @@ namespace ModularSystem.Common.BLL
         public virtual IEnumerable<ModuleIdentity> GetDependent(ModuleIdentity moduleInfo)
         {
             List<ModuleIdentity> res = new List<ModuleIdentity>();
-            foreach (var module in _modulesRepository)
+            foreach (var module in _clientModulesRepository)
             {
                 if (module.Dependencies.Contains(moduleInfo))
                     res.Add(module.ModuleIdentity);
@@ -121,7 +122,7 @@ namespace ModularSystem.Common.BLL
         /// </summary>
         public void AddModule(string userId, string clientId, ModuleIdentity module)
         {
-            var t = _modulesRepository.GetModule(module);
+            var t = _clientModulesRepository.GetModule(module);
             if (t == null)
                 throw new ModuleMissedException(module);
             var depRes = ModulesHelper.CheckDependencies(t, GetModuleIdentities(userId, clientId) ?? new ModuleIdentity[0]);
@@ -141,7 +142,7 @@ namespace ModularSystem.Common.BLL
         /// </summary>
         public void AddModules(string userId, string clientId, IEnumerable<ModuleIdentity> modules)
         {
-            var ordered = ModulesHelper.OrderModules(modules.Select(x => _modulesRepository.GetModule(x)));
+            var ordered = ModulesHelper.OrderModules(modules.Select(x => _clientModulesRepository.GetModule(x)));
 
             foreach (var moduleInfo in ordered)
             {
@@ -155,7 +156,7 @@ namespace ModularSystem.Common.BLL
         public void RemoveModule(string userId, string clientId, ModuleIdentity module)
         {
             var dependent = ModulesHelper.GetDependent(module,
-                _userModulesRepository.GetModules(userId, clientId).Select(x => _modulesRepository.GetModule(x)))
+                _userModulesRepository.GetModules(userId, clientId).Select(x => _clientModulesRepository.GetModule(x)))
                 .ToArray();
             if (dependent.Any())
                 throw new ModuleIsRequiredException(module, dependent);
@@ -168,7 +169,7 @@ namespace ModularSystem.Common.BLL
         /// </summary>
         public void RemoveModules(string userId, string clientId, IEnumerable<ModuleIdentity> modules)
         {
-            var ordered = ModulesHelper.OrderModules(modules.Select(x => _modulesRepository.GetModule(x))).Reverse();
+            var ordered = ModulesHelper.OrderModules(modules.Select(x => _clientModulesRepository.GetModule(x))).Reverse();
 
             foreach (var moduleInfo in ordered)
             {

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModularSystem.Common;
 using ModularSystem.Common.BLL;
+using ModularSystem.Common.Dependencies;
 using ModularSystem.Common.Exceptions;
 using ModularSystem.Common.PackedModules.Zip;
 using ModularSystem.Server.Common;
@@ -19,10 +20,12 @@ namespace ModularSystem.Server.Controllers
     public class ModulesConfigController : Controller
     {
         private readonly RegisteredModules _registeredModules;
+        private readonly DependenciesResolver _dependenciesResolver;
 
-        public ModulesConfigController(RegisteredModules registeredModules)
+        public ModulesConfigController(RegisteredModules registeredModules, DependenciesResolver dependenciesResolver)
         {
             _registeredModules = registeredModules;
+            _dependenciesResolver = dependenciesResolver;
         }
 
         [HttpPost("install")]
@@ -37,6 +40,25 @@ namespace ModularSystem.Server.Controllers
                 var batchedModules = new MemoryBatchedModules(br.ReadBytes((int)t.Length));
                 MemoryPackedModule[] innerModules;
                 batchedModules.UnbatchModules(out innerModules);
+                _registeredModules.RegisterModules(innerModules);
+            }
+        }
+
+        [HttpPost("install")]
+        [Authorize(Policy = "ConfigModulesAllowed")]
+        [MappedExceptionFilter(typeof(ModuleMissedException), HttpStatusCode.BadRequest)]
+        [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
+        public async Task InstallModulePackageV2Async()
+        {
+            using (var t = Request.Body)
+            using (var br = new BinaryReader(t))
+            {
+                var batchedModules = new MemoryBatchedModules(br.ReadBytes((int)t.Length));
+                MemoryPackedModule[] innerModules;
+                batchedModules.UnbatchModules(out innerModules);
+
+                
+
                 _registeredModules.RegisterModules(innerModules);
             }
         }

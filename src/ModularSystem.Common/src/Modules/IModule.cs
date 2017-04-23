@@ -11,7 +11,7 @@ namespace ModularSystem.Common.Modules
         ModuleIdentity ModuleIdentity { get; }
 
         /// <summary>
-        /// List of modules which are required to be installed for this module.
+        /// List of modules (all types i.e. server and client) which are required to be installed for this module.
         /// </summary>
         ModuleIdentity[] Dependencies { get; }
     }
