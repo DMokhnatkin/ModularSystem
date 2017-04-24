@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ModularSystem.Common.Modules;
 using ModularSystem.Common.Repositories;
 
@@ -9,39 +10,27 @@ namespace ModularSystem.Common.Dependencies
     {
         private readonly IModulesRepository<ClientModuleBase> _clientModules;
         private readonly IModulesRepository<ServerModuleBase> _serverModules;
+        private readonly IUserModulesRepository _userModules;
 
-        public DependenciesResolver(IModulesRepository<ClientModuleBase> clientModules, IModulesRepository<ServerModuleBase> serverModules)
+        public DependenciesResolver(IModulesRepository<ClientModuleBase> clientModules, IModulesRepository<ServerModuleBase> serverModules, IUserModulesRepository userModules)
         {
             _clientModules = clientModules;
             _serverModules = serverModules;
+            _userModules = userModules;
         }
 
         /// <summary>
-        /// Check if server module can be resolved. (check all module dependencies)
+        /// Check if modules can be resolved after add to user. (check all module dependencies)
         /// </summary>
-        public virtual ServerModuleCheckDepResult CheckDependencies(ServerModuleBase module)
-        {
-            foreach (var moduleDependency in module.ServerDependencies)
-            {
-                if (!_serverModules.ContainsModule(moduleDependency))
-                {
-                }
-            }
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Check if client module can be resolved. (check all module dependencies)
-        /// </summary>
-        public virtual ClientModuleCheckDepResult CheckDependencies(ClientModuleBase module)
+        public virtual ICheckResult CheckAddForUser(string userId, string clientId, IEnumerable<IModule> modules)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Check if modules can be resolved. (check all module dependencies)
+        /// Check if list of modules can be installed to system.
         /// </summary>
-        public virtual ClientModuleCheckDepResult CheckDependencies(IEnumerable<IModule> modules)
+        public virtual ICheckResult CheckCanBeInstalled(IEnumerable<IModule> modules)
         {
             throw new NotImplementedException();
         }
