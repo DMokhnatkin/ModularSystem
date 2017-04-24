@@ -13,6 +13,9 @@ namespace ModularSystem.Common.Wpf.Modules
         public ModuleIdentity ModuleIdentity { get; private set; }
 
         /// <inheritdoc />
+        public ModuleType Type => ModuleType.Client;
+
+        /// <inheritdoc />
         public ModuleIdentity[] Dependencies { get; private set; }
 
         /// <inheritdoc />

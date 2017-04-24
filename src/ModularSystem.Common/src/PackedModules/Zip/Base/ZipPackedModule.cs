@@ -23,6 +23,9 @@ namespace ModularSystem.Common.PackedModules.Zip
         public abstract ModuleIdentity ModuleIdentity { get; }
 
         /// <inheritdoc />
+        public abstract ModuleType Type { get; }
+
+        /// <inheritdoc />
         public abstract ModuleIdentity[] Dependencies { get; }
 
         #endregion IPackedModule inherited

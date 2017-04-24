@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace ModularSystem.Common.PackedModules.Zip
@@ -33,6 +34,10 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <inheritdoc />
         // Perfomance can be improved by cache
         public override ModuleIdentity ModuleIdentity => ModuleIdentity.Parse(this.ExtractMetaFile().Identity);
+
+        /// <inheritdoc />
+        // Perfomance can be improved by cache
+        public override ModuleType Type => (ModuleType)Enum.Parse(typeof(ModuleType), this.ExtractMetaFile().Type, true);
 
         /// <inheritdoc />
         // Perfomance can be improved by cache
