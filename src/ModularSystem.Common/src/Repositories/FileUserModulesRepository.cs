@@ -94,5 +94,11 @@ namespace ModularSystem.Common.Repositories
             }
             return res;
         }
+
+        /// <inheritdoc />
+        public bool Contains(string userId, string clientId, ModuleIdentity module)
+        {
+            return GetModules(userId, clientId).Contains(module);
+        }
     }
 }

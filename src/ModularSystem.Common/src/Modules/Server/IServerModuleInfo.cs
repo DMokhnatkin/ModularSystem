@@ -11,6 +11,9 @@
         /// <inheritdoc />
         public ModuleIdentity ModuleIdentity { get; }
 
+        /// <inheritdoc />
+        public ModuleType Type => ModuleType.Server;
+
         /// <summary>
         /// List of modules which are required to be installed on server for this module.
         /// </summary>

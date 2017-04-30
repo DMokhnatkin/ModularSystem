@@ -5,25 +5,28 @@ namespace ModularSystem.Common.Dependencies
     /// <summary>
     /// Some module was required by other module but was missed.
     /// </summary>
-    class MissedModuleError : ICheckResult
+    public class MissedModuleError : ICheckResult
     {
-        public MissedModuleError(IModule sourceModule, IModule requiredModule)
+        public MissedModuleError(IModule sourceModule, ModuleIdentity requiredModule, ModuleType requiredModuleType)
         {
             SourceModule = sourceModule;
             RequiredModule = requiredModule;
+            RequiredModuleType = requiredModuleType;
         }
 
         public IModule SourceModule { get; }
 
-        public IModule RequiredModule { get; }
+        public ModuleIdentity RequiredModule { get; }
+
+        public ModuleType RequiredModuleType { get; }
 
         /// <inheritdoc />
         public bool IsSuccess => false;
 
         /// <inheritdoc />
-        public string GetMessage()
+        public virtual string GetMessage()
         {
-            return $"Module {RequiredModule.ModuleIdentity} was required by {SourceModule.ModuleIdentity} but was missed";
+            return $"Module {RequiredModule} was required by {SourceModule.ModuleIdentity} on {RequiredModuleType} side but was missed";
         }
     }
 }

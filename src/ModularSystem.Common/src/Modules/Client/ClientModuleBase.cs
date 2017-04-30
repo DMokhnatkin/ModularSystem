@@ -14,15 +14,18 @@ namespace ModularSystem.Common.Modules
         /// <inheritdoc />
         public ModuleIdentity ModuleIdentity { get; }
 
+        /// <inheritdoc />
+        public ModuleType Type => ModuleType.Client;
+
         /// <summary>
         /// List of modules which are required to be installed on server for this module.
         /// </summary>
-        ModuleIdentity[] ServerDependencies { get; }
+        public ModuleIdentity[] ServerDependencies { get; }
 
         /// <summary>
         /// List of modules which are required to be installed on client for this module.
         /// </summary>
-        ModuleIdentity[] ClientDependencies { get; }
+        public ModuleIdentity[] ClientDependencies { get; }
 
         /// <inheritdoc />
         // Can be cached

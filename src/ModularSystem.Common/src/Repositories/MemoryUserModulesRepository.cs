@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ModularSystem.Common.Exceptions;
 
 namespace ModularSystem.Common.Repositories
@@ -26,6 +27,12 @@ namespace ModularSystem.Common.Repositories
             if (_userModules.ContainsKey((userId, clientId)))
                 return _userModules[(userId, clientId)];
             return null;
+        }
+
+        /// <inheritdoc />
+        public bool Contains(string userId, string clientId, ModuleIdentity module)
+        {
+            return GetModules(userId, clientId).Contains(module);
         }
     }
 }

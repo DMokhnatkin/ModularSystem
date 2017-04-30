@@ -42,6 +42,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Dependencies\CheckResults\ComplexError.cs" />
     <Compile Include="src\Dependencies\CheckResults\InvalidDependency.cs" />
+    <Compile Include="src\Dependencies\CheckResults\MissedInClientScopeError.cs" />
     <Compile Include="src\Dependencies\CheckResults\MissedModuleError.cs" />
     <Compile Include="src\Dependencies\CheckResults\ModuleDuplicatedError.cs" />
     <Compile Include="src\Dependencies\CheckResults\SuccessResult.cs" />
@@ -49,7 +50,8 @@
     <Compile Include="src\Dependencies\DependenciesResolver.cs" />
     <Compile Include="src\MetaFiles\MetaFileWrapper.cs" />
     <Compile Include="src\Modules\Client\ClientModuleBase.cs" />
-    <Compile Include="src\Modules\Server\ServerModuleBase.cs" />
+    <Compile Include="src\Modules\IModulesGroup.cs" />
+    <Compile Include="src\Modules\Server\IServerModuleInfo.cs" />
     <Compile Include="src\ModuleType.cs" />
     <Compile Include="src\PackedModules\IPackedModule.cs" />
     <Compile Include="src\PackedModules\Zip\TestHelpers\TestHelpers.cs" />

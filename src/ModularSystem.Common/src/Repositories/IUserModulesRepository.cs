@@ -7,5 +7,6 @@ namespace ModularSystem.Common.Repositories
         void AddModule(string userId, string clientId, ModuleIdentity module);
         void RemoveModule(string userId, string clientId, ModuleIdentity module);
         IEnumerable<ModuleIdentity> GetModules(string userId, string clientId);
+        bool Contains(string userId, string clientId, ModuleIdentity module);
     }
 }
