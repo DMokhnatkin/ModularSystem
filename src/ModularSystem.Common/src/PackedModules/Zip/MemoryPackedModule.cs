@@ -42,6 +42,6 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <inheritdoc />
         // Perfomance can be improved by cache
         public override ModuleType ModuleType => (ModuleType) Enum.Parse(typeof(ModuleType),
-            this.ExtractMetaFile().Type);
+            this.ExtractMetaFile().Type, true);
     }
 }

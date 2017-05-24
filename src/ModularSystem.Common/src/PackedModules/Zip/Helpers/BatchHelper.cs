@@ -85,9 +85,10 @@ namespace ModularSystem.Common.PackedModules.Zip
                 foreach (var zipArchiveEntry in bs.Entries)
                 {
                     using (var t = zipArchiveEntry.Open())
-                    using (var br = new BinaryReader(t))
+                    using (var ms = new MemoryStream())
                     {
-                        res.Add(br.ReadBytes((int)t.Length));
+                        t.CopyTo(ms);
+                        res.Add(ms.ToArray());
                     }
                 }
             }
