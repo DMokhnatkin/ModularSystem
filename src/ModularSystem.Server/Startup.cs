@@ -60,6 +60,7 @@ namespace ModularSystem.Server
             RegisteredModules registeredModules = new RegisteredModules(
                 new FileSystemModulesRepository(Path.Combine(AppContext.BaseDirectory, "modules")), 
                 new FileUserModulesRepository(Path.Combine(AppContext.BaseDirectory, "userModules.json"))); // TODO: change application data path
+            registeredModules.ServerModulesPath = Path.Combine(AppContext.BaseDirectory, "server_modules");
             services.AddSingleton(x => registeredModules);
         }
 

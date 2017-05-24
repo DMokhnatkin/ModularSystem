@@ -32,9 +32,10 @@ namespace ModularSystem.Server.Controllers
         public async Task InstallModulePackageAsync()
         {
             using (var t = Request.Body)
-            using (var br = new BinaryReader(t))
+            using (var ms = new MemoryStream())
             {
-                var batchedModules = new MemoryBatchedModules(br.ReadBytes((int)t.Length));
+                t.CopyTo(ms);
+                var batchedModules = new MemoryBatchedModules(ms.ToArray());
                 MemoryPackedModule[] innerModules;
                 batchedModules.UnbatchModules(out innerModules);
                 _registeredModules.RegisterModules(innerModules);

@@ -13,15 +13,17 @@ namespace ModularSystem.Common.PackedModules.Zip
         private static byte[] BatchModulesToByteArray(IEnumerable<IPackedModule> packedModules)
         {
             using (var fs = new MemoryStream())
-            using (var zip = new ZipArchive(fs, ZipArchiveMode.Create))
             {
-                foreach (var zipPackedModule in packedModules)
+                using (var zip = new ZipArchive(fs, ZipArchiveMode.Create))
                 {
-                    var entry = zip.CreateEntry(Guid.NewGuid().ToString());
-                    using (var entryStream = entry.Open())
-                    using (var moduleStream = zipPackedModule.OpenReadStream())
+                    foreach (var zipPackedModule in packedModules)
                     {
-                        moduleStream.CopyTo(entryStream);
+                        var entry = zip.CreateEntry(Guid.NewGuid().ToString());
+                        using (var entryStream = entry.Open())
+                        using (var moduleStream = zipPackedModule.OpenReadStream())
+                        {
+                            moduleStream.CopyTo(entryStream);
+                        }
                     }
                 }
                 return fs.ToArray();
