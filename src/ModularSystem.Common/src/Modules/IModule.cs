@@ -14,5 +14,7 @@ namespace ModularSystem.Common.Modules
         /// List of modules which are required to be installed for this module.
         /// </summary>
         ModuleIdentity[] Dependencies { get; }
+
+        ModuleType ModuleType { get; }
     }
 }

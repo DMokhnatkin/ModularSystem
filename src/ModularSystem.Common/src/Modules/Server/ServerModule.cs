@@ -11,6 +11,7 @@ namespace ModularSystem.Common.Modules.Server
 
         public ModuleIdentity ModuleIdentity { get; }
         public ModuleIdentity[] Dependencies { get; }
+        public ModuleType ModuleType => ModuleType.Server;
 
         public string Path { get; set; }
 

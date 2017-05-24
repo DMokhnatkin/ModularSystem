@@ -44,6 +44,7 @@
     <Compile Include="src\MetaFiles\MetaFileWrapper.cs" />
     <Compile Include="src\Modules\Server\IServerModule.cs" />
     <Compile Include="src\Modules\Server\ServerModule.cs" />
+    <Compile Include="src\ModuleType.cs" />
     <Compile Include="src\PackedModules\IPackedModule.cs" />
     <Compile Include="src\PackedModules\Zip\TestHelpers\TestHelpers.cs" />
     <Compile Include="src\PackedModules\Zip\Helpers\BatchHelper.cs" />
