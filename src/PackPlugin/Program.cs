@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using CommandLine;
 using ModularSystem.Common;
+using ModularSystem.Common.MetaFiles;
 using ModularSystem.Common.PackedModules.Zip;
 using Newtonsoft.Json.Linq;
 
@@ -35,7 +36,7 @@ namespace PackPlugin
             var packedModules =
                 conf["Modules"]
                 .Select(x => x.Value<string>())
-                .Select(x => PackHelper.PackModuleToFile(x, o.OutputDir))
+                .Select(x => PackHelper.PackModuleToFile(x, $"{MetaFileWrapper.FindInDirectory(x).Identity}.zip"))
                 .ToArray();
 
             var batchPath = Path.Combine(o.OutputDir, $"{conf["BatchName"].Value<string>()}.zip");
