@@ -39,8 +39,9 @@ namespace ModularSystem.Common.BLL
 
         public IBatchedModules ResolveClientModules(string userId, string clientType)
         {
-            var clientModules = _userModulesManager.GetClientModulesForUser(userId, clientType);
-            return BatchHelper.BatchModulesToMemory(clientModules.Select(x => x.Packed));
+            var clientModulesIds = _userModulesManager.GetClientModulesForUser(userId, clientType);
+            var modules = _clientModulesManager.GetInstalledModules(clientModulesIds);
+            return BatchHelper.BatchModulesToMemory(modules.Select(x => x.Packed));
         }
 
         public ModuleIdentity[] GetInstalledList()

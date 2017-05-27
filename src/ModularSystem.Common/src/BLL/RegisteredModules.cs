@@ -8,6 +8,7 @@ using ModularSystem.Common.Modules.Server;
 using ModularSystem.Common.PackedModules;
 using ModularSystem.Common.PackedModules.Zip;
 using ModularSystem.Common.Repositories;
+using ModularSystem.Common.Repositories.UserModules;
 
 namespace ModularSystem.Common.BLL
 {

@@ -61,8 +61,7 @@ namespace ModularSystem.Server.Controllers
         [Authorize(Policy = "ConfigModulesAllowed")]
         public IActionResult RegisterUserModules(string userId, string clientId, [FromBody]IEnumerable<string> moduleIdentities)
         {
-            var modules = _clientModulesManager.GetInstalledModules(moduleIdentities.Select(ModuleIdentity.Parse));
-            _userModulesManager.RegisterModulesForUser(userId, clientId, modules);
+            _userModulesManager.RegisterModulesForUser(userId, clientId, moduleIdentities.Select(ModuleIdentity.Parse));
             return Ok();
         }
 

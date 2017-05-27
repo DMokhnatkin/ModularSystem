@@ -70,7 +70,7 @@
     <Compile Include="src\PackedModules\Zip\Helpers\PackHelper.cs" />
     <Compile Include="src\Repositories\PackedModules\FileSystemPackedModulesRepository.cs" />
     <Compile Include="src\Repositories\FileSystemModulesRepository.cs" />
-    <Compile Include="src\Repositories\FileUserModulesRepository.cs" />
+    <Compile Include="src\Repositories\UserModules\FileUserModulesRepository.cs" />
     <Compile Include="src\Exceptions\ModuleIsRequiredException.cs" />
     <Compile Include="src\Exceptions\ModuleMissedException.cs" />
     <Compile Include="src\Modules\IPathStoredModule.cs" />
@@ -79,17 +79,15 @@
     <Compile Include="src\ModuleIdentity.cs" />
     <Compile Include="src\BLL\RegisteredModules.cs" />
     <Compile Include="src\BLL\CheckDependenciesResult.cs" />
-    <Compile Include="src\Repositories\IUserModulesRepository.cs" />
+    <Compile Include="src\Repositories\UserModules\IUserModulesRepository.cs" />
     <Compile Include="src\Repositories\IModulesRepository.cs" />
     <Compile Include="src\ModulesHelper.cs" />
     <Compile Include="src\Repositories\MemoryModulesRepository.cs" />
-    <Compile Include="src\Repositories\MemoryUserModulesRepository.cs" />
+    <Compile Include="src\Repositories\UserModules\MemoryUserModulesRepository.cs" />
     <Compile Include="src\Repositories\PackedModules\IPackedModulesRepository.cs" />
     <Compile Include="src\Repositories\PackedModules\MemoryPackedModulesRepository.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\Repositories\Modules\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

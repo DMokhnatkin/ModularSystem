@@ -5,6 +5,7 @@ using ModularSystem.Common.Exceptions;
 using ModularSystem.Common.PackedModules;
 using ModularSystem.Common.PackedModules.Zip;
 using ModularSystem.Common.Repositories;
+using ModularSystem.Common.Repositories.UserModules;
 using NUnit.Framework;
 
 namespace ModularSystem.Tests.Common.BLL

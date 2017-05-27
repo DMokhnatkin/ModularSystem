@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Repositories;
 using ModularSystem.Common.Repositories.PackedModules;
+using ModularSystem.Common.Repositories.UserModules;
 
 namespace ModularSystem.Server
 {
@@ -62,7 +63,9 @@ namespace ModularSystem.Server
                 new FileSystemPackedModulesRepository(
                     Path.Combine(AppContext.BaseDirectory, "modules/client"))));
             services.AddSingleton(x => new ServerModulesManager(Path.Combine(AppContext.BaseDirectory, "modules/server")));
-            services.AddSingleton(x => new UserModulesManager());
+            services.AddSingleton(x => new UserModulesManager(
+                new FileUserModulesRepository(
+                    Path.Combine(AppContext.BaseDirectory, "modules/userModules.json"))));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

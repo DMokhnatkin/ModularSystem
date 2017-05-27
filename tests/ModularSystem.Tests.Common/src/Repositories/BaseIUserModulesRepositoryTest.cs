@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using ModularSystem.Common;
 using ModularSystem.Common.Repositories;
+using ModularSystem.Common.Repositories.UserModules;
 using NUnit.Framework;
 
 namespace ModularSystem.Tests.Common.Repositories

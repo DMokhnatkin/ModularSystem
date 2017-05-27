@@ -1,24 +1,48 @@
 ﻿using System.Collections.Generic;
-using ModularSystem.Common.Modules.Client;
-using ModularSystem.Common.PackedModules;
+using ModularSystem.Common.Repositories.UserModules;
 
 namespace ModularSystem.Common.BLL
 {
     public class UserModulesManager
     {
-        private readonly Dictionary<(string, string), List<ServerSideClientModule>> _userModules = new Dictionary<(string, string), List<ServerSideClientModule>>();
+        // Persistent storage for required list of modules for users.
+        private readonly IUserModulesRepository _userModulesRepository;
 
-        public void RegisterModulesForUser(string userId, string clientType, IEnumerable<ServerSideClientModule> modules)
+        // Cache over repository
+        private Dictionary<(string, string), List<ModuleIdentity>> _userModules;
+
+        public UserModulesManager(IUserModulesRepository userModulesRepository)
         {
-            if (!_userModules.ContainsKey((userId, clientType)))
-                _userModules.Add((userId, clientType), new List<ServerSideClientModule>());
-            foreach (var serverSideClientModule in modules)
+            _userModulesRepository = userModulesRepository;
+
+            InitializeFromRepository();
+        }
+
+        private void InitializeFromRepository()
+        {
+            _userModules = new Dictionary<(string, string), List<ModuleIdentity>>();
+            foreach (var t in _userModulesRepository.GetAll())
             {
-                _userModules[(userId, clientType)].Add(serverSideClientModule);
+                if (!_userModules.ContainsKey((t.userId, t.clientType)))
+                    _userModules.Add((t.userId, t.clientType), new List<ModuleIdentity>());
+                _userModules[(t.userId, t.clientType)].Add(t.identity);
             }
         }
 
-        public ServerSideClientModule[] GetClientModulesForUser(string userId, string clientType)
+        public void RegisterModulesForUser(string userId, string clientType, IEnumerable<ModuleIdentity> modules)
+        {
+            if (!_userModules.ContainsKey((userId, clientType)))
+            {
+                _userModules.Add((userId, clientType), new List<ModuleIdentity>());
+            }
+            foreach (var moduleIdentity in modules)
+            {
+                _userModulesRepository.AddModule(userId, clientType, moduleIdentity);
+                _userModules[(userId, clientType)].Add(moduleIdentity);
+            }
+        }
+
+        public ModuleIdentity[] GetClientModulesForUser(string userId, string clientType)
         {
             return _userModules[(userId, clientType)].ToArray();
         }

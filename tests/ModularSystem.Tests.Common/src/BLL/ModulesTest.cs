@@ -5,6 +5,7 @@ using ModularSystem.Common.BLL;
 using ModularSystem.Common.PackedModules;
 using ModularSystem.Common.PackedModules.Zip;
 using ModularSystem.Common.Repositories;
+using ModularSystem.Common.Repositories.UserModules;
 using Moq;
 using NUnit.Framework;
 
