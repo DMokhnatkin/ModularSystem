@@ -11,14 +11,33 @@ namespace ModularSystem.Common.BLL
     {
         public string ServerModulesStorePath { get; }
 
-        // Cache over repository
+        // Cache over store
         private readonly Dictionary<ModuleIdentity, ServerModule> _serverModules = new Dictionary<ModuleIdentity, ServerModule>();
 
         public ServerModulesManager(string serverModulesStorePath)
         {
             ServerModulesStorePath = serverModulesStorePath;
 
-            FileSystemHelpers.ClearOrCreateDir(ServerModulesStorePath);
+            InitializeFromStore();
+            StartAll();
+        }
+
+        private void InitializeFromStore()
+        {
+            foreach (var directory in Directory.GetDirectories(ServerModulesStorePath))
+            {
+                var meta = MetaFileWrapper.FindInDirectory(directory);
+                var newModule = CreateFromMeta(meta, directory);
+                _serverModules.Add(newModule.ModuleIdentity, newModule);
+            }
+        }
+
+        private void StartAll()
+        {
+            foreach (var serverModule in _serverModules.Values)
+            {
+                serverModule.Start();
+            }
         }
 
         private ServerModule CreateFromMeta(MetaFileWrapper meta, string path)
