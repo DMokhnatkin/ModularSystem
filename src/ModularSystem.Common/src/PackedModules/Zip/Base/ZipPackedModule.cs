@@ -19,12 +19,15 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <inheritdoc />
         public abstract Stream OpenEditStream();
 
+        // ToRemove
         /// <inheritdoc />
         public abstract ModuleIdentity ModuleIdentity { get; }
 
+        // ToRemove
         /// <inheritdoc />
         public abstract ModuleIdentity[] Dependencies { get; }
 
+        // ToRemove
         /// <inheritdoc />
         public abstract ModuleType ModuleType { get; }
 

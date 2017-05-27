@@ -33,8 +33,9 @@ namespace ModularSystem.Common.Modules.Server
         public void Start()
         {
             ProcessStartInfo info = new ProcessStartInfo();
+            info.WorkingDirectory = Path;
             info.FileName = Configuration["Deploy:PythonPath"];
-            info.Arguments = string.Format($"{_metaFile.StartScript}");
+            info.Arguments = $"{_metaFile.StartScript}";
             //info.UseShellExecute = false;
             using (Process process = Process.Start(info))
             { }

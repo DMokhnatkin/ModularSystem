@@ -17,11 +17,11 @@ namespace ModularSystem.Server.Controllers
     //[Authorize]
     public class ModulesController : Controller
     {
-        private readonly RegisteredModules _registeredModules;
+        private readonly ModulesManager _modulesManager;
 
-        public ModulesController(RegisteredModules registeredModules)
+        public ModulesController(ModulesManager modulesManager)
         {
-            _registeredModules = registeredModules;
+            _modulesManager = modulesManager;
         }
 
         [HttpGet("download")]
@@ -29,6 +29,7 @@ namespace ModularSystem.Server.Controllers
         [MappedExceptionFilter(typeof(ModuleMissedException), HttpStatusCode.Conflict)]
         public async Task<IActionResult> DownloadModulesAsync()
         {
+            /*
             var userId = User.FindFirst("sub");
             if (userId == null)
                 return Forbid();
@@ -39,7 +40,8 @@ namespace ModularSystem.Server.Controllers
 
             MemoryBatchedModules batch;
             BatchHelper.BatchModules(_registeredModules.GetModules(userId.Value, clientId.Value), out batch);
-            return File(batch.ExtractData(), "application/zip");
+            return File(batch.ExtractData(), "application/zip");*/
+            throw new NotImplementedException();
         }
     }
 }

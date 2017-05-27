@@ -50,7 +50,8 @@ namespace ModularSystem.Common.MetaFiles
         public const string IdentityKey = "identity";
         public const string DependenciesKey = "dependencies";
         public const string TypeKey = "type";
-        public const string StartScriptKey = "start_script";
+        public const string StartScriptKey = "start";
+        public const string ClientTypesKey = "client_types";
 
         public string Identity
         {
@@ -74,6 +75,13 @@ namespace ModularSystem.Common.MetaFiles
         {
             get => GetValue<string>(StartScriptKey, null);
             set => SetValue(StartScriptKey, value);
+        }
+
+        /// <see cref="ModularSystem.Common.Modules.Client.IClientModule.ClientTypes"/>
+        public string[] ClientTypes
+        {
+            get => GetValues<string>(ClientTypesKey);
+            set => SetValues(ClientTypesKey, value);
         }
         #endregion
     }

@@ -6,7 +6,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ModularSystem.Common;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Exceptions;
 using ModularSystem.Common.PackedModules.Zip;
@@ -18,27 +17,25 @@ namespace ModularSystem.Server.Controllers
     [Authorize(Policy = "ConfigModulesAllowed")]
     public class ModulesConfigController : Controller
     {
-        private readonly RegisteredModules _registeredModules;
+        private readonly ModulesManager _modulesManager;
 
-        public ModulesConfigController(RegisteredModules registeredModules)
+        public ModulesConfigController(ModulesManager modulesManager)
         {
-            _registeredModules = registeredModules;
+            _modulesManager = modulesManager;
         }
 
         [HttpPost("install")]
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleMissedException), HttpStatusCode.BadRequest)]
         [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
-        public async Task InstallModulePackageAsync()
+        public void InstallModulesBatchAsync()
         {
             using (var t = Request.Body)
             using (var ms = new MemoryStream())
             {
                 t.CopyTo(ms);
                 var batchedModules = new MemoryBatchedModules(ms.ToArray());
-                MemoryPackedModule[] innerModules;
-                batchedModules.UnbatchModules(out innerModules);
-                _registeredModules.RegisterModules(innerModules);
+                _modulesManager.InstallBatch(batchedModules);
             }
         }
 
@@ -48,16 +45,14 @@ namespace ModularSystem.Server.Controllers
         [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
         public async Task RemoveModuleAsync([FromBody]string module)
         {
-            await Task.Factory.StartNew(() => _registeredModules.UnregisterModule(ModuleIdentity.Parse(module)));
+            throw new NotImplementedException();
         }
 
         [HttpGet]
         [Authorize(Policy = "ConfigModulesAllowed")]
-        public async Task<string[]> GetModulesListAsync()
+        public string[] GetModulesListAsync()
         {
-            var modules = await Task.Factory.StartNew(() => _registeredModules.GetRegisteredModules());
-            var dtos = modules.Select(x => x.ModuleIdentity.ToString()).ToArray();
-            return dtos;
+            return _modulesManager.GetInstalledModules().Select(x => x.ToString()).ToArray();
         }
 
         [HttpPost("user/{userId}/{clientId}")]
@@ -65,8 +60,7 @@ namespace ModularSystem.Server.Controllers
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
         public IActionResult AddUserModules(string userId, string clientId, [FromBody]IEnumerable<string> moduleIdentities)
         {
-            _registeredModules.AddModules(userId, clientId, moduleIdentities.Select(ModuleIdentity.Parse));
-            return Ok();
+            throw new NotImplementedException();
         }
 
         [HttpDelete("user/{userId}/{clientId}")]
@@ -74,8 +68,7 @@ namespace ModularSystem.Server.Controllers
         [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
         public IActionResult RemoveUserModules(string userId, string clientId, IEnumerable<string> moduleIdentities)
         {
-            _registeredModules.RemoveModules(userId, clientId, moduleIdentities.Select(ModuleIdentity.Parse));
-            return Ok();
+            throw new NotImplementedException();
         }
 
         [HttpGet("user/{userId}")]
@@ -83,10 +76,7 @@ namespace ModularSystem.Server.Controllers
         [Authorize(Policy = "ConfigModulesAllowed")]
         public IEnumerable<string> GetUserModules(string userId)
         {
-            var r = _registeredModules.GetModuleIdentities(userId, "wpfclient");
-            if (r == null)
-                return new string[0];
-            return _registeredModules.GetModuleIdentities(userId, "wpfclient").Select(x => x.ToString());
+            throw new NotImplementedException();
         }
     }
 }
