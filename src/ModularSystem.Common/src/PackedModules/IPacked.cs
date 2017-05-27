@@ -9,5 +9,9 @@ namespace ModularSystem.Common.PackedModules
         Stream OpenReadStream();
 
         Stream OpenEditStream();
+
+        byte[] ExtractBytes();
+
+        void CopyTo(Stream stream);
     }
 }

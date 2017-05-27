@@ -5,6 +5,7 @@ using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Repositories
 {
+    // ToRemove
     public class MemoryModulesRepository<T> : IModulesRepository<T> where T : IModule
     {
         private Dictionary<ModuleIdentity, T> _modules = new Dictionary<ModuleIdentity, T>();

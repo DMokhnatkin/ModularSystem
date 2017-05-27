@@ -19,6 +19,24 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <inheritdoc />
         public abstract Stream OpenEditStream();
 
+        /// <inheritdoc />
+        public void CopyTo(Stream stream)
+        {
+            using (var s = OpenReadStream())
+            {
+                s.CopyTo(stream);
+            }
+        }
+
+        /// <inheritdoc />
+        public byte[] ExtractBytes()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                CopyTo(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
         #endregion
 
         #region IZipPacked inherited

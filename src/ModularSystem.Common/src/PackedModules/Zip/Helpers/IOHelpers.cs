@@ -4,7 +4,7 @@
     {
         public static string GenerateFileName(this ZipPackedModule module)
         {
-            var meta =PackHelper.ExtractMetaFile(module);
+            var meta = module.ExtractMetaFile();
             return $"{meta.Identity}.zip";
         }
     }

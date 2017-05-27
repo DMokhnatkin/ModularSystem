@@ -54,7 +54,7 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
             FilePackedModule m2;
             PackHelper.PackModule(TestModule1Path, "test", out m2);
 
-            var r2 = PackHelper.ExtractMetaFile(m2);
+            var r2 = m2.ExtractMetaFile();
             Assert.AreEqual(r2.Identity, "module1-1.3.0");
             Assert.AreEqual(r2.Type, "wpfclient");
             Assert.IsTrue(r2.Dependencies.SequenceEqual(new[] { "test.client.wpf-1.1", "test2.server-1.5", "test4.client.wpf-1.7" }));
@@ -74,8 +74,8 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
             MemoryPackedModule m;
             PackHelper.PackModule(TestModule1Path, out m);
 
-            PackHelper.UpdateMetaFile(m, newMetaFile);
-            var r = PackHelper.ExtractMetaFile(m);
+            m.UpdateMetaFile(newMetaFile);
+            var r = m.ExtractMetaFile();
             Assert.AreEqual(r.Identity, newMetaFile.Identity);
             Assert.AreEqual(r.Type, newMetaFile.Type);
             Assert.IsTrue(r.Dependencies.SequenceEqual(newMetaFile.Dependencies));
@@ -85,8 +85,8 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
             FilePackedModule m2;
             PackHelper.PackModule(TestModule1Path, "test", out m2);
 
-            PackHelper.UpdateMetaFile(m2, newMetaFile);
-            var r2 = PackHelper.ExtractMetaFile(m2);
+            m2.UpdateMetaFile(newMetaFile);
+            var r2 = m2.ExtractMetaFile();
             Assert.AreEqual(r2.Identity, newMetaFile.Identity);
             Assert.AreEqual(r2.Type, newMetaFile.Type);
             Assert.IsTrue(r2.Dependencies.SequenceEqual(newMetaFile.Dependencies));

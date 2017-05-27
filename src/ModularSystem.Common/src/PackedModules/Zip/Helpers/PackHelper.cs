@@ -109,33 +109,6 @@ namespace ModularSystem.Common.PackedModules.Zip
             }
         }
         #endregion
-
-        #region MetaFiles
-
-        /// <summary>
-        /// Open meta files from packed module. This is valid only for zip packed modules.
-        /// </summary>
-        public static MetaFileWrapper ExtractMetaFile(this ZipPackedModule module)
-        {
-            using (var z = module.OpenReadZipArchive())
-            using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
-            {
-                return new MetaFileWrapper(metaFileStream);
-            }
-        }
-
-        /// <summary>
-        /// Update meta file in packed module. This is valid only for zip packed modules.
-        /// </summary>
-        public static void UpdateMetaFile(this ZipPackedModule module, MetaFileWrapper metaFile)
-        {
-            using (var z = module.OpenEditZipArchive())
-            using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
-            {
-                metaFile.Write(metaFileStream);
-            }
-        }
-        #endregion
     }
 }
 

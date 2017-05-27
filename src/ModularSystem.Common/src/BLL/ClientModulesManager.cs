@@ -1,50 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using ModularSystem.Common.MetaFiles;
 using ModularSystem.Common.Modules.Client;
+using ModularSystem.Common.PackedModules;
 using ModularSystem.Common.PackedModules.Zip;
+using ModularSystem.Common.Repositories.PackedModules;
 
 namespace ModularSystem.Common.BLL
 {
     public class ClientModulesManager
     {
-        public string ClientModulesStorePath { get; }
+        // Persistent storage for packed client modules.
+        private readonly IPackedModulesRepository _modulesRepository;
 
-        private readonly Dictionary<ModuleIdentity, ServerSideClientModule> _clientModules = new Dictionary<ModuleIdentity, ServerSideClientModule>();
+        // Cache over repository.
+        private Dictionary<ModuleIdentity, ServerSideClientModule> _modules;
 
-        public ClientModulesManager(string clientModulesStorePath)
+        public ClientModulesManager(IPackedModulesRepository modulesRepository)
         {
-            ClientModulesStorePath = clientModulesStorePath;
+            _modulesRepository = modulesRepository;
+            InitializeFromRepository();
+        }
 
-            FileSystemHelpers.ClearOrCreateDir(ClientModulesStorePath);
+        /// <summary>
+        /// Load cache (_modules) from repository
+        /// </summary>
+        private void InitializeFromRepository()
+        {
+            _modules = new Dictionary<ModuleIdentity, ServerSideClientModule>();
+            foreach (var moduleIdentity in _modulesRepository.GetIdentities())
+            {
+                var packedModule = _modulesRepository.GetModule(moduleIdentity);
+                var meta = packedModule.ExtractMetaFile();
+                var newModule = CreateFromMeta(meta, packedModule);
+                _modules.Add(newModule.ModuleIdentity, newModule);
+            }
+        }
+
+        private ServerSideClientModule CreateFromMeta(MetaFileWrapper meta, IPackedModule packed)
+        {
+            return new ServerSideClientModule(
+                ModuleIdentity.Parse(meta.Identity),
+                meta.Dependencies.Select(ModuleIdentity.Parse).ToArray(),
+                meta.ClientTypes,
+                packed);
         }
 
         public ServerSideClientModule InstallModule(ZipPackedModule module)
         {
             var moduleMeta = module.ExtractMetaFile();
 
-            // Copy packed data
-            var modulePath = Path.Combine(ClientModulesStorePath, $"{moduleMeta.Identity}.zip");
-            using (var moduleStream = module.OpenReadStream())
-            using (var writeStream = File.Create(modulePath))
-            {
-                moduleStream.CopyTo(writeStream);
-            }
+            var newPackedModule = _modulesRepository.AddModule(ModuleIdentity.Parse(moduleMeta.Identity), module);
             // Parse module info
-            var packed = new FilePackedModule(modulePath);
-            var newModule = new ServerSideClientModule(
-                ModuleIdentity.Parse(moduleMeta.Identity),
-                moduleMeta.Dependencies.Select(ModuleIdentity.Parse).ToArray(),
-                moduleMeta.ClientTypes,
-                packed);
-            _clientModules.Add(newModule.ModuleIdentity, newModule);
+            var newModule = CreateFromMeta(moduleMeta, newPackedModule);
+            _modules[ModuleIdentity.Parse(moduleMeta.Identity)] = newModule;
             return newModule;
         }
 
         public ModuleIdentity[] GetListOfInstalledModules()
         {
-            return _clientModules.Values.Select(x => x.ModuleIdentity).ToArray();
+            return _modules.Keys.ToArray();
         }
 
         public ServerSideClientModule[] GetInstalledModules(IEnumerable<ModuleIdentity> moduleIdentities)
@@ -52,9 +68,10 @@ namespace ModularSystem.Common.BLL
             var res = new List<ServerSideClientModule>();
             foreach (var moduleIdentity in moduleIdentities)
             {
-                if (!_clientModules.ContainsKey(moduleIdentity))
+                var module = _modules[moduleIdentity];
+                if (module == null)
                     throw new ArgumentException($"Client module {moduleIdentity} wasn't installed");
-                res.Add(_clientModules[moduleIdentity]);
+                res.Add(module);
             }
             return res.ToArray();
         }

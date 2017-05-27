@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.IO.Compression;
+using ModularSystem.Common.MetaFiles;
 
 namespace ModularSystem.Common.PackedModules.Zip
 {
@@ -19,6 +20,25 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <inheritdoc />
         public abstract Stream OpenEditStream();
 
+        /// <inheritdoc />
+        public void CopyTo(Stream stream)
+        {
+            using (var s = OpenReadStream())
+            {
+                s.CopyTo(stream);
+            }
+        }
+
+        /// <inheritdoc />
+        public byte[] ExtractBytes()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                CopyTo(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
+
         // ToRemove
         /// <inheritdoc />
         public abstract ModuleIdentity ModuleIdentity { get; }
@@ -30,6 +50,26 @@ namespace ModularSystem.Common.PackedModules.Zip
         // ToRemove
         /// <inheritdoc />
         public abstract ModuleType ModuleType { get; }
+
+        /// <inheritdoc />
+        public MetaFileWrapper ExtractMetaFile()
+        {
+            using (var z = OpenReadZipArchive())
+            using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
+            {
+                return new MetaFileWrapper(metaFileStream);
+            }
+        }
+
+        /// <inheritdoc />
+        public void UpdateMetaFile(MetaFileWrapper metaFile)
+        {
+            using (var z = OpenEditZipArchive())
+            using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
+            {
+                metaFile.Write(metaFileStream);
+            }
+        }
 
         #endregion IPackedModule inherited
 

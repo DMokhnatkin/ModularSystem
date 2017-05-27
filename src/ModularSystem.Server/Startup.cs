@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Repositories;
+using ModularSystem.Common.Repositories.PackedModules;
 
 namespace ModularSystem.Server
 {
@@ -56,8 +57,10 @@ namespace ModularSystem.Server
                 .AddOperationalStore(builder =>
                     builder.UseSqlServer(connectionString, options =>
                         options.MigrationsAssembly(migrationsAssembly)));*/
-
-            services.AddSingleton(x => new ClientModulesManager(Path.Combine(AppContext.BaseDirectory, "modules/client")));
+            
+            services.AddSingleton(x => new ClientModulesManager(
+                new FileSystemPackedModulesRepository(
+                    Path.Combine(AppContext.BaseDirectory, "modules/client"))));
             services.AddSingleton(x => new ServerModulesManager(Path.Combine(AppContext.BaseDirectory, "modules/server")));
             services.AddSingleton(x => new UserModulesManager());
         }
