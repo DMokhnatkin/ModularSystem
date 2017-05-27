@@ -19,16 +19,16 @@ namespace ModularSystem.Common.Wpf.Modules
                 Directory.Delete(BasePath, true);
         }
 
-        private MemoryModulesRepository<WpfClientInstalledStoredModule> _repository = new MemoryModulesRepository<WpfClientInstalledStoredModule>();
+        private MemoryModulesRepository<WpfClientInstalledStoredModuleInfo> _repository = new MemoryModulesRepository<WpfClientInstalledStoredModuleInfo>();
 
-        public void InstallZipPackagedModule(ZipPackedModule module)
+        public void InstallZipPackagedModule(ZipPackedModuleInfo moduleInfo)
         {
-            var moduleDir = Path.Combine(BasePath, module.ModuleIdentity.ToString());
+            var moduleDir = Path.Combine(BasePath, moduleInfo.ModuleIdentity.ToString());
             if (Directory.Exists(moduleDir))
                 Directory.Delete(moduleDir, true);
             Directory.CreateDirectory(moduleDir);
 
-            module.UnpackToDirectory(moduleDir);
+            moduleInfo.UnpackToDirectory(moduleDir);
 
             // TODO: do smth with dependncy assemblies
             var workingDir = Path.Combine(AppContext.BaseDirectory, "working");
@@ -46,7 +46,7 @@ namespace ModularSystem.Common.Wpf.Modules
                 SearchOption.AllDirectories))
                 File.Copy(newPath, newPath.Replace(moduleDir, workingDir), true);
 
-            var m = new WpfClientInstalledStoredModule();
+            var m = new WpfClientInstalledStoredModuleInfo();
             m.InitializeFromPath(moduleDir);
             _repository.AddModule(m);
         }
@@ -54,7 +54,7 @@ namespace ModularSystem.Common.Wpf.Modules
         public void StartModules()
         {
             var modules = _repository.ToList();
-            foreach (var orderModule in ModulesHelper.OrderModules(modules).OfType<WpfClientInstalledStoredModule>())
+            foreach (var orderModule in ModulesHelper.OrderModules(modules).OfType<WpfClientInstalledStoredModuleInfo>())
             {
                 orderModule.Start();
             }

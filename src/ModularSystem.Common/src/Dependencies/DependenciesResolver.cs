@@ -8,11 +8,11 @@ namespace ModularSystem.Common.Dependencies
 {
     public class DependenciesResolver
     {
-        private readonly IModulesRepository<ClientModuleBase> _clientModules;
-        private readonly IModulesRepository<ServerModuleBase> _serverModules;
+        private readonly IModulesRepository<ClientModuleInfoBase> _clientModules;
+        private readonly IModulesRepository<ServerModuleInfoBase> _serverModules;
         private readonly IUserModulesRepository _userModules;
 
-        public DependenciesResolver(IModulesRepository<ClientModuleBase> clientModules, IModulesRepository<ServerModuleBase> serverModules, IUserModulesRepository userModules)
+        public DependenciesResolver(IModulesRepository<ClientModuleInfoBase> clientModules, IModulesRepository<ServerModuleInfoBase> serverModules, IUserModulesRepository userModules)
         {
             _clientModules = clientModules;
             _serverModules = serverModules;
@@ -24,7 +24,7 @@ namespace ModularSystem.Common.Dependencies
         /// <summary>
         /// Check if there is no already installed module with same identity.
         /// </summary>
-        private ICheckResult CheckDuplicates(IEnumerable<IModule> modules)
+        private ICheckResult CheckDuplicates(IEnumerable<IModuleInfo> modules)
         {
             foreach (var module in modules)
             {
@@ -46,16 +46,16 @@ namespace ModularSystem.Common.Dependencies
         /// <summary>
         /// Check if all server module dependecies are in repositories (server).
         /// </summary>
-        /// <param name="module">For this module check will be done</param>
+        /// <param name="moduleInfo">For this module check will be done</param>
         /// <param name="modulesGroup">Modules can be installed in groups, in this case missed module can be later in group (will be installed, but later) </param>
-        private ICheckResult CheckDependeciesInRep(ServerModuleBase module, IModulesGroup modulesGroup = null)
+        private ICheckResult CheckDependeciesInRep(ServerModuleInfoBase moduleInfo, IModulesGroup modulesGroup = null)
         {
-            foreach (var moduleServerDependency in module.ServerDependencies)
+            foreach (var moduleServerDependency in moduleInfo.ServerDependencies)
             {
                 if (!_serverModules.ContainsModule(moduleServerDependency) && 
                     modulesGroup != null && 
                     !modulesGroup.ContainsServerModule(moduleServerDependency))
-                    return new MissedModuleError(module, moduleServerDependency, ModuleType.Server);
+                    return new MissedModuleError(moduleInfo, moduleServerDependency, ModuleType.Server);
             }
             return new SuccessResult();
         }
@@ -63,23 +63,23 @@ namespace ModularSystem.Common.Dependencies
         /// <summary>
         /// Check if all client module dependecies are in repositories (server and client).
         /// </summary>
-        /// <param name="module">For this module check will be done</param>
+        /// <param name="moduleInfoBase">For this module check will be done</param>
         /// <param name="modulesGroup">Modules can be installed in groups, in this case missed module can be later in group (will be installed, but later) </param>
-        private ICheckResult CheckDependeciesInRep(ClientModuleBase module, IModulesGroup modulesGroup = null)
+        private ICheckResult CheckDependeciesInRep(ClientModuleInfoBase moduleInfoBase, IModulesGroup modulesGroup = null)
         {
-            foreach (var moduleServerDependency in module.ServerDependencies)
+            foreach (var moduleServerDependency in moduleInfoBase.ServerDependencies)
             {
                 if (!_serverModules.ContainsModule(moduleServerDependency) &&
                     modulesGroup != null &&
                     modulesGroup.ContainsServerModule(moduleServerDependency))
-                    return new MissedModuleError(module, moduleServerDependency, ModuleType.Server);
+                    return new MissedModuleError(moduleInfoBase, moduleServerDependency, ModuleType.Server);
             }
-            foreach (var moduleClientDependency in module.ClientDependencies)
+            foreach (var moduleClientDependency in moduleInfoBase.ClientDependencies)
             {
                 if (!_clientModules.ContainsModule(moduleClientDependency) &&
                     modulesGroup != null &&
                     modulesGroup.ContainsClientModule(moduleClientDependency))
-                    return new MissedModuleError(module, moduleClientDependency, ModuleType.Server);
+                    return new MissedModuleError(moduleInfoBase, moduleClientDependency, ModuleType.Server);
             }
             return new SuccessResult();
         }
@@ -87,13 +87,13 @@ namespace ModularSystem.Common.Dependencies
         /// <summary>
         /// Check if client module can be resolved using specifed client modules scope (specifed userId and clientId)
         /// </summary>
-        private ICheckResult CheckClientModulesScope(ClientModuleBase module, string userId, string clientId)
+        private ICheckResult CheckClientModulesScope(ClientModuleInfoBase moduleInfoBase, string userId, string clientId)
         {
-            foreach (var moduleClientDependency in module.ClientDependencies)
+            foreach (var moduleClientDependency in moduleInfoBase.ClientDependencies)
             {
                 if (!_userModules.Contains(userId, clientId, moduleClientDependency))
                 {
-                    return new MissedInClientScopeError(module, moduleClientDependency, userId, clientId);
+                    return new MissedInClientScopeError(moduleInfoBase, moduleClientDependency, userId, clientId);
                 }
             }
             return new SuccessResult();

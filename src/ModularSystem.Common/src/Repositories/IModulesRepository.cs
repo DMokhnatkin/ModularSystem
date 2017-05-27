@@ -3,7 +3,7 @@ using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Repositories
 {
-    public interface IModulesRepository<T> : IEnumerable<T> where T : IModule
+    public interface IModulesRepository<T> : IEnumerable<T> where T : IModuleInfo
     {
         void AddModule(T module);
         void RemoveModule(ModuleIdentity moduleIdentity);

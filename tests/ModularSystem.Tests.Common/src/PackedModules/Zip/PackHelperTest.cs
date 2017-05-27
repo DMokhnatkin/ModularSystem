@@ -18,7 +18,7 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
         [Test]
         public void PackModuleToMemoryTest()
         {
-            MemoryPackedModule m;
+            MemoryPackedModuleInfo m;
             PackHelper.PackModule(TestModule1Path, out m);
             // Test if module packed succes (i don't know how)
 
@@ -29,7 +29,7 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
         public void PackModuleToFileTest()
         {
             TestingIOHelpers.DeleteFiles("test");
-            FilePackedModule m;
+            FilePackedModuleInfo m;
             PackHelper.PackModule(TestModule1Path, "test", out m);
             // Test if module packed succes (i don't know how)
 
@@ -41,7 +41,7 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
         public void ExtractMetaFileTest()
         {
             // MemoryPackedModule
-            MemoryPackedModule m;
+            MemoryPackedModuleInfo m;
             PackHelper.PackModule(TestModule1Path, out m);
 
             var r = m.ExtractMetaFile();
@@ -52,7 +52,7 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
 
             // FilePackedModule
             TestingIOHelpers.DeleteFiles("test");
-            FilePackedModule m2;
+            FilePackedModuleInfo m2;
             PackHelper.PackModule(TestModule1Path, "test", out m2);
 
             var r2 = PackHelper.ExtractMetaFile(m2);
@@ -73,7 +73,7 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
             };
 
             // MemoryPackedModule
-            MemoryPackedModule m;
+            MemoryPackedModuleInfo m;
             PackHelper.PackModule(TestModule1Path, out m);
 
             PackHelper.UpdateMetaFile(m, newMetaFile);
@@ -84,7 +84,7 @@ namespace ModularSystem.Tests.Common.PackedModules.Zip
 
             // FilePackedModule
             TestingIOHelpers.DeleteFiles("test");
-            FilePackedModule m2;
+            FilePackedModuleInfo m2;
             PackHelper.PackModule(TestModule1Path, "test", out m2);
 
             PackHelper.UpdateMetaFile(m2, newMetaFile);

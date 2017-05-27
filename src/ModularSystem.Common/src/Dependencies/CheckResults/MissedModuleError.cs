@@ -7,14 +7,14 @@ namespace ModularSystem.Common.Dependencies
     /// </summary>
     public class MissedModuleError : ICheckResult
     {
-        public MissedModuleError(IModule sourceModule, ModuleIdentity requiredModule, ModuleType requiredModuleType)
+        public MissedModuleError(IModuleInfo sourceModuleInfo, ModuleIdentity requiredModule, ModuleType requiredModuleType)
         {
-            SourceModule = sourceModule;
+            SourceModuleInfo = sourceModuleInfo;
             RequiredModule = requiredModule;
             RequiredModuleType = requiredModuleType;
         }
 
-        public IModule SourceModule { get; }
+        public IModuleInfo SourceModuleInfo { get; }
 
         public ModuleIdentity RequiredModule { get; }
 
@@ -26,7 +26,7 @@ namespace ModularSystem.Common.Dependencies
         /// <inheritdoc />
         public virtual string GetMessage()
         {
-            return $"Module {RequiredModule} was required by {SourceModule.ModuleIdentity} on {RequiredModuleType} side but was missed";
+            return $"Module {RequiredModule} was required by {SourceModuleInfo.ModuleIdentity} on {RequiredModuleType} side but was missed";
         }
     }
 }

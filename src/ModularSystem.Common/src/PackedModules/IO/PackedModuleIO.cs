@@ -5,24 +5,24 @@ namespace ModularSystem.Common.PackedModules.IO
 {
     public static class PackedModuleIO
     {
-        public static FilePackedModule WriteToFile(this IPacked module, string filePath)
+        public static FilePackedModuleInfo WriteToFile(this IPacked module, string filePath)
         {
             using (var moduleStream = module.OpenReadStream())
             using (var fileStream = File.OpenWrite(filePath))
             {
                 moduleStream.CopyTo(fileStream);
             }
-            return new FilePackedModule(filePath);
+            return new FilePackedModuleInfo(filePath);
         }
 
-        public static void ReadFromFile(string filePath, out MemoryPackedModule module)
+        public static void ReadFromFile(string filePath, out MemoryPackedModuleInfo moduleInfo)
         {
-            module = new MemoryPackedModule(File.ReadAllBytes(filePath));
+            moduleInfo = new MemoryPackedModuleInfo(File.ReadAllBytes(filePath));
         }
 
-        public static void ReadFromFile(string filePath, out FilePackedModule module)
+        public static void ReadFromFile(string filePath, out FilePackedModuleInfo moduleInfo)
         {
-            module = new FilePackedModule(filePath);
+            moduleInfo = new FilePackedModuleInfo(filePath);
         }
     }
 }

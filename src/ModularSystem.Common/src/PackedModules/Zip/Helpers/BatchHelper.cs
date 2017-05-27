@@ -10,7 +10,7 @@ namespace ModularSystem.Common.PackedModules.Zip
     {
         #region Batch
         // Get list of modules and batch them in one zip archive, then return byte array of this archive.
-        private static byte[] BatchModulesToByteArray(IEnumerable<IPackedModule> packedModules)
+        private static byte[] BatchModulesToByteArray(IEnumerable<IPackedModuleInfo> packedModules)
         {
             using (var fs = new MemoryStream())
             using (var zip = new ZipArchive(fs, ZipArchiveMode.Create))
@@ -34,16 +34,16 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <param name="destPath">Path of destination zip archive</param>
         /// <param name="packedModules">List of modules to pack</param>
         /// <param name="batch">Result</param>
-        public static void BatchModules(IEnumerable<IPackedModule> packedModules, string destPath, out FileBatchedModules batch)
+        public static void BatchModules(IEnumerable<IPackedModuleInfo> packedModules, string destPath, out FileBatchedModules batch)
         {
             File.WriteAllBytes(destPath, BatchModulesToByteArray(packedModules));
             batch = new FileBatchedModules(destPath);
         }
 
         /// <summary>
-        /// Alias <see cref="BatchModules(IEnumerable{IPackedModule}, string, out FileBatchedModules)"/>
+        /// Alias <see cref="BatchModules(IEnumerable{IPackedModuleInfo}, string, out FileBatchedModules)"/>
         /// </summary>
-        public static FileBatchedModules BatchModulesToFile(IEnumerable<IPackedModule> packedModules, string destPath)
+        public static FileBatchedModules BatchModulesToFile(IEnumerable<IPackedModuleInfo> packedModules, string destPath)
         {
             FileBatchedModules res;
             BatchModules(packedModules, destPath, out res);
@@ -55,15 +55,15 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// </summary>
         /// <param name="packedModules">List of modules to pack</param>
         /// <param name="batch">Result</param>
-        public static void BatchModules(IEnumerable<IPackedModule> packedModules, out MemoryBatchedModules batch)
+        public static void BatchModules(IEnumerable<IPackedModuleInfo> packedModules, out MemoryBatchedModules batch)
         {
             batch = new MemoryBatchedModules(BatchModulesToByteArray(packedModules));
         }
 
         /// <summary>
-        /// Alias <see cref="BatchModules(IEnumerable{IPackedModule}, out MemoryBatchedModules)"/>
+        /// Alias <see cref="BatchModules(IEnumerable{IPackedModuleInfo}, out MemoryBatchedModules)"/>
         /// </summary>
-        public static MemoryBatchedModules BatchModulesToMemory(IEnumerable<IPackedModule> packedModules)
+        public static MemoryBatchedModules BatchModulesToMemory(IEnumerable<IPackedModuleInfo> packedModules)
         {
             MemoryBatchedModules res;
             BatchModules(packedModules, out res);
@@ -107,10 +107,10 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// Unpack (unbatch) collection of module to memory.
         /// Inner modules will not be unpacked.
         /// </summary>
-        public static void UnbatchModules(this ZipBatchedModules batch, out MemoryPackedModule[] result)
+        public static void UnbatchModules(this ZipBatchedModules batch, out MemoryPackedModuleInfo[] result)
         {
             result = UnbatchModulesToByteArray(batch)
-                .Select(x => new MemoryPackedModule(x))
+                .Select(x => new MemoryPackedModuleInfo(x))
                 .ToArray();
         }
 

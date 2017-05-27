@@ -1,14 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.PackedModules.Zip
 {
-    public class MemoryPackedModule : ZipPackedModule
+    public class MemoryPackedModuleInfo : ZipPackedModuleInfo
     {
         private readonly byte[] _data;
 
-        public MemoryPackedModule(byte[] data)
+        public MemoryPackedModuleInfo(byte[] data)
         {
             _data = data;
         }

@@ -7,22 +7,22 @@ namespace ModularSystem.Common.Dependencies
     /// </summary>
     public class ModuleDuplicatedError : ICheckResult
     {
-        public ModuleDuplicatedError(IModule sourceModule)
+        public ModuleDuplicatedError(IModuleInfo sourceModuleInfo)
         {
-            SourceModule = sourceModule;
+            SourceModuleInfo = sourceModuleInfo;
         }
 
         /// <summary>
         /// For this module check was done.
         /// </summary>
-        public IModule SourceModule { get; }
+        public IModuleInfo SourceModuleInfo { get; }
 
         /// <inheritdoc />
         public bool IsSuccess => false;
 
         public string GetMessage()
         {
-            return $"Module {SourceModule} is already in repository";
+            return $"Module {SourceModuleInfo} is already in repository";
         }
     }
 }

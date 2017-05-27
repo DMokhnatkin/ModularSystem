@@ -11,32 +11,32 @@ namespace ModularSystem.Common.BLL
 {
     public class RegisteredModules
     {
-        private readonly IModulesRepository<IPackedModule> _clientModulesRepository;
+        private readonly IModulesRepository<IPackedModuleInfo> _clientModulesRepository;
 
         private readonly IUserModulesRepository _userModulesRepository;
 
-        public RegisteredModules(IModulesRepository<IPackedModule> clientModulesRepository, IUserModulesRepository userModulesRepository)
+        public RegisteredModules(IModulesRepository<IPackedModuleInfo> clientModulesRepository, IUserModulesRepository userModulesRepository)
         {
             _clientModulesRepository = clientModulesRepository;
             _userModulesRepository = userModulesRepository;
         }
 
         #region Modules
-        public virtual void RegisterModule(IPackedModule packedModule)
+        public virtual void RegisterModule(IPackedModuleInfo packedModuleInfo)
         {
-            var t = CheckDependencies(packedModule);
+            var t = CheckDependencies(packedModuleInfo);
             if (!t.IsCheckSuccess)
                 throw t.ToOneException();
-            _clientModulesRepository.AddModule(packedModule);
+            _clientModulesRepository.AddModule(packedModuleInfo);
         }
 
         /// <summary>
         /// Register list of modules.
         /// This method will try to register modules in right order.
         /// </summary>
-        public virtual void RegisterModules(IEnumerable<IPackedModule> modules)
+        public virtual void RegisterModules(IEnumerable<IPackedModuleInfo> modules)
         {
-            var enumerable = modules as FilePackedModule[] ?? modules.ToArray();
+            var enumerable = modules as FilePackedModuleInfo[] ?? modules.ToArray();
             var identityToModule = enumerable.ToDictionary(x => x.ModuleIdentity, x => x); // Just for get IModule by ModuleIdentity
             var orderedModules = ModulesHelper.OrderModules(enumerable);
             foreach (var m in orderedModules)
@@ -72,7 +72,7 @@ namespace ModularSystem.Common.BLL
         /// <summary>
         /// Returns module by it's identity
         /// </summary>
-        public virtual IPackedModule GetModule(ModuleIdentity moduleIdentity)
+        public virtual IPackedModuleInfo GetModule(ModuleIdentity moduleIdentity)
         {
             return _clientModulesRepository.GetModule(moduleIdentity);
         }
@@ -81,7 +81,7 @@ namespace ModularSystem.Common.BLL
         /// Get all registered modules
         /// </summary>
         /// <returns></returns>
-        public virtual IEnumerable<IPackedModule> GetRegisteredModules()
+        public virtual IEnumerable<IPackedModuleInfo> GetRegisteredModules()
         {
             return _clientModulesRepository;
         }
@@ -89,16 +89,16 @@ namespace ModularSystem.Common.BLL
         /// <summary>
         /// Check if module can be registered. (check all module dependencies)
         /// </summary>
-        public virtual ICheckDependenciesResult CheckDependencies(IModule moduleInfo)
+        public virtual ICheckDependenciesResult CheckDependencies(IModuleInfo moduleInfoInfo)
         {
             Dictionary<ModuleIdentity, Exception> failed = new Dictionary<ModuleIdentity, Exception>();
-            foreach (var dependency in moduleInfo.Dependencies)
+            foreach (var dependency in moduleInfoInfo.Dependencies)
             {
                 var module = GetModule(dependency);
                 if (module == null)
                     failed.Add(dependency, new ModuleMissedException(dependency));
             }
-            return new CheckDependenciesResult(moduleInfo.ModuleIdentity, failed);
+            return new CheckDependenciesResult(moduleInfoInfo.ModuleIdentity, failed);
         }
 
         /// <summary>
@@ -182,9 +182,9 @@ namespace ModularSystem.Common.BLL
             return _userModulesRepository.GetModules(userId, clientId);
         }
 
-        public IEnumerable<IPackedModule> GetModules(string userId, string clientId)
+        public IEnumerable<IPackedModuleInfo> GetModules(string userId, string clientId)
         {
-            var res = new List<IPackedModule>();
+            var res = new List<IPackedModuleInfo>();
             foreach (var moduleIdentity in GetModuleIdentities(userId, clientId))
             {
                 var t = GetModule(moduleIdentity);

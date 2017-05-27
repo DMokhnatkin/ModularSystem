@@ -1,12 +1,13 @@
 ﻿using System.IO;
 using System.IO.Compression;
+using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.PackedModules.Zip
 {
     /// <summary>
     /// Base class for all modules which are packed in zip archive.
     /// </summary>
-    public abstract class ZipPackedModule : IPackedModule, IZipPacked
+    public abstract class ZipPackedModuleInfo : IPackedModuleInfo, IZipPacked
     {
         #region IPackedModule inherited
 

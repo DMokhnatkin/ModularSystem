@@ -43,24 +43,24 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// Pack one module
         /// </summary>
         /// <param name="sourceDirectoryPath">Directory with module files</param>
-        /// <param name="module">Result</param>
+        /// <param name="moduleInfo">Result</param>
         /// <param name="metaFileName">Name of module meta file</param>
-        public static void PackModule(string sourceDirectoryPath, out MemoryPackedModule module, string metaFileName = MetaFileWrapper.DefaultFileName)
+        public static void PackModule(string sourceDirectoryPath, out MemoryPackedModuleInfo moduleInfo, string metaFileName = MetaFileWrapper.DefaultFileName)
         {
             EnsureModuleIsValid(sourceDirectoryPath, metaFileName);
 
             // In this place you can do some extra actions depend on module type
             // **
 
-            module = new MemoryPackedModule(PackDirectoryToByteArray(sourceDirectoryPath));
+            moduleInfo = new MemoryPackedModuleInfo(PackDirectoryToByteArray(sourceDirectoryPath));
         }
 
         /// <summary>
-        /// Alias <see cref="PackModule(string, out MemoryPackedModule, string)"/>
+        /// Alias <see cref="PackModule(string, out MemoryPackedModuleInfo, string)"/>
         /// </summary>
-        public static MemoryPackedModule PackModuleToMemory(string sourceDirectoryPath, string metaFileName = MetaFileWrapper.DefaultFileName)
+        public static MemoryPackedModuleInfo PackModuleToMemory(string sourceDirectoryPath, string metaFileName = MetaFileWrapper.DefaultFileName)
         {
-            MemoryPackedModule res;
+            MemoryPackedModuleInfo res;
             PackModule(sourceDirectoryPath, out res, metaFileName);
             return res;
         }
@@ -70,9 +70,9 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// </summary>
         /// <param name="sourceDirectoryPath">Directory with module files</param>
         /// <param name="destFilePath">Path to file which will be created</param>
-        /// <param name="module">Result</param>
+        /// <param name="moduleInfo">Result</param>
         /// <param name="metaFileName">Name of module meta file</param>
-        public static void PackModule(string sourceDirectoryPath, string destFilePath, out FilePackedModule module, string metaFileName = MetaFileWrapper.DefaultFileName)
+        public static void PackModule(string sourceDirectoryPath, string destFilePath, out FilePackedModuleInfo moduleInfo, string metaFileName = MetaFileWrapper.DefaultFileName)
         {
             EnsureModuleIsValid(sourceDirectoryPath, metaFileName);
 
@@ -80,15 +80,15 @@ namespace ModularSystem.Common.PackedModules.Zip
             // **
 
             File.WriteAllBytes(destFilePath, PackDirectoryToByteArray(sourceDirectoryPath));
-            module = new FilePackedModule(destFilePath);
+            moduleInfo = new FilePackedModuleInfo(destFilePath);
         }
 
         /// <summary>
-        /// Alias <see cref="PackModule(string, string, out FilePackedModule, string)"/>
+        /// Alias <see cref="PackModule(string, string, out FilePackedModuleInfo, string)"/>
         /// </summary>
-        public static FilePackedModule PackModuleToFile(string sourceDirectoryPath, string destFilePath, string metaFileName = MetaFileWrapper.DefaultFileName)
+        public static FilePackedModuleInfo PackModuleToFile(string sourceDirectoryPath, string destFilePath, string metaFileName = MetaFileWrapper.DefaultFileName)
         {
-            FilePackedModule res;
+            FilePackedModuleInfo res;
             PackModule(sourceDirectoryPath, destFilePath, out res);
             return res;
         }
@@ -99,11 +99,11 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <summary>
         /// Unpack module to directory
         /// </summary>
-        /// <param name="module"></param>
+        /// <param name="moduleInfo"></param>
         /// <param name="destination">Directory path where to unpack</param>
-        public static void UnpackToDirectory(this ZipPackedModule module, string destination)
+        public static void UnpackToDirectory(this ZipPackedModuleInfo moduleInfo, string destination)
         {
-            using (var z = module.OpenReadZipArchive())
+            using (var z = moduleInfo.OpenReadZipArchive())
             {
                 z.ExtractToDirectory(destination);
             }
@@ -115,9 +115,9 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <summary>
         /// Open meta files from packed module. This is valid only for zip packed modules.
         /// </summary>
-        public static MetaFileWrapper ExtractMetaFile(this ZipPackedModule module)
+        public static MetaFileWrapper ExtractMetaFile(this ZipPackedModuleInfo moduleInfo)
         {
-            using (var z = module.OpenReadZipArchive())
+            using (var z = moduleInfo.OpenReadZipArchive())
             using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
             {
                 return new MetaFileWrapper(metaFileStream);
@@ -127,9 +127,9 @@ namespace ModularSystem.Common.PackedModules.Zip
         /// <summary>
         /// Update meta file in packed module. This is valid only for zip packed modules.
         /// </summary>
-        public static void UpdateMetaFile(this ZipPackedModule module, MetaFileWrapper metaFile)
+        public static void UpdateMetaFile(this ZipPackedModuleInfo moduleInfo, MetaFileWrapper metaFile)
         {
-            using (var z = module.OpenEditZipArchive())
+            using (var z = moduleInfo.OpenEditZipArchive())
             using (var metaFileStream = z.GetEntry(MetaFileWrapper.DefaultFileName).Open())
             {
                 metaFile.Write(metaFileStream);

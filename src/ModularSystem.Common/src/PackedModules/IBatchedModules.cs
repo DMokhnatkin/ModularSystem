@@ -1,4 +1,6 @@
-﻿namespace ModularSystem.Common.PackedModules
+﻿using ModularSystem.Common.Modules;
+
+namespace ModularSystem.Common.PackedModules
 {
     /// <summary>
     /// Represents collection of zip packed modules packed (batched) in one zip archive.

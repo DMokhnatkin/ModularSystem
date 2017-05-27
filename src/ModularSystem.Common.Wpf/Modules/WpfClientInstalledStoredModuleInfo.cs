@@ -7,7 +7,7 @@ using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Wpf.Modules
 {
-    public class WpfClientInstalledStoredModule : IModule, IPathStoredModule, IStartableModule
+    public class WpfClientInstalledStoredModuleInfo : IModuleInfo, IPathStoredModule, IStartableModule
     {
         /// <inheritdoc />
         public ModuleIdentity ModuleIdentity { get; private set; }

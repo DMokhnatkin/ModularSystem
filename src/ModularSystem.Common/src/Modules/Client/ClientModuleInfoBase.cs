@@ -2,9 +2,9 @@
 
 namespace ModularSystem.Common.Modules
 {
-    public abstract class ClientModuleBase : IModule
+    public abstract class ClientModuleInfoBase : IModuleInfo
     {
-        protected ClientModuleBase(ModuleIdentity moduleIdentity, ModuleIdentity[] serverDependencies, ModuleIdentity[] clientDependencies)
+        protected ClientModuleInfoBase(ModuleIdentity moduleIdentity, ModuleIdentity[] serverDependencies, ModuleIdentity[] clientDependencies)
         {
             ModuleIdentity = moduleIdentity;
             ServerDependencies = serverDependencies;

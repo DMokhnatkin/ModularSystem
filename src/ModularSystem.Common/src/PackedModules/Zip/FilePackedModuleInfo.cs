@@ -1,14 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.PackedModules.Zip
 {
-    public class FilePackedModule : ZipPackedModule
+    public class FilePackedModuleInfo : ZipPackedModuleInfo
     {
         public string FilePath { get; }
 
-        public FilePackedModule(string filePath)
+        public FilePackedModuleInfo(string filePath)
         {
             FilePath = filePath;
         }

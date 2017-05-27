@@ -2,6 +2,7 @@
 using System.IO.Compression;
 using System.Linq;
 using ModularSystem.Common.MetaFiles;
+using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.PackedModules.Zip
 {
@@ -10,7 +11,7 @@ namespace ModularSystem.Common.PackedModules.Zip
     /// </summary>
     public class TestHelpers
     {
-        public static MemoryPackedModule CreateMemoryPackedModule(string type, ModuleIdentity identity, ModuleIdentity[] dependencies, string metaFileName = MetaFileWrapper.DefaultFileName)
+        public static MemoryPackedModuleInfo CreateMemoryPackedModule(string type, ModuleIdentity identity, ModuleIdentity[] dependencies, string metaFileName = MetaFileWrapper.DefaultFileName)
         {
             using (var ms = new MemoryStream())
             {
@@ -28,7 +29,7 @@ namespace ModularSystem.Common.PackedModules.Zip
                         meta.Write(entryStream);
                     }
                 }
-                return new MemoryPackedModule(ms.ToArray());
+                return new MemoryPackedModuleInfo(ms.ToArray());
             }
         }
     }

@@ -18,11 +18,11 @@ namespace ModularSystem.Common
         /// { module1, module2 }. Module1 requires module2 as dependency. 
         /// In this case { module2, module1 } will be returned. 
         /// </example>
-        public static IEnumerable<IModule> OrderModules(IEnumerable<IModule> modules)
+        public static IEnumerable<IModuleInfo> OrderModules(IEnumerable<IModuleInfo> modules)
         {
             // We will count number of links of module to other modules in list.
             // Right order - ascending order of this values
-            var moduleInfos = modules as IModule[] ?? modules.ToArray();
+            var moduleInfos = modules as IModuleInfo[] ?? modules.ToArray();
             Dictionary<ModuleIdentity, int> linkesCt = moduleInfos.ToDictionary(x => x.ModuleIdentity, x => 0);
             foreach (var moduleInfo in moduleInfos)
             {
@@ -40,23 +40,23 @@ namespace ModularSystem.Common
         /// Check dependencies of module in given list.
         /// I.e. is given modules list is enough to install module.
         /// </summary>
-        public static ICheckDependenciesResult CheckDependencies(IModule module, IEnumerable<ModuleIdentity> modules)
+        public static ICheckDependenciesResult CheckDependencies(IModuleInfo moduleInfo, IEnumerable<ModuleIdentity> modules)
         {
             HashSet<ModuleIdentity> modulesSet = modules as HashSet<ModuleIdentity> ?? new HashSet<ModuleIdentity>(modules);
             Dictionary<ModuleIdentity, Exception> missedModules = new Dictionary<ModuleIdentity, Exception>();
-            foreach (var moduleDependency in module.Dependencies)
+            foreach (var moduleDependency in moduleInfo.Dependencies)
             {
                 if (!modulesSet.Contains(moduleDependency))
                     missedModules.Add(moduleDependency, new ModuleMissedException(moduleDependency));
             }
-            return new CheckDependenciesResult(module.ModuleIdentity, missedModules);
+            return new CheckDependenciesResult(moduleInfo.ModuleIdentity, missedModules);
         }
 
         /// <summary>
         /// Get all modules dependent on specifed module in collection.
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<ModuleIdentity> GetDependent(ModuleIdentity module, IEnumerable<IModule> modules)
+        public static IEnumerable<ModuleIdentity> GetDependent(ModuleIdentity module, IEnumerable<IModuleInfo> modules)
         {
             var res = new List<ModuleIdentity>();
             foreach (var moduleInfo in modules)

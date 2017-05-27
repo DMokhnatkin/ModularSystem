@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Repositories
 {

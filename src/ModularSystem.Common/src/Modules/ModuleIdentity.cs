@@ -1,49 +1,49 @@
 ﻿using System;
 
-namespace ModularSystem.Common
+namespace ModularSystem.Common.Modules
 {
     /// <summary>
     /// Unique identifier for module.
     /// </summary>
-    public struct ModuleIdentity
+    public class ModuleIdentity : IModuleIdentity
     {
-        /// <summary>
-        /// Name of module.
-        /// </summary>
-        /// <remarks>You can't use spaces in name.</remarks>
-        public string Name { get; }
+        /// <inheritdoc />
+        public virtual string Name { get; }
 
-        /// <summary>
-        /// Version of module.
-        /// </summary>
-        public Version Version { get; }
+        /// <inheritdoc />
+        public virtual Version Version { get; }
 
-        public ModuleIdentity(string name, Version version)
+        /// <inheritdoc />
+        public virtual ModuleType Type { get; }
+
+        public ModuleIdentity(string name, ModuleType type, Version version)
         {
             if (name.Contains("-"))
                 throw new ArgumentException("Module identity name can't contain -");
             Name = name;
+            Type = type;
             Version = version;
         }
 
-        public ModuleIdentity(string name, string version)
+        public ModuleIdentity(string name, string type, string version)
         {
             if (name.Contains("-"))
                 throw new ArgumentException("Module identity name can't contain -");
             Name = name;
+            Type = (ModuleType) Enum.Parse(typeof(ModuleType), type, true);
             Version = new Version(version);
         }
 
         /// <inheritdoc />
         public override string ToString()
         {
-            return $"{Name}-{Version}";
+            return $"{Name}-{Version}-{Type}";
         }
 
         /// <inheritdoc />
         public override int GetHashCode()
         {
-            return Name.GetHashCode() ^ Version.GetHashCode();
+            return Name.GetHashCode() ^ Version.GetHashCode() ^ Version.GetHashCode();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace ModularSystem.Common
         public static ModuleIdentity Parse(string str)
         {
             var r = str.Split('-');
-            return new ModuleIdentity(r[0], r[1]);
+            return new ModuleIdentity(r[0], r[1], r[2]);
         }
     }
 }

@@ -10,6 +10,7 @@ using ModularSystem.Common;
 using ModularSystem.Common.BLL;
 using ModularSystem.Common.Dependencies;
 using ModularSystem.Common.Exceptions;
+using ModularSystem.Common.Modules;
 using ModularSystem.Common.PackedModules.Zip;
 using ModularSystem.Server.Common;
 
@@ -32,34 +33,19 @@ namespace ModularSystem.Server.Controllers
         [Authorize(Policy = "ConfigModulesAllowed")]
         [MappedExceptionFilter(typeof(ModuleMissedException), HttpStatusCode.BadRequest)]
         [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
-        public async Task InstallModulePackageAsync()
+        public async Task<IActionResult> InstallModulePackageAsync()
         {
             using (var t = Request.Body)
             using (var br = new BinaryReader(t))
             {
                 var batchedModules = new MemoryBatchedModules(br.ReadBytes((int)t.Length));
-                MemoryPackedModule[] innerModules;
-                batchedModules.UnbatchModules(out innerModules);
-                _registeredModules.RegisterModules(innerModules);
-            }
-        }
-
-        [HttpPost("install")]
-        [Authorize(Policy = "ConfigModulesAllowed")]
-        [MappedExceptionFilter(typeof(ModuleMissedException), HttpStatusCode.BadRequest)]
-        [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
-        public async Task InstallModulePackageV2Async()
-        {
-            using (var t = Request.Body)
-            using (var br = new BinaryReader(t))
-            {
-                var batchedModules = new MemoryBatchedModules(br.ReadBytes((int)t.Length));
-                MemoryPackedModule[] innerModules;
-                batchedModules.UnbatchModules(out innerModules);
-
-                
-
-                _registeredModules.RegisterModules(innerModules);
+                MemoryPackedModuleInfo[] innerModulesInfo;
+                batchedModules.UnbatchModules(out innerModulesInfo);
+                var res = _dependenciesResolver.CheckCanBeInstalled(new ModulesGroup(innerModulesInfo));
+                if (!res.IsSuccess)
+                    return new BadRequestObjectResult(res.GetMessage());
+                _registeredModules.RegisterModules(innerModulesInfo);
+                return Ok();
             }
         }
 

@@ -1,23 +1,18 @@
 namespace ModularSystem.Common.Modules
 {
     /// <summary>
-    /// Base module interface. All modules implement it.
+    /// Info about module (such as identity and dependencies)
     /// </summary>
-    public interface IModule
+    public interface IModuleInfo
     {
         /// <summary>
         /// Identifier for module
         /// </summary>
-        ModuleIdentity ModuleIdentity { get; }
-
-        /// <summary>
-        /// Type of module
-        /// </summary>
-        ModuleType Type { get; }
+        IModuleIdentity ModuleIdentity { get; }
 
         /// <summary>
         /// List of modules (all types i.e. server and client) which are required to be installed for this module.
         /// </summary>
-        ModuleIdentity[] Dependencies { get; }
+        IModuleIdentity[] Dependencies { get; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ModularSystem.Common.PackedModules
 {
-    public interface IPackedModule : IPacked, IModule
+    public interface IPackedModuleInfo : IPacked, IModuleInfo
     {
     }
 }

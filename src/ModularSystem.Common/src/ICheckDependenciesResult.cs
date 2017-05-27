@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ModularSystem.Common.Exceptions;
+using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common
 {

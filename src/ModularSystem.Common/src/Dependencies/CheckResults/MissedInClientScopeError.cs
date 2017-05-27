@@ -5,7 +5,7 @@ namespace ModularSystem.Common.Dependencies
     public class MissedInClientScopeError : MissedModuleError
     {
         /// <inheritdoc />
-        public MissedInClientScopeError(IModule sourceModule, ModuleIdentity requiredModule, string userId, string clientId) : base(sourceModule, requiredModule, ModuleType.Client)
+        public MissedInClientScopeError(IModuleInfo sourceModuleInfo, ModuleIdentity requiredModule, string userId, string clientId) : base(sourceModuleInfo, requiredModule, ModuleType.Client)
         {
             UserId = userId;
             ClientId = clientId;
@@ -18,7 +18,7 @@ namespace ModularSystem.Common.Dependencies
         /// <inheritdoc />
         public override string GetMessage()
         {
-            return $"Module {RequiredModule} was required by {SourceModule.ModuleIdentity} on {RequiredModuleType} side but was missed in client scope (UserId = {UserId} ClientId = {ClientId})";
+            return $"Module {RequiredModule} was required by {SourceModuleInfo.ModuleIdentity} on {RequiredModuleType} side but was missed in client scope (UserId = {UserId} ClientId = {ClientId})";
         }
     }
 }

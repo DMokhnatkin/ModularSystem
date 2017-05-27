@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using ModularSystem.Common;
+using ModularSystem.Common.Modules;
 using ModularSystem.Common.Repositories;
 using NUnit.Framework;
 

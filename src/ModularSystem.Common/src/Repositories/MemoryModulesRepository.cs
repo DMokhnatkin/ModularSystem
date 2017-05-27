@@ -5,7 +5,7 @@ using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Repositories
 {
-    public class MemoryModulesRepository<T> : IModulesRepository<T> where T : IModule
+    public class MemoryModulesRepository<T> : IModulesRepository<T> where T : IModuleInfo
     {
         private Dictionary<ModuleIdentity, T> _modules = new Dictionary<ModuleIdentity, T>();
 

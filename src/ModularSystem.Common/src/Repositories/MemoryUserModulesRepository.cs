@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ModularSystem.Common.Exceptions;
+using ModularSystem.Common.Modules;
 
 namespace ModularSystem.Common.Repositories
 {

@@ -7,15 +7,15 @@ namespace ModularSystem.Common.Dependencies
     /// </summary>
     public class InvalidDependency : ICheckResult
     {
-        public InvalidDependency(IModule sourceModule, IModule requiredModule)
+        public InvalidDependency(IModuleInfo sourceModuleInfo, IModuleInfo requiredModuleInfo)
         {
-            SourceModule = sourceModule;
-            RequiredModule = requiredModule;
+            SourceModuleInfo = sourceModuleInfo;
+            RequiredModuleInfo = requiredModuleInfo;
         }
 
-        public IModule SourceModule { get; }
+        public IModuleInfo SourceModuleInfo { get; }
 
-        public IModule RequiredModule { get; }
+        public IModuleInfo RequiredModuleInfo { get; }
 
         /// <inheritdoc />
         public bool IsSuccess => false;
@@ -23,7 +23,7 @@ namespace ModularSystem.Common.Dependencies
         /// <inheritdoc />
         public string GetMessage()
         {
-            return $"{SourceModule} can't require {RequiredModule}.";
+            return $"{SourceModuleInfo} can't require {RequiredModuleInfo}.";
         }
     }
 }

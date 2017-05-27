@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using CommandLine;
 using ModularSystem.Common;
+using ModularSystem.Common.Modules;
 using ModularSystem.Сonfigurator.BLL;
 using ModularSystem.Сonfigurator.InputOptions;
 using ModularSystem.Сonfigurator.Proxies;

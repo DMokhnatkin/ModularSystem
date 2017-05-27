@@ -2,12 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using ModularSystem.Common.Modules;
 using ModularSystem.Common.PackedModules;
 using ModularSystem.Common.PackedModules.Zip;
 
 namespace ModularSystem.Common.Repositories
 {
-    public class FileSystemModulesRepository : IModulesRepository<IPackedModule>
+    public class FileSystemModulesRepository : IModulesRepository<IPackedModuleInfo>
     {
         public string BasePath { get; }
 
@@ -20,11 +21,11 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public IEnumerator<IPackedModule> GetEnumerator()
+        public IEnumerator<IPackedModuleInfo> GetEnumerator()
         {
             foreach (var f in Directory.GetFiles(BasePath))
             {
-                yield return new FilePackedModule(f);
+                yield return new FilePackedModuleInfo(f);
             }
         }
 
@@ -35,12 +36,12 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public void AddModule(IPackedModule module)
+        public void AddModule(IPackedModuleInfo moduleInfo)
         {
-            if (IsModuleRegistered(module.ModuleIdentity))
-                throw new ArgumentException($"Module {module.ModuleIdentity} is already registered");
-            using (var f = File.OpenWrite(Path.Combine(BasePath, $"{module.ModuleIdentity}.zip")))
-            using (var ms = module.OpenReadStream())
+            if (IsModuleRegistered(moduleInfo.ModuleIdentity))
+                throw new ArgumentException($"Module {moduleInfo.ModuleIdentity} is already registered");
+            using (var f = File.OpenWrite(Path.Combine(BasePath, $"{moduleInfo.ModuleIdentity}.zip")))
+            using (var ms = moduleInfo.OpenReadStream())
             using (var msr = new BinaryReader(ms))
             {
                 var data = msr.ReadBytes((int) ms.Length);
@@ -57,11 +58,11 @@ namespace ModularSystem.Common.Repositories
         }
 
         /// <inheritdoc />
-        public IPackedModule GetModule(ModuleIdentity moduleIdentity)
+        public IPackedModuleInfo GetModule(ModuleIdentity moduleIdentity)
         {
             if (!IsModuleRegistered(moduleIdentity))
                 return null;
-            return new FilePackedModule(Path.Combine(BasePath, $"{moduleIdentity}.zip"));
+            return new FilePackedModuleInfo(Path.Combine(BasePath, $"{moduleIdentity}.zip"));
         }
 
         /// <inheritdoc />

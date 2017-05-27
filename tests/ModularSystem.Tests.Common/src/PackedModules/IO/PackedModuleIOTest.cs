@@ -18,13 +18,13 @@ namespace ModularSystem.Tests.Common.PackedModules.IO
         {
             // MemoryPackedModule
             TestingIOHelpers.DeleteFiles("test");
-            new MemoryPackedModule(_sampleData).WriteToFile("test");
+            new MemoryPackedModuleInfo(_sampleData).WriteToFile("test");
             Assert.IsTrue(_sampleData.SequenceEqual(File.ReadAllBytes("test")));
 
             // FilePackedModule
             TestingIOHelpers.DeleteFiles("test", "test2");
             File.WriteAllBytes("test", _sampleData);
-            new FilePackedModule("test").WriteToFile("test2");
+            new FilePackedModuleInfo("test").WriteToFile("test2");
             Assert.IsTrue(_sampleData.SequenceEqual(File.ReadAllBytes("test2")));
         }
 
@@ -32,9 +32,9 @@ namespace ModularSystem.Tests.Common.PackedModules.IO
         public void ReadFromFile_MemoryPackedTest()
         {
             TestingIOHelpers.DeleteFiles("test");
-            new MemoryPackedModule(_sampleData).WriteToFile("test");
+            new MemoryPackedModuleInfo(_sampleData).WriteToFile("test");
 
-            MemoryPackedModule m;
+            MemoryPackedModuleInfo m;
             PackedModuleIO.ReadFromFile("test", out m);
             using (var resStream = m.OpenReadStream())
             using (var br = new BinaryReader(resStream))
@@ -48,9 +48,9 @@ namespace ModularSystem.Tests.Common.PackedModules.IO
         {
             TestingIOHelpers.DeleteFiles("test", "test2");
             File.WriteAllBytes("test", _sampleData);
-            new FilePackedModule("test").WriteToFile("test2");
+            new FilePackedModuleInfo("test").WriteToFile("test2");
 
-            FilePackedModule m;
+            FilePackedModuleInfo m;
             PackedModuleIO.ReadFromFile("test2", out m);
             using (var resStream = m.OpenReadStream())
             using (var br = new BinaryReader(resStream))
