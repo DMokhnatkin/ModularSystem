@@ -41,6 +41,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\BLL\ModulesManager.cs" />
+    <Compile Include="src\BLL\ServerModulesManager.cs" />
+    <Compile Include="src\BLL\ClientModulesManager.cs" />
+    <Compile Include="src\BLL\UserModulesManager.cs" />
     <Compile Include="src\FileSystemHelpers.cs" />
     <Compile Include="src\MetaFiles\FileWrapperBase.cs" />
     <Compile Include="src\MetaFiles\MetaFileWrapper.cs" />

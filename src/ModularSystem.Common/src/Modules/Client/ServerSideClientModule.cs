@@ -12,9 +12,9 @@ namespace ModularSystem.Common.Modules.Client
         public ModuleType ModuleType => ModuleType.Client;
         public string[] ClientTypes { get; }
 
-        public IPacked Packed { get; }
+        public IPackedModule Packed { get; }
 
-        public ServerSideClientModule(ModuleIdentity moduleIdentity, ModuleIdentity[] dependencies, string[] clientTypes, IPacked packed)
+        public ServerSideClientModule(ModuleIdentity moduleIdentity, ModuleIdentity[] dependencies, string[] clientTypes, IPackedModule packed)
         {
             ModuleIdentity = moduleIdentity;
             Dependencies = dependencies;

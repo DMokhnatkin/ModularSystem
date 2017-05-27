@@ -1,27 +1,20 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using ModularSystem.Common.Modules.Client;
-using ModularSystem.Common.Modules.Server;
+﻿using System.Linq;
+using ModularSystem.Common.PackedModules;
 using ModularSystem.Common.PackedModules.Zip;
 
 namespace ModularSystem.Common.BLL
 {
     public class ModulesManager
     {
-        public string ClientModulesStorePath { get; }
-        public string ServerModulesStorePath { get; }
+        private readonly ClientModulesManager _clientModulesManager;
+        private readonly ServerModulesManager _serverModulesManager;
+        private readonly UserModulesManager _userModulesManager;
 
-        private readonly Dictionary<ModuleIdentity, ServerSideClientModule> _clientModules = new Dictionary<ModuleIdentity, ServerSideClientModule>();
-        private readonly Dictionary<ModuleIdentity, ServerModule> _serverModules = new Dictionary<ModuleIdentity, ServerModule>();
-
-        public ModulesManager(string clientModulesStorePath, string serverModulesStorePath)
+        public ModulesManager(ClientModulesManager clientModulesManager, ServerModulesManager serverModulesManager, UserModulesManager userModulesManager)
         {
-            ClientModulesStorePath = clientModulesStorePath;
-            ServerModulesStorePath = serverModulesStorePath;
-
-            FileSystemHelpers.ClearOrCreateDir(ClientModulesStorePath);
-            FileSystemHelpers.ClearOrCreateDir(ServerModulesStorePath);
+            _clientModulesManager = clientModulesManager;
+            _serverModulesManager = serverModulesManager;
+            _userModulesManager = userModulesManager;
         }
 
         public void InstallBatch(ZipBatchedModules batch, bool startServerModules = true)
@@ -33,12 +26,10 @@ namespace ModularSystem.Common.BLL
                 switch (memoryPackedModule.ModuleType)
                 {
                     case ModuleType.Client:
-                        var clientModule = InstallClientModule(memoryPackedModule);
-                        _clientModules.Add(clientModule.ModuleIdentity, clientModule);
+                        _clientModulesManager.InstallModule(memoryPackedModule);
                         break;
                     case ModuleType.Server:
-                        var serverModule = InstallServerModule(memoryPackedModule);
-                        _serverModules.Add(serverModule.ModuleIdentity, serverModule);
+                        var serverModule = _serverModulesManager.InstallModule(memoryPackedModule);
                         if (startServerModules)
                             serverModule.Start();
                         break;
@@ -46,43 +37,16 @@ namespace ModularSystem.Common.BLL
             }
         }
 
-        public ServerSideClientModule InstallClientModule(ZipPackedModule module)
+        public IBatchedModules ResolveClientModules(string userId, string clientType)
         {
-            var moduleMeta = module.ExtractMetaFile();
-
-            // Copy packed data
-            var modulePath = Path.Combine(ClientModulesStorePath, $"{moduleMeta.Identity}.zip");
-            using (var moduleStream = module.OpenReadStream())
-            using (var writeStream = File.Create(modulePath))
-            {
-                moduleStream.CopyTo(writeStream);
-            }
-            // Parse module info
-            var packed = new FilePackedModule(modulePath);
-            return new ServerSideClientModule(
-                ModuleIdentity.Parse(moduleMeta.Identity), 
-                moduleMeta.Dependencies.Select(ModuleIdentity.Parse).ToArray(), 
-                moduleMeta.ClientTypes,
-                packed);
+            var clientModules = _userModulesManager.GetClientModulesForUser(userId, clientType);
+            return BatchHelper.BatchModulesToMemory(clientModules.Select(x => x.Packed));
         }
 
-        public ServerModule InstallServerModule(ZipPackedModule module)
+        public ModuleIdentity[] GetInstalledList()
         {
-            var moduleMeta = module.ExtractMetaFile();
-
-            var modulePath = Path.Combine(ServerModulesStorePath, $"{moduleMeta.Identity}");
-            module.UnpackToDirectory(modulePath);
-
-            return new ServerModule(
-                ModuleIdentity.Parse(moduleMeta.Identity), 
-                moduleMeta.Dependencies.Select(ModuleIdentity.Parse).ToArray(),
-                modulePath);
-        }
-
-        public ModuleIdentity[] GetInstalledModules()
-        {
-            return _serverModules.Values.Select(x => x.ModuleIdentity)
-                .Concat(_clientModules.Values.Select(x => x.ModuleIdentity)).ToArray();
+            return _serverModulesManager.GetInstalledModules()
+                .Concat(_clientModulesManager.GetListOfInstalledModules()).ToArray();
         }
     }
 }

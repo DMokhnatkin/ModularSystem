@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ModularSystem.Common;
 using ModularSystem.Common.BLL;
-using ModularSystem.Common.Exceptions;
 using ModularSystem.Common.PackedModules.Zip;
-using ModularSystem.Server.Common;
 
 namespace ModularSystem.Server.Controllers
 {
@@ -17,17 +15,23 @@ namespace ModularSystem.Server.Controllers
     [Authorize(Policy = "ConfigModulesAllowed")]
     public class ModulesConfigController : Controller
     {
-        private readonly ModulesManager _modulesManager;
+        private readonly ServerModulesManager _serverModulesManager;
+        private readonly ClientModulesManager _clientModulesManager;
+        private readonly UserModulesManager _userModulesManager;
 
-        public ModulesConfigController(ModulesManager modulesManager)
+        private ModulesManager _modulesManager;
+
+        public ModulesConfigController(ServerModulesManager serverModulesManager, ClientModulesManager clientModulesManager, UserModulesManager userModulesManager)
         {
-            _modulesManager = modulesManager;
+            _serverModulesManager = serverModulesManager;
+            _clientModulesManager = clientModulesManager;
+            _userModulesManager = userModulesManager;
+
+            _modulesManager = new ModulesManager(_clientModulesManager, _serverModulesManager, _userModulesManager);
         }
 
         [HttpPost("install")]
         [Authorize(Policy = "ConfigModulesAllowed")]
-        [MappedExceptionFilter(typeof(ModuleMissedException), HttpStatusCode.BadRequest)]
-        [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
         public void InstallModulesBatchAsync()
         {
             using (var t = Request.Body)
@@ -41,8 +45,6 @@ namespace ModularSystem.Server.Controllers
 
         [HttpPut("remove")]
         [Authorize(Policy = "ConfigModulesAllowed")]
-        [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
-        [MappedExceptionFilter(typeof(ArgumentException), HttpStatusCode.BadRequest)] // May be not safe
         public async Task RemoveModuleAsync([FromBody]string module)
         {
             throw new NotImplementedException();
@@ -52,20 +54,20 @@ namespace ModularSystem.Server.Controllers
         [Authorize(Policy = "ConfigModulesAllowed")]
         public string[] GetModulesListAsync()
         {
-            return _modulesManager.GetInstalledModules().Select(x => x.ToString()).ToArray();
+            return _modulesManager.GetInstalledList().Select(x => x.ToString()).ToArray();
         }
 
         [HttpPost("user/{userId}/{clientId}")]
         [Authorize(Policy = "ConfigModulesAllowed")]
-        [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
-        public IActionResult AddUserModules(string userId, string clientId, [FromBody]IEnumerable<string> moduleIdentities)
+        public IActionResult RegisterUserModules(string userId, string clientId, [FromBody]IEnumerable<string> moduleIdentities)
         {
-            throw new NotImplementedException();
+            var modules = _clientModulesManager.GetInstalledModules(moduleIdentities.Select(ModuleIdentity.Parse));
+            _userModulesManager.RegisterModulesForUser(userId, clientId, modules);
+            return Ok();
         }
 
         [HttpDelete("user/{userId}/{clientId}")]
         [Authorize(Policy = "ConfigModulesAllowed")]
-        [MappedExceptionFilter(typeof(ModuleIsRequiredException), HttpStatusCode.BadRequest)]
         public IActionResult RemoveUserModules(string userId, string clientId, IEnumerable<string> moduleIdentities)
         {
             throw new NotImplementedException();

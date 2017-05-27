@@ -49,9 +49,10 @@ namespace ModularSystem.Clients.Wpf.ViewModels
             var t = await proxy.DownloadModules();
 
             using (var s = await t.Content.ReadAsStreamAsync())
-            using (var ss = new BinaryReader(s))
+            using (var memoryStream = new MemoryStream())
             {
-                var b = new MemoryBatchedModules(ss.ReadBytes((int)s.Length));
+                s.CopyTo(memoryStream);
+                var b = new MemoryBatchedModules(memoryStream.ToArray());
                 MemoryPackedModule[] innerModules;
                 b.UnbatchModules(out innerModules);
 

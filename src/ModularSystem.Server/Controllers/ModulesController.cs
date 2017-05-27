@@ -17,31 +17,35 @@ namespace ModularSystem.Server.Controllers
     //[Authorize]
     public class ModulesController : Controller
     {
-        private readonly ModulesManager _modulesManager;
+        private readonly ClientModulesManager _clientModules;
+        private readonly ServerModulesManager _serverModules;
+        private readonly UserModulesManager _userModules;
 
-        public ModulesController(ModulesManager modulesManager)
+        private ModulesManager _modulesManager;
+
+        public ModulesController(ClientModulesManager clientModules, ServerModulesManager serverModules, UserModulesManager userModules)
         {
-            _modulesManager = modulesManager;
+            _clientModules = clientModules;
+            _serverModules = serverModules;
+            _userModules = userModules;
+
+            _modulesManager = new ModulesManager(_clientModules, _serverModules, _userModules);
         }
 
-        [HttpGet("download")]
+        [HttpGet("download/{clientType}")]
         [Authorize]
-        [MappedExceptionFilter(typeof(ModuleMissedException), HttpStatusCode.Conflict)]
-        public async Task<IActionResult> DownloadModulesAsync()
+        public IActionResult ResolveModulesAsync()
         {
-            /*
             var userId = User.FindFirst("sub");
             if (userId == null)
                 return Forbid();
 
-            var clientId = User.FindFirst("client_id");
-            if (clientId == null)
+            var clientType = User.FindFirst("client_id");
+            if (clientType == null)
                 return Forbid();
 
-            MemoryBatchedModules batch;
-            BatchHelper.BatchModules(_registeredModules.GetModules(userId.Value, clientId.Value), out batch);
-            return File(batch.ExtractData(), "application/zip");*/
-            throw new NotImplementedException();
+            var batch = _modulesManager.ResolveClientModules(userId.Value, clientType.Value);
+            return File(batch.ExtractData(), "application/zip");
         }
     }
 }

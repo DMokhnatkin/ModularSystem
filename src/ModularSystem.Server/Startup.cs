@@ -56,10 +56,10 @@ namespace ModularSystem.Server
                 .AddOperationalStore(builder =>
                     builder.UseSqlServer(connectionString, options =>
                         options.MigrationsAssembly(migrationsAssembly)));*/
-            
-            services.AddSingleton(x => new ModulesManager(
-                Path.Combine(AppContext.BaseDirectory, "modules/client"),
-                Path.Combine(AppContext.BaseDirectory, "modules/server")));
+
+            services.AddSingleton(x => new ClientModulesManager(Path.Combine(AppContext.BaseDirectory, "modules/client")));
+            services.AddSingleton(x => new ServerModulesManager(Path.Combine(AppContext.BaseDirectory, "modules/server")));
+            services.AddSingleton(x => new UserModulesManager());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
