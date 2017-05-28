@@ -10,7 +10,7 @@ function bldnuget([string]$dir, [string]$source, [switch]$push)
         $_.FullName
     }
     $outputPath = Join-Path -Path $dir -ChildPath "Deploy"
-    nuget pack $proj -outputdirectory $outputPath
+    ./nuget.exe pack $proj -outputdirectory $outputPath
     if ($push)
     {
 		$tmp = Join-Path -Path $outputPath -ChildPath *.nupkg
@@ -19,7 +19,7 @@ function bldnuget([string]$dir, [string]$source, [switch]$push)
 			$_.FullName
 		}
 		echo $package
-	    nuget push $package -Source $source
+	    ./nuget.exe push $package -Source $source
     }
 }
 
