@@ -22,7 +22,7 @@ namespace ModularSystem.Clients.Wpf.ViewModels
         public MainWindowViewModel()
         {
             ClientAppContext.CurrentContext = new ClientAppContext(_sessionModules, new AuthenticationContext());
-            ClientAppContext.CurrentContext.AuthenticationContext.ClientId = "wpfclient";
+            ClientAppContext.CurrentContext.AuthenticationContext.ClientId = "wpf";
             ClientAppContext.CurrentContext.AuthenticationContext.ClientPassword = "g6wCBw2";
 
             ClientAppContext.CurrentContext.Container.RegisterInstance(new MainUi());

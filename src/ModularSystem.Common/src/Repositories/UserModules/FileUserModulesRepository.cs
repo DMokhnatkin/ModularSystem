@@ -30,7 +30,7 @@ namespace ModularSystem.Common.Repositories.UserModules
         }
 
         /// <inheritdoc />
-        public void AddModule(string userId, string clientId, ModuleIdentity module)
+        public void AddModule(string userId, string clientType, ModuleIdentity module)
         {
             JObject t;
             using (JsonReader r = new JsonTextReader(File.OpenText(FilePath)))
@@ -39,17 +39,17 @@ namespace ModularSystem.Common.Repositories.UserModules
                 t.TryGetValue(userId, out var clients);
                 if (clients != null)
                 {
-                    ((JObject) clients).TryGetValue(clientId, out var identities);
+                    ((JObject) clients).TryGetValue(clientType, out var identities);
                     if (identities != null)
                         ((JArray)identities).Add(module.ToString());
                     else
-                        ((JObject)clients).Add(clientId, new JArray(module.ToString()));
+                        ((JObject)clients).Add(clientType, new JArray(module.ToString()));
                 }
                 else
                 {
                     t.Add(userId, new JObject(
                         new JProperty(
-                            clientId,
+                            clientType,
                             new JArray(module.ToString()))));
                 }
             }
@@ -60,7 +60,7 @@ namespace ModularSystem.Common.Repositories.UserModules
         }
 
         /// <inheritdoc />
-        public void RemoveModule(string userId, string clientId, ModuleIdentity module)
+        public void RemoveModule(string userId, string clientType, ModuleIdentity module)
         {
             JObject t;
             using (JsonReader r = new JsonTextReader(File.OpenText(FilePath)))
@@ -68,7 +68,7 @@ namespace ModularSystem.Common.Repositories.UserModules
                 t = (JObject)JToken.ReadFrom(r);
                 t.TryGetValue(userId, out var clients);
                 JToken identities = null;
-                ((JObject) clients)?.TryGetValue(clientId, out identities);
+                ((JObject) clients)?.TryGetValue(clientType, out identities);
                 var jT = ((JArray)identities)?.First(x => Extensions.Value<string>(x) == module.ToString());
                 ((JArray)identities)?.Remove(jT);
             }
@@ -79,7 +79,7 @@ namespace ModularSystem.Common.Repositories.UserModules
         }
 
         /// <inheritdoc />
-        public IEnumerable<ModuleIdentity> GetModules(string userId, string clientId)
+        public IEnumerable<ModuleIdentity> GetModules(string userId, string clientType)
         {
             var res = new List<ModuleIdentity>();
             using (JsonReader r = new JsonTextReader(File.OpenText(FilePath)))
@@ -87,7 +87,7 @@ namespace ModularSystem.Common.Repositories.UserModules
                 var t = (JObject)JToken.ReadFrom(r);
                 t.TryGetValue(userId, out var clients);
                 JToken identities = null;
-                ((JObject) clients)?.TryGetValue(clientId, out identities);
+                ((JObject) clients)?.TryGetValue(clientType, out identities);
                 if (identities != null)
                 {
                     foreach (var moduleIdentity in ((JArray)identities).Select(x => ModuleIdentity.Parse(x.Value<string>())))

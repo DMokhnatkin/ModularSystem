@@ -48,7 +48,7 @@ namespace ModularSystem.Server
                 },
                 new Client
                 {
-                    ClientId = "wpfclient",
+                    ClientId = "wpf",
 
                     // no interactive user, use the clientid/secret for authentication
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,

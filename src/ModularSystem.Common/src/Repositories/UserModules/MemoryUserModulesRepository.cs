@@ -9,24 +9,24 @@ namespace ModularSystem.Common.Repositories.UserModules
     {
         private readonly Dictionary<(string userId , string clientType), HashSet<ModuleIdentity>> _userModules = new Dictionary<(string, string), HashSet<ModuleIdentity>>();
 
-        public void AddModule(string userId, string clientId, ModuleIdentity module)
+        public void AddModule(string userId, string clientType, ModuleIdentity module)
         {
-            if (!_userModules.ContainsKey((userId, clientId)))
-                _userModules[(userId, clientId)] = new HashSet<ModuleIdentity>();
-            _userModules[(userId, clientId)].Add(module);
+            if (!_userModules.ContainsKey((userId, clientType)))
+                _userModules[(userId, clientType)] = new HashSet<ModuleIdentity>();
+            _userModules[(userId, clientType)].Add(module);
         }
 
-        public void RemoveModule(string userId, string clientId, ModuleIdentity module)
+        public void RemoveModule(string userId, string clientType, ModuleIdentity module)
         {
-            if (!_userModules.ContainsKey((userId, clientId)) || !_userModules[(userId, clientId)].Contains(module))
+            if (!_userModules.ContainsKey((userId, clientType)) || !_userModules[(userId, clientType)].Contains(module))
                 throw new ModuleMissedException(module, $"{module} isn't in requirments of user {userId}");
-            _userModules[(userId, clientId)].Remove(module);
+            _userModules[(userId, clientType)].Remove(module);
         }
 
-        public IEnumerable<ModuleIdentity> GetModules(string userId, string clientId)
+        public IEnumerable<ModuleIdentity> GetModules(string userId, string clientType)
         {
-            if (_userModules.ContainsKey((userId, clientId)))
-                return _userModules[(userId, clientId)];
+            if (_userModules.ContainsKey((userId, clientType)))
+                return _userModules[(userId, clientType)];
             return null;
         }
 

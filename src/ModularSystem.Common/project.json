@@ -2,15 +2,15 @@
   "supports": {},
   "dependencies": {
     "Microsoft.Extensions.Configuration": "1.1.2",
-    "Microsoft.Extensions.Configuration.FileExtensions": "1.1.1",
-    "Microsoft.Extensions.Configuration.Json": "1.1.1",
+    "Microsoft.Extensions.Configuration.FileExtensions": "1.1.2",
+    "Microsoft.Extensions.Configuration.Json": "1.1.2",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
-    "Newtonsoft.Json": "9.0.1",
+    "Newtonsoft.Json": "10.0.2",
     "System.Diagnostics.Process": "4.3.0",
-    "System.IO.Compression": "4.1.0",
-    "System.IO.Compression.ZipFile": "4.0.1",
-    "System.IO.FileSystem": "4.0.1",
-    "System.ValueTuple": "4.3.0"
+    "System.IO.Compression": "4.3.0",
+    "System.IO.Compression.ZipFile": "4.3.0",
+    "System.IO.FileSystem": "4.3.0",
+    "System.ValueTuple": "4.3.1"
   },
   "frameworks": {
     "netstandard1.4": {}

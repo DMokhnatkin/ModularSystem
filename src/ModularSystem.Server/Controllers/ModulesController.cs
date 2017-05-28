@@ -32,7 +32,7 @@ namespace ModularSystem.Server.Controllers
             _modulesManager = new ModulesManager(_clientModules, _serverModules, _userModules);
         }
 
-        [HttpGet("download/{clientType}")]
+        [HttpGet("download")]
         [Authorize]
         public IActionResult ResolveModulesAsync()
         {
