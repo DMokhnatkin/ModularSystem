@@ -43,10 +43,17 @@ namespace ModularSystem.Common.Wpf.Modules
         {
             foreach (var t in Directory.GetFiles(Path, "*.dll"))
             {
-                var assembly = Assembly.LoadFile(t);
-                var c = assembly.GetTypes().FirstOrDefault(x => typeof(IWpfClientEntry).IsAssignableFrom(x));
-                if (c != null)
-                    return c;
+                try
+                {
+                    var assembly = Assembly.LoadFile(t);
+                    var c = assembly.GetTypes().FirstOrDefault(x => typeof(IWpfClientEntry).IsAssignableFrom(x));
+                    if (c != null)
+                        return c;
+                }
+                catch (Exception e)
+                {
+                    // ignored
+                }
             }
             //currentDomain.AssemblyResolve -= CurrentDomainAssemblyResolve;
             return null;
